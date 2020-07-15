@@ -1,0 +1,15 @@
+{
+	"savings_accounts": ["Emergency", "Loan"],
+	"net_ignore_accounts": ["Loan"],
+	"match_rules": [
+		["Study", {
+			"description": "study"
+		}],
+		["Emergency", {
+			"description": "emergency fund"
+		}],
+		["Emergency", {
+			"description": "loan fund"
+		}]
+	]
+}
