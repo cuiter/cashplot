@@ -1,6 +1,12 @@
+import copy
+
+def fill_dict(keys, value):
+    result = {}
+    for key in keys:
+        result[key] = copy.deepcopy(value)
+    return result
+
 # Copied from https://codereview.stackexchange.com/a/131836
-
-
 class EqHash:
     """Mixin adding __eq__, __ne__, and __hash__ methods."""
 
@@ -14,7 +20,6 @@ class EqHash:
 
     def __hash__(self):
         return hash(tuple(sorted(vars(self).items())))
-
 
 class Repr:
     """Mixin adding a __repr__ method."""
