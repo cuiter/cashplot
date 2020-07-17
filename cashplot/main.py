@@ -1,5 +1,6 @@
 from cashplot.config import Config
 from cashplot.sources.ing import load_ing_transactions
+from cashplot.graph import create_graph
 from cashplot.transactions import *
 
 
@@ -10,5 +11,5 @@ def main(transactionspath, configpath):
         transactions = categorize(
             list(map(lambda tr: tr.convert(), ing_transactions)), config)
         transactions_bal = transaction_balances(transactions, config)
-        for tr in transactions_bal:
-            print("Balance " + str(tr.balances['main']))
+        fig = create_graph(transactions_bal)
+        fig.show()
