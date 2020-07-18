@@ -1,6 +1,9 @@
 # Local cashplot config
 /config.json
 
+# TODO list
+/TODO.md
+
 # Virtualenv
 /venv/
 

@@ -25,9 +25,6 @@ class Config:
         self.match_rules = match_rules
 
     def loads(jsonstr):
+        """Parse the config from the JSON string."""
         table = json.loads(jsonstr)
         return Config(table['savings_accounts'], table['net_ignore_accounts'], table['match_rules'])
-
-
-def test_ha():
-    assert True

@@ -2,14 +2,15 @@
 	"savings_accounts": ["Emergency", "Loan"],
 	"net_ignore_accounts": ["Loan"],
 	"match_rules": [
-		["Study", {
-			"description": "study"
+		["Salary", {
+			"counter_name": "Company Inc.",
+			"counter_account": "NL01WORK0987654321"
 		}],
 		["Emergency", {
-			"description": "emergency fund"
+			"description": "Orange Savings Account ABC123456"
 		}],
-		["Emergency", {
-			"description": "loan fund"
+		["Loan", {
+			"description": "Orange Savings Account DEF999999"
 		}]
 	]
 }
