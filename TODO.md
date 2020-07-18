@@ -1,3 +1,0 @@
-- [ ] Add a nice CLI
-- [ ] Add tests
-- [ ] Add balance graphing using PyPlot

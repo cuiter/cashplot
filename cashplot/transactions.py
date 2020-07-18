@@ -9,6 +9,8 @@ NET_ACCOUNT_NAME = 'net'
 
 
 class TransactionBase(EqHash, Repr):
+    """A transaction without a category assigned."""
+
     def __init__(self, date, counter_name, counter_account, description, change):
         assert type(date) is datetime.date
         assert type(counter_name) is str
@@ -22,29 +24,19 @@ class TransactionBase(EqHash, Repr):
         self.description = description
         self.change = change
 
-    def __eq__(self, other):
-        if not isinstance(other, TransactionBase):
-            # Don't attempt to compare against unrelated types
-            return NotImplemented
-        return (self.date == other.date
-                and self.counter_name == other.counter_name
-                and self.counter_account == other.counter_account
-                and self.description == other.description
-                and self.change == other.change)
-
 
 class Transaction(TransactionBase):
+    """A transaction with a category assigned."""
+
     def __init__(self, category, date, counter_name, counter_account, description, change):
         super().__init__(date, counter_name, counter_account, description, change)
         assert type(category) is str
         self.category = category
 
-    def __eq__(self, other):
-        return (super.__eq__(self, other)
-                and self.category == other.category)
-
 
 class TransactionBalance(Transaction):
+    """A transaction combined with changes and balances for each account."""
+
     def __init__(self, category, date, counter_name, counter_account, description, change, changes, balances):
         super().__init__(category, date, counter_name, counter_account, description, change)
         assert type(changes) is dict
@@ -58,6 +50,7 @@ class TransactionBalance(Transaction):
 
 
 def categorize(transactions, config):
+    """Categorize transactions based on matching rules in the configuration."""
     def categorize_transaction(transaction):
         for match_rule in config.match_rules:
             category = match_rule[0]
@@ -72,6 +65,7 @@ def categorize(transactions, config):
 
 
 def transaction_balances(transactions, config):
+    """Calculate the change and balance for every account on each transaction."""
     def zero_accounts():
         accounts = {MAIN_ACCOUNT_NAME: Decimal(0)}
         for account_name in config.savings_accounts:
@@ -86,7 +80,7 @@ def transaction_balances(transactions, config):
         return net_change
 
     old_balances = zero_accounts()
-    result_transactions = []
+    tr_balances = []
 
     for transaction in transactions:
         changes = zero_accounts()
@@ -104,8 +98,8 @@ def transaction_balances(transactions, config):
             **changes, **{NET_ACCOUNT_NAME: calculate_net_change(changes)}}
         transaction_balances = {
             **balances, **{NET_ACCOUNT_NAME: calculate_net_change(balances)}}
-        result_transactions.append(TransactionBalance(transaction.category, transaction.date, transaction.counter_name,
-                                                      transaction.counter_account, transaction.description, transaction.change, transaction_changes, transaction_balances))
+        tr_balances.append(TransactionBalance(transaction.category, transaction.date, transaction.counter_name,
+                                              transaction.counter_account, transaction.description, transaction.change, transaction_changes, transaction_balances))
 
         old_balances = balances
-    return result_transactions
+    return tr_balances
