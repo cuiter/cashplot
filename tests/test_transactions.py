@@ -30,11 +30,11 @@ def test_transaction_balances():
         transactions_uncategorized, config), config)
     assert tr_balances == [
         TransactionBalance('Salary', datetime.date(2020, 6, 28), 'Company Inc.', 'NL01WORK0987654321', 'Salary for June 2020', Decimal('2000'), {'main': Decimal('2000'), 'Emergency': Decimal(
-            '0'), 'Loan': Decimal('0'), 'net': Decimal('2000')}, {'main': Decimal('2000'), 'Emergency': Decimal('0'), 'Loan': Decimal('0'), 'net': Decimal('2000')}),
+            '0'), 'Loan': Decimal('0'), 'net': Decimal('2000')}, {'main': Decimal('2000'), 'Emergency': Decimal('0'), 'Loan': Decimal('0.50'), 'net': Decimal('2000')}),
         TransactionBalance('Salary', datetime.date(2020, 6, 28), 'Company Inc.', 'NL01WORK0987654321', 'Bonus for June 2020', Decimal('500'), {'main': Decimal('500'), 'Emergency': Decimal(
-            '0'), 'Loan': Decimal('0'), 'net': Decimal('500')}, {'main': Decimal('2500'), 'Emergency': Decimal('0'), 'Loan': Decimal('0'), 'net': Decimal('2500')}),
+            '0'), 'Loan': Decimal('0'), 'net': Decimal('500')}, {'main': Decimal('2500'), 'Emergency': Decimal('0'), 'Loan': Decimal('0.50'), 'net': Decimal('2500')}),
         TransactionBalance('Emergency', datetime.date(2020, 6, 29), 'Mr. G', 'NL00MAIN1234567890', 'To Orange Savings Account ABC123456', Decimal('-100'), {'main': Decimal(
-            '-100'), 'Emergency': Decimal('100'), 'Loan': Decimal('0'), 'net': Decimal('0')}, {'main': Decimal('2400'), 'Emergency': Decimal('100'), 'Loan': Decimal('0'), 'net': Decimal('2500')}),
+            '-100'), 'Emergency': Decimal('100'), 'Loan': Decimal('0'), 'net': Decimal('0')}, {'main': Decimal('2400'), 'Emergency': Decimal('100'), 'Loan': Decimal('0.50'), 'net': Decimal('2500')}),
         TransactionBalance('Loan', datetime.date(2020, 7, 1), 'Mr. G', 'NL00MAIN1234567890', 'To Orange Savings Account DEF999999', Decimal('-200'), {'main': Decimal('-200'), 'Emergency': Decimal(
-            '0'), 'Loan': Decimal('200'), 'net': Decimal('-200')}, {'main': Decimal('2200'), 'Emergency': Decimal('100'), 'Loan': Decimal('200'), 'net': Decimal('2300')})
+            '0'), 'Loan': Decimal('200'), 'net': Decimal('-200')}, {'main': Decimal('2200'), 'Emergency': Decimal('100'), 'Loan': Decimal('200.50'), 'net': Decimal('2300')})
     ]
