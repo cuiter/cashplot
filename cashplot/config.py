@@ -19,10 +19,12 @@ class Config:
             for field in match:
                 assert field in ['counter_account',
                                  'counter_name', 'description']
-
         self.savings_accounts = savings_accounts
         self.net_ignore_accounts = net_ignore_accounts
         self.match_rules = match_rules
+
+        # Add default rule to catch transactions that aren't categorized.
+        match_rules.append(["Uncategorized", { }])
 
     def loads(jsonstr):
         """Parse the config from the JSON string."""
