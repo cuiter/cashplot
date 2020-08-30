@@ -3,10 +3,7 @@ from typing import NamedTuple
 import datetime
 from decimal import Decimal
 from cashplot.util import *
-
-MAIN_ACCOUNT_NAME = 'main'
-NET_ACCOUNT_NAME = 'net'
-
+from cashplot.consts import *
 
 class TransactionBase(EqHash, Repr):
     """A transaction without a category assigned."""
@@ -79,7 +76,7 @@ def transaction_balances(transactions, config):
                 net_change += changes[account_name]
         return net_change
 
-    old_balances = zero_accounts()
+    old_balances = config.starting_balances
     tr_balances = []
 
     for transaction in transactions:

@@ -1,0 +1,2 @@
+MAIN_ACCOUNT_NAME = 'main'
+NET_ACCOUNT_NAME = 'net'

@@ -32,6 +32,9 @@ These matching rules can be set in the configuration file (`config.json`):
 `savings_accounts` Array of names of savings accounts  
 `net_ignore_accounts` Array of names of savings accounts that don't count
 towards the "net worth" account  
+`starting_balances` The starting balance of the accounts before the
+transactions have occurred. Unnoted accounts are assumed to have a starting
+balance of zero.  
 `match_rules` Array of category matching rules  
 Each category matching rule is an array of two elements, the category name and
 the rules table. This table can have the following attributes:
@@ -52,6 +55,9 @@ An example configuration would be:
     "net_ignore_accounts": [
         "Savings Student Loan"
     ],
+    "starting_balances": {
+        "Savings Main": 0.53
+    },
     "match_rules": [
         ["Savings Main", {
             "counter_name": "Orange Savings Account ABC123456"

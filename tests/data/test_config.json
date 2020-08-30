@@ -1,6 +1,9 @@
 {
 	"savings_accounts": ["Emergency", "Loan"],
 	"net_ignore_accounts": ["Loan"],
+	"starting_balances": {
+		"Loan": 0.50
+	},
 	"match_rules": [
 		["Salary", {
 			"counter_name": "Company Inc.",
