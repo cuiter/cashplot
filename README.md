@@ -35,12 +35,14 @@ towards the "net worth" account
 `starting_balances` The starting balance of the accounts before the
 transactions have occurred. Unnoted accounts are assumed to have a starting
 balance of zero.  
-`match_rules` Array of category matching rules  
-Each category matching rule is an array of two elements, the category name and
+`match_rules` Array of matching rules  
+Each matching rule is an array of two elements, the category name and
 the rules table. This table can have the following attributes:
 `counter_name`, `counter_account`, and `description`. The values of these
-attributes are Python regexes. Transactions are matched against all of the
+attributes are Python regexes. For example, `(?i)` can be used to match with
+case-insensitivity. Transactions are matched against all of the
 given attributes.
+It's possible to specify multiple matching rules per category.
 
 Transactions with a category that corresponds to the name of a savings account
 are treated as a transaction between the main and savings account.
@@ -71,6 +73,10 @@ An example configuration would be:
         }],
         ["Health Insurance", {
             "counter_name": "ABCDEF Health Insurance",
+            "description": "Automatic withdrawal for period"
+        }],
+        ["Health Insurance", {
+            "counter_name": "DEFCHI Other Health Insurance",
             "description": "Automatic withdrawal for period"
         }],
         ["Other" { }]
