@@ -3,9 +3,9 @@ from cashplot.transactions import TransactionBalance, transaction_balances, cate
 from cashplot.sources.ing import load_ing_transactions
 from cashplot.config import Config
 
-with open("tests/test_config.json", "r") as cfp:
+with open("tests/data/test_config.json", "r") as cfp:
     config = Config.loads(cfp.read())
-with open("tests/test_transactions.csv", "r") as tfp:
+with open("tests/data/test_transactions.csv", "r") as tfp:
     transactions_uncategorized = list(
         map(lambda tr: tr.convert(), load_ing_transactions(tfp)))
     tr_balances = transaction_balances(categorize(

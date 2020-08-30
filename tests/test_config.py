@@ -2,7 +2,7 @@ from cashplot.config import Config
 
 
 def test_config():
-    with open("tests/test_config.json", "r") as fp:
+    with open("tests/data/test_config.json", "r") as fp:
         config = Config.loads(fp.read())
         assert config.savings_accounts == ['Emergency', 'Loan']
         assert config.net_ignore_accounts == ['Loan']
