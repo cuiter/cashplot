@@ -43,12 +43,17 @@ class INGTransaction(EqHash, Repr):
 
 
 def load_ing_transactions(fp):
-    # Determine CSV dialect. The Dutch transactions file uses ; as a delimiter.
+    # Determine CSV dialect. Older exports use , as the separator whereas new versions use ;.
+    fp.seek(6)
+    ch_1 = fp.read(1)
     fp.seek(7)
-    if fp.read(1) == ';':
+    ch_2 = fp.read(1)
+    if ch_1 == ';' or ch_2 == ';':
         delimiter = ';'
-    else:
+    elif ch_1 == ',' or ch_2 == ',':
         delimiter = ','
+    else:
+        raise ValueError("Could not determine delimiter from {} and {}".format(ch_1, ch_2))
     fp.seek(0)
 
     csv_reader = csv.reader(fp, delimiter=delimiter)
