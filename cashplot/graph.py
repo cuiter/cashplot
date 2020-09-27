@@ -11,6 +11,9 @@ def create_graph(tr_balances):
     draw_balances(fig, tr_balances)
     draw_categories(fig, tr_balances)
 
+    # Zoom into the last year by default
+    fig.update_xaxes(range=last_year_range(tr_balances))
+
     return fig
 
 
@@ -76,3 +79,9 @@ def categories_changes(tr_balances):
         cur_month = next_month(cur_month)
 
     return (months, changes)
+
+def last_year_range(tr_balances):
+    """Calculate the date range from a year prior to the transaction, to the transaction"""
+    last_date = tr_balances[-1].date
+    last_year_date = datetime.datetime(last_date.year - 1, last_date.month, last_date.day).date()
+    return [last_year_date, last_date]

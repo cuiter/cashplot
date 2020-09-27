@@ -38,3 +38,7 @@ def test_categories_changes():
     (months, changes) = categories_changes(tr_balances)
     assert months == [datetime.date(2020, 6, 1), datetime.date(2020, 7, 1)]
     assert changes == {'Salary': [Decimal('2500'), Decimal('0')]}
+
+def test_last_year_range():
+    ly_range = last_year_range(tr_balances)
+    assert ly_range == [datetime.date(2019, 7, 1), datetime.date(2020, 7, 1)]
