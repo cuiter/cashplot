@@ -24,6 +24,10 @@ Install the dependencies:
 Run cashplot:  
 `python -m cashplot <path/to/transactions.csv> <path/to/config.json>`
 
+When you run cashplot, the graph is displayed in a browser window.  
+By default, the graph is zoomed in on the last year. You can double-click to
+zoom out and see all the years for which data is available.
+
 ## Configuration
 
 Transactions are grouped into categories based on matching rules.
