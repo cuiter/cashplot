@@ -73,7 +73,7 @@ def get_categories(tr_balances):
     for account_name in tr_balances[0].balances.keys():
         if account_name in categories:
             categories.remove(account_name)
-    return list(categories)
+    return sorted(list(categories))
 
 
 def floor_month(date):

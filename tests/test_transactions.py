@@ -21,7 +21,9 @@ def test_categorize():
         Transaction('Emergency', datetime.date(2020, 6, 29), 'Mr. G',
                     'NL00MAIN1234567890', 'To Orange Savings Account ABC123456', Decimal('-100')),
         Transaction('Loan', datetime.date(2020, 7, 1), 'Mr. G', 'NL00MAIN1234567890',
-                    'To Orange Savings Account DEF999999', Decimal('-200'))
+                    'To Orange Savings Account DEF999999', Decimal('-200')),
+        Transaction('Shopping', datetime.date(2020, 7, 12), 'bol.com b.v.',
+                    'NL00MAIN1234567890', 'Name: bol.com b.v. Description: 90340932902 2492049402', Decimal('-50'))
     ]
 
 
@@ -36,5 +38,7 @@ def test_transaction_balances():
         TransactionBalance('Emergency', datetime.date(2020, 6, 29), 'Mr. G', 'NL00MAIN1234567890', 'To Orange Savings Account ABC123456', Decimal('-100'), {'main': Decimal(
             '-100'), 'Emergency': Decimal('100'), 'Loan': Decimal('0'), 'net': Decimal('0')}, {'main': Decimal('2400'), 'Emergency': Decimal('100'), 'Loan': Decimal('0.50'), 'net': Decimal('2500')}),
         TransactionBalance('Loan', datetime.date(2020, 7, 1), 'Mr. G', 'NL00MAIN1234567890', 'To Orange Savings Account DEF999999', Decimal('-200'), {'main': Decimal('-200'), 'Emergency': Decimal(
-            '0'), 'Loan': Decimal('200'), 'net': Decimal('-200')}, {'main': Decimal('2200'), 'Emergency': Decimal('100'), 'Loan': Decimal('200.50'), 'net': Decimal('2300')})
+            '0'), 'Loan': Decimal('200'), 'net': Decimal('-200')}, {'main': Decimal('2200'), 'Emergency': Decimal('100'), 'Loan': Decimal('200.50'), 'net': Decimal('2300')}),
+        TransactionBalance('Shopping', datetime.date(2020, 7, 12), 'bol.com b.v.', 'NL00MAIN1234567890', 'Name: bol.com b.v. Description: 90340932902 2492049402', Decimal('-50'), {'main': Decimal('-50'),
+            'Emergency': Decimal('0'), 'Loan': Decimal('0'), 'net': Decimal('-50')}, {'main': Decimal('2150'), 'Emergency': Decimal('100'), 'Loan': Decimal('200.5'), 'net': Decimal('2250')})
     ]

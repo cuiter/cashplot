@@ -31,22 +31,23 @@ def test_next_month():
 
 
 def test_get_categories():
-    assert get_categories(tr_balances) == ['Salary']
+    assert get_categories(tr_balances) == ['Salary', 'Shopping']
 
 
 def test_categories_changes():
     months, changes = categories_changes(tr_balances)
     assert months == [datetime.date(2020, 6, 1), datetime.date(2020, 7, 1)]
-    assert changes == {'Salary': [Decimal('2500'), Decimal('0')]}
+    assert changes == {'Salary': [Decimal('2500'), Decimal('0')],
+                       'Shopping': [Decimal('0'), Decimal('-50')]}
 
 def test_categories_income_expenses():
     months, changes = categories_changes(tr_balances)
     income_months, income_changes, expenses_months, expenses_changes = categories_income_expenses(months, changes)
-    assert income_months == {'Salary': [datetime.date(2020, 6, 1)]}
-    assert income_changes == {'Salary': [Decimal('2500')]}
-    assert expenses_months == {'Salary': []}
-    assert expenses_changes == {'Salary': []}
+    assert income_months == {'Salary': [datetime.date(2020, 6, 1)], 'Shopping': []}
+    assert income_changes == {'Salary': [Decimal('2500')], 'Shopping': []}
+    assert expenses_months == {'Salary': [], 'Shopping': [datetime.date(2020, 7, 1)]}
+    assert expenses_changes == {'Salary': [], 'Shopping': [Decimal('50')]}
 
 def test_last_year_range():
     ly_range = last_year_range(tr_balances)
-    assert ly_range == [datetime.date(2019, 7, 1), datetime.date(2020, 7, 1)]
+    assert ly_range == [datetime.date(2019, 7, 12), datetime.date(2020, 7, 12)]
