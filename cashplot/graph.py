@@ -4,13 +4,12 @@ from cashplot.util import *
 import datetime
 from decimal import Decimal
 
-GRAPH_LAYOUT = dict(rows=3, cols=1,
+GRAPH_LAYOUT = dict(rows=2, cols=1,
                     vertical_spacing=0.04,
                     shared_xaxes=True,
-                    subplot_titles=("Balance", "Monthly income", "Monthly expenses"))
+                    subplot_titles=("Balance", "Monthly income and expenses"))
 BALANCE_GRAPH = dict(row=1, col=1)
-INCOME_CATEGORY_GRAPH = dict(row=2, col=1)
-EXPENSES_CATEGORY_GRAPH = dict(row=3, col=1)
+CATEGORY_GRAPH = dict(row=2, col=1)
 
 
 def create_graph(tr_balances):
@@ -25,10 +24,15 @@ def create_graph(tr_balances):
 
     # Make the bars stack on top of each other
     # and place ticks on the start of each month.
-    fig.update_layout(barmode='relative',
-                      xaxis=dict(
+    fig.update_layout(barmode="relative",
+                      xaxis1=dict(
                         tickmode="array",
-                        tickvals=months
+                        tickvals=months,
+                      ),
+                      xaxis2=dict(
+                        tickmode="array",
+                        tickvals=override_days(months, 15),
+                        tickformat="%b %Y"
                       ))
 
     return fig
@@ -41,8 +45,7 @@ def draw_balances(fig, tr_balances):
     for account_name in tr_balances[0].balances.keys():
         y = list(map(lambda tr: tr.balances[account_name], tr_balances))
 
-        fig.add_trace(go.Scatter(x=x, y=y, name=account_name), **BALANCE_GRAPH)
-
+        fig.add_trace(go.Scatter(x=x, y=y, name=account_name, line_shape='hv'), **BALANCE_GRAPH)
 
 def draw_categories(fig, tr_balances):
     """
@@ -57,12 +60,12 @@ def draw_categories(fig, tr_balances):
     for category in changes.keys():
         # Draws bar chart entries of the monthly income and expenses grouped by category.
         # Shifts the dates by half a month so that the bar is drawn in the middle of the month.
-        fig.add_trace(go.Bar(x=list(map(shift_half_month, income_months[category])),
+        fig.add_trace(go.Bar(x=override_days(income_months[category], 9),
                              y=income_changes[category], name=category),
-                      **INCOME_CATEGORY_GRAPH)
-        fig.add_trace(go.Bar(x=list(map(shift_half_month, expenses_months[category])),
+                      **CATEGORY_GRAPH)
+        fig.add_trace(go.Bar(x=override_days(expenses_months[category], 21),
                              y=expenses_changes[category], name=category),
-                      **EXPENSES_CATEGORY_GRAPH)
+                      **CATEGORY_GRAPH)
 
     return months
 
@@ -89,13 +92,12 @@ def next_month(date):
         return datetime.datetime(date.year + 1, 1, 1).date()
 
 
-def shift_half_month(date):
+def override_days(dates, day):
     """
-    Shift the given date forward by half a month.
-
-    NOTE: Assumes the given date is on the first of the month.
+    Return the given dates with its day set to the given day.
     """
-    return datetime.datetime(date.year, date.month, date.day + 15)
+    return list(map(lambda date: datetime.datetime(date.year, date.month, day).date(),
+                    dates))
 
 
 def categories_changes(tr_balances):

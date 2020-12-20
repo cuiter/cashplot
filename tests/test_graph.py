@@ -30,6 +30,17 @@ def test_next_month():
                       ) == datetime.datetime(2000, 2, 1).date()
 
 
+def test_override_days():
+    assert override_days([datetime.datetime(2020, 5, 20).date(),
+                          datetime.datetime(2200, 12, 31).date(),
+                          datetime.datetime(2000, 1, 1).date()],
+                         15) == [
+                          datetime.datetime(2020, 5, 15).date(),
+                          datetime.datetime(2200, 12, 15).date(),
+                          datetime.datetime(2000, 1, 15).date()
+                         ]
+
+
 def test_get_categories():
     assert get_categories(tr_balances) == ['Salary', 'Shopping']
 
