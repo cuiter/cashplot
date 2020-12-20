@@ -1,12 +1,18 @@
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 from cashplot.util import *
 import datetime
 from decimal import Decimal
 
+GRAPH_LAYOUT = {"rows": 2, "cols": 1}
+BALANCE_GRAPH = {"row": 1, "col": 1}
+CATEGORY_GRAPH = {"row": 2, "col": 1}
+
 
 def create_graph(tr_balances):
     """Create a Plotly graph from the given transactions+balances."""
-    fig = go.Figure()
+    fig = make_subplots(**GRAPH_LAYOUT,
+                        subplot_titles=("Balance", "Monthly income/expenses"))
 
     draw_balances(fig, tr_balances)
     draw_categories(fig, tr_balances)
@@ -24,7 +30,7 @@ def draw_balances(fig, tr_balances):
     for account_name in tr_balances[0].balances.keys():
         y = list(map(lambda tr: tr.balances[account_name], tr_balances))
 
-        fig.add_trace(go.Scatter(x=x, y=y, name=account_name))
+        fig.add_trace(go.Scatter(x=x, y=y, name=account_name), **BALANCE_GRAPH)
 
 
 def draw_categories(fig, tr_balances):
@@ -32,7 +38,7 @@ def draw_categories(fig, tr_balances):
     months, changes = categories_changes(tr_balances)
 
     for category in changes.keys():
-        fig.add_trace(go.Scatter(x=months, y=changes[category], name=category))
+        fig.add_trace(go.Bar(x=months, y=changes[category], name=category), **CATEGORY_GRAPH)
 
 
 def get_categories(tr_balances):
@@ -58,7 +64,7 @@ def next_month(date):
 
 
 def categories_changes(tr_balances):
-    """Calculate the monthly income/expenses for each category occurring in the given transactions+balances."""
+    """Calculate the monthly total for each category occurring in the given transactions+balances."""
     categories = get_categories(tr_balances)
 
     first_month = floor_month(tr_balances[0].date)
