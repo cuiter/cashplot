@@ -4,21 +4,32 @@ from cashplot.util import *
 import datetime
 from decimal import Decimal
 
-GRAPH_LAYOUT = {"rows": 2, "cols": 1}
-BALANCE_GRAPH = {"row": 1, "col": 1}
-CATEGORY_GRAPH = {"row": 2, "col": 1}
+GRAPH_LAYOUT = dict(rows=3, cols=1,
+                    vertical_spacing=0.04,
+                    shared_xaxes=True,
+                    subplot_titles=("Balance", "Monthly income", "Monthly expenses"))
+BALANCE_GRAPH = dict(row=1, col=1)
+INCOME_CATEGORY_GRAPH = dict(row=2, col=1)
+EXPENSES_CATEGORY_GRAPH = dict(row=3, col=1)
 
 
 def create_graph(tr_balances):
     """Create a Plotly graph from the given transactions+balances."""
-    fig = make_subplots(**GRAPH_LAYOUT,
-                        subplot_titles=("Balance", "Monthly income/expenses"))
+    fig = make_subplots(**GRAPH_LAYOUT)
 
     draw_balances(fig, tr_balances)
-    draw_categories(fig, tr_balances)
+    months = draw_categories(fig, tr_balances)
 
-    # Zoom into the last year by default
+    # Zoom into the last year by default.
     fig.update_xaxes(range=last_year_range(tr_balances))
+
+    # Make the bars stack on top of each other
+    # and place ticks on the start of each month.
+    fig.update_layout(barmode='relative',
+                      xaxis=dict(
+                        tickmode="array",
+                        tickvals=months
+                      ))
 
     return fig
 
@@ -34,11 +45,26 @@ def draw_balances(fig, tr_balances):
 
 
 def draw_categories(fig, tr_balances):
-    """Draw the monthly total income/expenses for each category."""
+    """
+    Draw the monthly total income/expenses for each category.
+
+    Returns the months by which the monthly totals are grouped.
+    """
     months, changes = categories_changes(tr_balances)
+    income_months, income_changes, expenses_months, expenses_changes = categories_income_expenses(months, changes)
+
 
     for category in changes.keys():
-        fig.add_trace(go.Bar(x=months, y=changes[category], name=category), **CATEGORY_GRAPH)
+        # Draws bar chart entries of the monthly income and expenses grouped by category.
+        # Shifts the dates by half a month so that the bar is drawn in the middle of the month.
+        fig.add_trace(go.Bar(x=list(map(shift_half_month, income_months[category])),
+                             y=income_changes[category], name=category),
+                      **INCOME_CATEGORY_GRAPH)
+        fig.add_trace(go.Bar(x=list(map(shift_half_month, expenses_months[category])),
+                             y=expenses_changes[category], name=category),
+                      **EXPENSES_CATEGORY_GRAPH)
+
+    return months
 
 
 def get_categories(tr_balances):
@@ -63,6 +89,15 @@ def next_month(date):
         return datetime.datetime(date.year + 1, 1, 1).date()
 
 
+def shift_half_month(date):
+    """
+    Shift the given date forward by half a month.
+
+    NOTE: Assumes the given date is on the first of the month.
+    """
+    return datetime.datetime(date.year, date.month, date.day + 15)
+
+
 def categories_changes(tr_balances):
     """Calculate the monthly total for each category occurring in the given transactions+balances."""
     categories = get_categories(tr_balances)
@@ -85,6 +120,42 @@ def categories_changes(tr_balances):
         cur_month = next_month(cur_month)
 
     return (months, changes)
+
+
+def categories_income_expenses(months, changes):
+    """
+    Split the category monthly totals into income and expenses.
+
+    NOTE: This flips the sign of the expenses so they are always positive.
+    Returns dictionaries of X (month) and Y (change) values indexed by category.
+    """
+    income_months = {}
+    income_changes = {}
+    expenses_months = {}
+    expenses_changes = {}
+
+    for category in changes.keys():
+        cat_changes = changes[category]
+        cat_income_months = []
+        cat_income_changes = []
+        cat_expenses_months = []
+        cat_expenses_changes = []
+
+        for i in range(0, len(months)):
+            if cat_changes[i] < Decimal(0):
+                cat_expenses_months.append(months[i])
+                cat_expenses_changes.append(-cat_changes[i])
+            elif cat_changes[i] > Decimal(0):
+                cat_income_months.append(months[i])
+                cat_income_changes.append(cat_changes[i])
+
+        income_months[category] = cat_income_months
+        income_changes[category] = cat_income_changes
+        expenses_months[category] = cat_expenses_months
+        expenses_changes[category] = cat_expenses_changes
+
+    return (income_months, income_changes, expenses_months, expenses_changes)
+
 
 def last_year_range(tr_balances):
     """Calculate the date range from a year prior to the transaction, to the transaction"""
