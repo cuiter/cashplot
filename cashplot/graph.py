@@ -1,4 +1,5 @@
 import plotly.graph_objects as go
+import plotly
 from plotly.subplots import make_subplots
 from cashplot.util import *
 import datetime
@@ -25,6 +26,7 @@ def create_graph(tr_balances):
     # Make the bars stack on top of each other
     # and place ticks on the start of each month.
     fig.update_layout(barmode="relative",
+                      colorway=plotly.colors.qualitative.T10,
                       xaxis1=dict(
                           tickmode="array",
                           tickvals=months,
