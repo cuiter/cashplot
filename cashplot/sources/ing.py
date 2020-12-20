@@ -31,7 +31,8 @@ class INGTransaction(EqHash, Repr):
         elif raw_direction == "Debit" or raw_direction == "Af":
             direction = False
         else:
-            raise ValueError("Could not determine transaction direction based on value: " + raw_direction)
+            raise ValueError(
+                "Could not determine transaction direction based on value: " + raw_direction)
         amount = Decimal(row[6].replace(',', '.'))
         tr_type = row[7]
         description = row[8]
@@ -53,7 +54,8 @@ def load_ing_transactions(fp):
     elif ch_1 == ',' or ch_2 == ',':
         delimiter = ','
     else:
-        raise ValueError("Could not determine delimiter from {} and {}".format(ch_1, ch_2))
+        raise ValueError(
+            "Could not determine delimiter from {} and {}".format(ch_1, ch_2))
     fp.seek(0)
 
     csv_reader = csv.reader(fp, delimiter=delimiter)
