@@ -35,10 +35,10 @@ def test_override_days():
                           datetime.datetime(2200, 12, 31).date(),
                           datetime.datetime(2000, 1, 1).date()],
                          15) == [
-                          datetime.datetime(2020, 5, 15).date(),
-                          datetime.datetime(2200, 12, 15).date(),
-                          datetime.datetime(2000, 1, 15).date()
-                         ]
+        datetime.datetime(2020, 5, 15).date(),
+        datetime.datetime(2200, 12, 15).date(),
+        datetime.datetime(2000, 1, 15).date()
+    ]
 
 
 def test_get_categories():
@@ -51,13 +51,18 @@ def test_categories_changes():
     assert changes == {'Salary': [Decimal('2500'), Decimal('0')],
                        'Shopping': [Decimal('0'), Decimal('-50')]}
 
+
 def test_categories_income_expenses():
     months, changes = categories_changes(tr_balances)
-    income_months, income_changes, expenses_months, expenses_changes = categories_income_expenses(months, changes)
-    assert income_months == {'Salary': [datetime.date(2020, 6, 1)], 'Shopping': []}
+    income_months, income_changes, expenses_months, expenses_changes = categories_income_expenses(
+        months, changes)
+    assert income_months == {'Salary': [
+        datetime.date(2020, 6, 1)], 'Shopping': []}
     assert income_changes == {'Salary': [Decimal('2500')], 'Shopping': []}
-    assert expenses_months == {'Salary': [], 'Shopping': [datetime.date(2020, 7, 1)]}
+    assert expenses_months == {'Salary': [],
+                               'Shopping': [datetime.date(2020, 7, 1)]}
     assert expenses_changes == {'Salary': [], 'Shopping': [Decimal('50')]}
+
 
 def test_last_year_range():
     ly_range = last_year_range(tr_balances)

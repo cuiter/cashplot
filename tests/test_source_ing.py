@@ -33,7 +33,8 @@ def test_load_ing_transactions():
                            'GT', False, Decimal('100'), 'Online Banking', 'To Orange Savings Account ABC123456'),
             INGTransaction(datetime.date(2020, 7, 1), 'Mr. G', 'NL00MAIN1234567890', 'NL00MAIN1234567890',
                            'GT', False, Decimal('200'), 'Online Banking', 'To Orange Savings Account DEF999999'),
-            INGTransaction(datetime.date(2020, 7, 12), 'bol.com b.v.', 'NL27INGB0000026500', 'NL00MAIN1234567890', 'ID', False, Decimal('50'), 'iDEAL', 'Name: bol.com b.v. Description: 90340932902 2492049402')
+            INGTransaction(datetime.date(2020, 7, 12), 'bol.com b.v.', 'NL27INGB0000026500', 'NL00MAIN1234567890',
+                           'ID', False, Decimal('50'), 'iDEAL', 'Name: bol.com b.v. Description: 90340932902 2492049402')
         ]
     # Dutch transactions file
     with open("tests/data/test_transactions_nl.csv", "r") as tfp:
@@ -47,7 +48,8 @@ def test_load_ing_transactions():
                            'GT', False, Decimal('100'), 'Online bankieren', 'Naar Oranje spaarrekening ABC123456'),
             INGTransaction(datetime.date(2020, 7, 1), 'Mr. G', 'NL00MAIN1234567890', 'NL00MAIN1234567890',
                            'GT', False, Decimal('200'), 'Online bankieren', 'Naar Oranje spaarrekening DEF999999'),
-            INGTransaction(datetime.date(2020, 7, 12), 'bol.com b.v.', 'NL27INGB0000026500', 'NL00MAIN1234567890', 'ID', False, Decimal('50'), 'iDEAL', 'Naam: bol.com b.v. Beschrijving: 90340932902 2492049402')
+            INGTransaction(datetime.date(2020, 7, 12), 'bol.com b.v.', 'NL27INGB0000026500', 'NL00MAIN1234567890',
+                           'ID', False, Decimal('50'), 'iDEAL', 'Naam: bol.com b.v. Beschrijving: 90340932902 2492049402')
         ]
 
 

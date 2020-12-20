@@ -26,13 +26,13 @@ def create_graph(tr_balances):
     # and place ticks on the start of each month.
     fig.update_layout(barmode="relative",
                       xaxis1=dict(
-                        tickmode="array",
-                        tickvals=months,
+                          tickmode="array",
+                          tickvals=months,
                       ),
                       xaxis2=dict(
-                        tickmode="array",
-                        tickvals=override_days(months, 15),
-                        tickformat="%b %Y"
+                          tickmode="array",
+                          tickvals=override_days(months, 15),
+                          tickformat="%b %Y"
                       ))
 
     return fig
@@ -45,7 +45,9 @@ def draw_balances(fig, tr_balances):
     for account_name in tr_balances[0].balances.keys():
         y = list(map(lambda tr: tr.balances[account_name], tr_balances))
 
-        fig.add_trace(go.Scatter(x=x, y=y, name=account_name, line_shape='hv'), **BALANCE_GRAPH)
+        fig.add_trace(go.Scatter(x=x, y=y, name=account_name,
+                                 line_shape='hv'), **BALANCE_GRAPH)
+
 
 def draw_categories(fig, tr_balances):
     """
@@ -54,8 +56,8 @@ def draw_categories(fig, tr_balances):
     Returns the months by which the monthly totals are grouped.
     """
     months, changes = categories_changes(tr_balances)
-    income_months, income_changes, expenses_months, expenses_changes = categories_income_expenses(months, changes)
-
+    income_months, income_changes, expenses_months, expenses_changes = categories_income_expenses(
+        months, changes)
 
     for category in changes.keys():
         # Draws bar chart entries of the monthly income and expenses grouped by category.
@@ -162,5 +164,6 @@ def categories_income_expenses(months, changes):
 def last_year_range(tr_balances):
     """Calculate the date range from a year prior to the transaction, to the transaction"""
     last_date = tr_balances[-1].date
-    last_year_date = datetime.datetime(last_date.year - 1, last_date.month, last_date.day).date()
+    last_year_date = datetime.datetime(
+        last_date.year - 1, last_date.month, last_date.day).date()
     return [last_year_date, last_date]

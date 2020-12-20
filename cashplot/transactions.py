@@ -5,6 +5,7 @@ from decimal import Decimal
 from cashplot.util import *
 from cashplot.consts import *
 
+
 class TransactionBase(EqHash, Repr):
     """A transaction without a category assigned."""
 
