@@ -1,4 +1,5 @@
 "Datum";"Naam / Omschrijving";"Rekening";"Tegenrekening";"Code";"Af Bij";"Bedrag (EUR)";"Mutatiesoort";"Mededelingen"
+20200712;bol.com b.v.;NL27INGB0000026500;NL00MAIN1234567890;ID;Af;50;iDEAL;Naam: bol.com b.v. Beschrijving: 90340932902 2492049402
 20200701;Mr. G;NL00MAIN1234567890;NL00MAIN1234567890;GT;Af;200;Online bankieren;Naar Oranje spaarrekening DEF999999
 20200629;Mr. G;NL00MAIN1234567890;NL00MAIN1234567890;GT;Af;100;Online bankieren;Naar Oranje spaarrekening ABC123456
 20200628;Company Inc.;NL00MAIN1234567890;NL01WORK0987654321;OV;Bij;500;Overschrijving;Bonus voor juni 2020
