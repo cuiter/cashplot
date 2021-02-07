@@ -46,22 +46,12 @@ def test_get_categories():
 
 
 def test_categories_changes():
-    months, changes = categories_changes(tr_balances)
+    months, income_changes, expenses_changes = categories_changes(tr_balances)
     assert months == [datetime.date(2020, 6, 1), datetime.date(2020, 7, 1)]
-    assert changes == {'Salary': [Decimal('2500'), Decimal('0')],
-                       'Shopping': [Decimal('0'), Decimal('-50')]}
-
-
-def test_categories_income_expenses():
-    months, changes = categories_changes(tr_balances)
-    income_months, income_changes, expenses_months, expenses_changes = categories_income_expenses(
-        months, changes)
-    assert income_months == {'Salary': [
-        datetime.date(2020, 6, 1)], 'Shopping': []}
-    assert income_changes == {'Salary': [Decimal('2500')], 'Shopping': []}
-    assert expenses_months == {'Salary': [],
-                               'Shopping': [datetime.date(2020, 7, 1)]}
-    assert expenses_changes == {'Salary': [], 'Shopping': [Decimal('50')]}
+    assert income_changes == {'Salary': [Decimal('2500'), Decimal('0')],
+                              'Shopping': [Decimal('0'), Decimal('0')]}
+    assert expenses_changes == {'Salary': [Decimal('0'), Decimal('0')],
+                              'Shopping': [Decimal('0'), Decimal('50')]}
 
 
 def test_last_year_range():
