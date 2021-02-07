@@ -1,4 +1,5 @@
 from cashplot.util import *
+import datetime
 
 
 def test_fill_dict():
@@ -31,3 +32,8 @@ def test_eq_hash():
 def test_repr():
     assert repr(Point(5, 2)) == 'Point(5, 2)'
     assert repr(Point(-5, -2)) == 'Point(-5, -2)'
+
+
+def test_interleave_lists():
+    assert interleave_lists([1, 2], [3, 4]) == [1, 3, 2, 4]
+    assert interleave_lists(['first', 'second'], ['third', 'fourth']) == ['first', 'third', 'second', 'fourth']

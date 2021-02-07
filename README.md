@@ -2,18 +2,19 @@
 
 ![](https://cuiter.me/ext/cashplot.png)
 
-Draws a graph of your bank balance and income/expenses over time.
+CashPlot helps in finding trends in your financials and shows you where your
+money is going. It draws a graph of your bank balance and income/expenses over
+time.
 
-Supports ING Bank export files.
+It supports ING Bank export files (English/Dutch CSV).
 
 ## Features
 
 - Generates a time/money graph of:
-  - Balance of the main and savings accounts.
-  - Net worth (sum of main + savings accounts).
-  - Monthly income/expenses grouped by category.
-- Uses Plotly to generate the graph.  
-  This means easy zooming / scrolling / filtering by category.
+  - Balance of the main and savings accounts
+  - Net worth (sum of main + savings accounts)
+  - Total period income/expenses grouped by category
+- Easy zooming / scrolling / filtering by category
 
 ## How to use
 
@@ -23,11 +24,14 @@ Create a Virtualenv directory in `venv/`:
 Install the dependencies:  
 `pip install -r requirements.txt`
 
-Run CashPlot:  
-`python -m cashplot <path/to/transactions.csv> <path/to/config.json>`  
+List the command-line options:  
+`python -m cashplot --help`  
 
-For example, to generate the graph displayed above, run:  
-`python -m cashplot examples/transactions.csv examples/config.json`
+Run CashPlot:  
+`python -m cashplot [--config <path/to/config.json>] <path/to/transactions.csv>`  
+
+For example, to generate the graph shown above, run:  
+`python -m cashplot --config examples/config.json examples/transactions.csv`
 
 When you run CashPlot, the graph is displayed in a browser window.  
 By default, the graph is zoomed in on the last year. You can double-click to
@@ -62,9 +66,9 @@ the main and savings account.
 
 See the `examples/config.json` file for an example configuration.
 
-## Getting transaction files
+## Getting transactions exports
 
-Transaction files can be downloaded from the ING Bank online portal. When
+Transactions exports can be downloaded from the ING Bank online portal. When
 logged in, click on the download icon near the balance of the checking
 account. It's recommended to select the earliest possible start date, so that
 the calculated end balance corresponds to the current balance. Select

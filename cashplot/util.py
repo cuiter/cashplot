@@ -1,4 +1,5 @@
 import copy
+import datetime
 
 
 def fill_dict(keys, value):
@@ -9,6 +10,8 @@ def fill_dict(keys, value):
     return result
 
 # Copied from https://stackoverflow.com/a/11125298
+
+
 def interleave_lists(list1, list2):
     return [x for t in zip(list1, list2) for x in t]
 
