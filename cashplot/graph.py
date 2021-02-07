@@ -57,18 +57,21 @@ def draw_categories(fig, tr_balances):
 
     Returns the months by which the monthly totals are grouped.
     """
-    months, changes = categories_changes(tr_balances)
-    income_months, income_changes, expenses_months, expenses_changes = categories_income_expenses(
-        months, changes)
+    months, income_changes, expenses_changes = categories_changes(tr_balances)
 
-    for category in changes.keys():
+    # Because of the way Plotly determines categories, we need to combine
+    # the incomes and expenses into one dataset to avoid duplicate categories.
+
+    # Shifts the dates by half a month so that the bar is drawn in the middle of the month.
+    income_months = override_days(months, 9)
+    expenses_months = override_days(months, 21)
+    combined_months = interleave_lists(income_months, expenses_months)
+
+    for category in income_changes.keys():
+        combined_changes = interleave_lists(income_changes[category], expenses_changes[category])
         # Draws bar chart entries of the monthly income and expenses grouped by category.
-        # Shifts the dates by half a month so that the bar is drawn in the middle of the month.
-        fig.add_trace(go.Bar(x=override_days(income_months[category], 9),
-                             y=income_changes[category], name=category),
-                      **CATEGORY_GRAPH)
-        fig.add_trace(go.Bar(x=override_days(expenses_months[category], 21),
-                             y=expenses_changes[category], name=category),
+        fig.add_trace(go.Bar(x=combined_months,
+                             y=combined_changes, name=category),
                       **CATEGORY_GRAPH)
 
     return months
@@ -105,62 +108,33 @@ def override_days(dates, day):
 
 
 def categories_changes(tr_balances):
-    """Calculate the monthly total for each category occurring in the given transactions+balances."""
+    """Calculate the monthly total income/expenses for each category occurring in the given transactions+balances."""
     categories = get_categories(tr_balances)
 
     first_month = floor_month(tr_balances[0].date)
     last_month = floor_month(tr_balances[-1].date)
 
-    changes = fill_dict(categories, [])
+    income_changes = fill_dict(categories, [])
+    expenses_changes = fill_dict(categories, [])
 
     months = []
     cur_month = first_month
     while cur_month <= last_month:
-        cur_changes = fill_dict(categories, Decimal(0))
+        cur_income_changes = fill_dict(categories, Decimal(0))
+        cur_expenses_changes = fill_dict(categories, Decimal(0))
         for tr in tr_balances:
             if floor_month(tr.date) == cur_month and tr.category in categories:
-                cur_changes[tr.category] += tr.change
+                if tr.change >= 0:
+                    cur_income_changes[tr.category] += tr.change
+                else:
+                    cur_expenses_changes[tr.category] += -tr.change
         for category in categories:
-            changes[category].append(cur_changes[category])
+            income_changes[category].append(cur_income_changes[category])
+            expenses_changes[category].append(cur_expenses_changes[category])
         months.append(cur_month)
         cur_month = next_month(cur_month)
 
-    return (months, changes)
-
-
-def categories_income_expenses(months, changes):
-    """
-    Split the category monthly totals into income and expenses.
-
-    NOTE: This flips the sign of the expenses so they are always positive.
-    Returns dictionaries of X (month) and Y (change) values indexed by category.
-    """
-    income_months = {}
-    income_changes = {}
-    expenses_months = {}
-    expenses_changes = {}
-
-    for category in changes.keys():
-        cat_changes = changes[category]
-        cat_income_months = []
-        cat_income_changes = []
-        cat_expenses_months = []
-        cat_expenses_changes = []
-
-        for i in range(0, len(months)):
-            if cat_changes[i] < Decimal(0):
-                cat_expenses_months.append(months[i])
-                cat_expenses_changes.append(-cat_changes[i])
-            elif cat_changes[i] > Decimal(0):
-                cat_income_months.append(months[i])
-                cat_income_changes.append(cat_changes[i])
-
-        income_months[category] = cat_income_months
-        income_changes[category] = cat_income_changes
-        expenses_months[category] = cat_expenses_months
-        expenses_changes[category] = cat_expenses_changes
-
-    return (income_months, income_changes, expenses_months, expenses_changes)
+    return (months, income_changes, expenses_changes)
 
 
 def last_year_range(tr_balances):

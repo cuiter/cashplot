@@ -8,9 +8,12 @@ def fill_dict(keys, value):
         result[key] = copy.deepcopy(value)
     return result
 
+# Copied from https://stackoverflow.com/a/11125298
+def interleave_lists(list1, list2):
+    return [x for t in zip(list1, list2) for x in t]
+
+
 # Copied from https://codereview.stackexchange.com/a/131836
-
-
 class EqHash:
     """Mixin adding __eq__, __ne__, and __hash__ methods."""
 
