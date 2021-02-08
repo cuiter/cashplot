@@ -1,0 +1,14 @@
+{
+  "extends": ["eslint:recommended", "google"],
+  "rules": { },
+  "plugins": ["jasmine"],
+  "globals": {
+    "Plotly": true
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
+    "jasmine": true
+  }
+}
