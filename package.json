@@ -1,0 +1,18 @@
+{
+  "name": "cashplot",
+  "private": true,
+  "scripts": {
+    "dev": "webpack && xdg-open ./src/index.html",
+    "build": "webpack",
+    "test": "node ./tests/index.js",
+    "lint": "eslint ./src/js/ ./tests/"
+  },
+  "devDependencies": {
+    "eslint": "^7.19.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-jasmine": "^4.1.2",
+    "jasmine": "^3.6.4",
+    "webpack": "^5.21.2",
+    "webpack-cli": "^4.5.0"
+  }
+}
