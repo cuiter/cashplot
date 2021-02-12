@@ -21,4 +21,4 @@ const trace3 = {
 
 const data = [trace1, trace2, trace3];
 
-Plotly.newPlot('tester', data);
+Plotly.newPlot('main-plot', data);
