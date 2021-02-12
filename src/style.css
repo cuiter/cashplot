@@ -1,0 +1,13 @@
+.margin-top-10 {
+	margin-top: 10rem;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.flex-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
