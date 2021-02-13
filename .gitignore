@@ -1,14 +1,8 @@
-# Local cashplot config
-/config.json
-
 # TODO list
 /TODO.md
 /sketches
 
-# Virtualenv
-/venv/
-
 # Node.JS
 /node_modules/
 # Compiled output
-/src/main.js
+/src/js/main.js
