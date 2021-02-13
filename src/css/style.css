@@ -11,3 +11,19 @@
 	justify-content: center;
 	align-items: center;
 }
+
+.disabled {
+	display: none;
+}
+
+.navigation .title {
+	 display: inline;
+	 font-size: 1.6rem;
+	 line-height: 5.2rem;
+	 padding: 0;
+	 text-decoration: none;
+}
+
+.navigation {
+	border-bottom: .1rem solid #d1d1d1;
+}

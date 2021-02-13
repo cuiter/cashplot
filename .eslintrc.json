@@ -5,6 +5,9 @@
   "globals": {
     "Plotly": true
   },
+  "parserOptions": {
+    "sourceType": "module"
+  },
   "env": {
     "browser": true,
     "node": true,
