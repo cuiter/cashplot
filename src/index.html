@@ -12,14 +12,37 @@
   </head>
   <body>
     <main class="wrapper">
-      <header id="home" class="container margin-top-10">
-        <h1 id="title" class="text-center">CashPlot</h1>
-      </header>
-      <section class="container flex-center margin-top-10">
-        <button class="button">Get Started</button>
+      <nav class="navigation">
+        <section class="container">
+          <a class="navigation-title" href="index.html">
+            <h1 class="title">CashPlot</h1>
+          </a>
+        </section>
+      </nav>
+      <div class="page" id="home-page">
+        <header class="container margin-top-10">
+          <h1 id="title" class="text-center">CashPlot</h1>
+        </header>
+        <section class="container flex-center margin-top-10">
+          <button class="button" id="get-started-button">Get Started</button>
+        </section>
       </div>
+      <section class="container margin-top-10 page disabled" id="input-page">
+        <h1>Input Data</h1>
+        <h3>Transactions</h3>
+        <i>Provide the transaction data you want to plot below or upload a file.</i><br>
+        <form>
+          <textarea rows="5" cols="20" id="transaction-export-input"></textarea><br>
+          <input type="file" id="transaction-export-upload"></input>
+        </form>
+      </section>
+      <section class="container margin-top-10 page disabled" id="balance-page">
+      </section>
+      <section class="container margin-top-10 page disabled" id="totals-page">
+      </section>
+      <section class="container margin-top-10 page disabled" id="faq-page">
+      </section>
     </main>
-
     <script src="js/deps/plotly-latest.min.js"></script>
     <script src="js/main.js"></script>
   </body>

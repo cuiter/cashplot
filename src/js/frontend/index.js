@@ -1,24 +1,23 @@
-const trace1 = {
-  x: [1, 2, 3, 4],
-  y: [10, 15, 13, 17],
-  mode: 'markers',
-  type: 'scatter',
-};
+import {setActivePage} from './ui';
 
-const trace2 = {
-  x: [2, 3, 4, 5],
-  y: [16, 5, 11, 9],
-  mode: 'lines',
-  type: 'scatter',
-};
+function init() {
+  document.getElementById('get-started-button')
+      .addEventListener('click', () => setActivePage('input'));
+  document.getElementById('transaction-export-upload')
+      .addEventListener('change', onTransactionExportUpload);
+}
 
-const trace3 = {
-  x: [1, 2, 3, 4],
-  y: [12, 9, 15, 12],
-  mode: 'lines+markers',
-  type: 'scatter',
-};
+function onTransactionExportUpload() {
+  const fileList = this.files;
+  if (fileList.length > 0) {
+    const file = this.files[0];
+    const reader = new FileReader();
+    reader.addEventListener('loadend', (event) => {
+      console.log(event.target.result);
+      document.getElementById('transaction-export-input').value = event.target.result;
+    });
+    reader.readAsText(file);
+  }
+}
 
-const data = [trace1, trace2, trace3];
-
-Plotly.newPlot('main-plot', data);
+document.addEventListener('DOMContentLoaded', init);

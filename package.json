@@ -5,7 +5,7 @@
     "dev": "webpack && xdg-open ./src/index.html",
     "build": "webpack",
     "test": "node ./tests/index.js",
-    "lint": "eslint ./src/js/ ./tests/"
+    "lint": "eslint ./src/js/lib/ ./src/js/frontend/ ./tests/ --fix"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
