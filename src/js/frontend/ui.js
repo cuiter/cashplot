@@ -1,3 +1,13 @@
+const HIDE_NAV_PAGES = ['home'];
+const NAV_ELEMENT = 'navigation';
+/**
+ * Sets the page to be visible, while hiding all others.
+ * A page is an element with class .page and id <name>-page.
+ *
+ * This function also shows/hides the navigation bar depending on the page.
+ *
+ * @param {string} pageName - Name of the page to switch to.
+ */
 export function setActivePage(pageName) {
   const elements = document.querySelectorAll('.page');
 
@@ -13,5 +23,12 @@ export function setActivePage(pageName) {
 
   if (!found) {
     throw new Error('Page ' + pageName + ' does not exist.');
+  }
+
+  console.log(pageName);
+  if (HIDE_NAV_PAGES.indexOf(pageName) >= 0) {
+    document.getElementById(NAV_ELEMENT).classList.add('disabled');
+  } else {
+    document.getElementById(NAV_ELEMENT).classList.remove('disabled');
   }
 }
