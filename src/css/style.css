@@ -2,6 +2,17 @@
 	margin-top: 10rem;
 }
 
+.margin-top-5 {
+	margin-top: 5rem;
+}
+
+.button-small {
+	font-size: .8rem;
+	height: 2.8rem;
+	line-height: 2.8rem;
+	padding: 0 1.5rem;
+}
+
 .text-center {
 	text-align: center;
 }
@@ -16,12 +27,17 @@
 	display: none;
 }
 
+.invisible {
+	visibility: hidden;
+}
+
 .navigation .title {
-	 display: inline;
-	 font-size: 1.6rem;
-	 line-height: 5.2rem;
-	 padding: 0;
-	 text-decoration: none;
+	display: inline;
+	font-size: 1.6rem;
+	line-height: 5.2rem;
+	padding: 0;
+	text-decoration: none;
+	cursor: pointer;
 }
 
 .navigation {

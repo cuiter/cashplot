@@ -1,20 +1,29 @@
 import {setActivePage} from './ui';
 
+/**
+ * Initialization method to be called when the page is done loading.
+ * Registers event handlers.
+ */
 function init() {
+  document.getElementById('home-button')
+      .addEventListener('click', () => setActivePage('home'));
   document.getElementById('get-started-button')
       .addEventListener('click', () => setActivePage('input'));
-  document.getElementById('transaction-export-upload')
-      .addEventListener('change', onTransactionExportUpload);
+  document.getElementById('transaction-data-upload')
+      .addEventListener('change', onTransactionDataUpload);
 }
 
-function onTransactionExportUpload() {
-  const fileList = this.files;
+/**
+ * Callback for the transaction data "Browse file" button
+ */
+function onTransactionDataUpload() {
+  const fileList = this.files; // eslint-disable-line no-invalid-this
   if (fileList.length > 0) {
-    const file = this.files[0];
+    const file = fileList[0];
     const reader = new FileReader();
     reader.addEventListener('loadend', (event) => {
-      console.log(event.target.result);
-      document.getElementById('transaction-export-input').value = event.target.result;
+      document.getElementById('transaction-data-input').value =
+        event.target.result;
     });
     reader.readAsText(file);
   }
