@@ -43,3 +43,17 @@
 .navigation {
 	border-bottom: .1rem solid #d1d1d1;
 }
+
+.description {
+	display: block;
+	margin-bottom: 0.8rem;
+}
+
+/* Override input text color to make it readable in dark-mode browsers. */
+input[type="color"], input[type="date"], input[type="datetime"],
+input[type="datetime-local"], input[type="email"], input[type="month"],
+input[type="number"], input[type="password"], input[type="search"],
+input[type="tel"], input[type="text"], input[type="url"], input[type="week"],
+input:not([type]), textarea, select {
+	color: #505a65;
+}

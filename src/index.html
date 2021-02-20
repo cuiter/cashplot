@@ -28,32 +28,85 @@
         </section>
       </div>
       <section class="container margin-top-5 page disabled" id="input-page">
-        <i>
+        <i class="description">
           Start entering the data by filling in the fields. It's possible to
           create an export, for example if you want to create a back-up or
           share the results with someone else.
         </i>
         <form>
-          <input type="file" class="disabled" id="transaction-data-upload"></input>
           <label class="button button-outline" for="config-upload">Upload Parameters</label>
           <input type="file" class="disabled" id="config-upload"></input>
           <button class="button" id="config-export">Export Parameters</button>
         </form>
 
         <h2>Transaction Data</h2>
-        <i>Provide the transaction data to plot below or upload a file.</i><br>
+        <i class="description">Provide the transaction data to plot below or upload a file.</i>
         <form>
-          <textarea rows="5" cols="20" id="transaction-export-input"></textarea><br>
+          <textarea rows="5" cols="20" id="transaction-data-input"></textarea><br>
           <label class="button" for="transaction-data-upload">Upload Transactions</label>
+          <input type="file" class="disabled" id="transaction-data-upload"></input>
         </form>
 
-        <h2>Savings Accounts</h2>
-        <i>Provide the names of the savings accounts that you want to track in addition to the main (checkings) account</i><br>
-        <button class="button button-small" id="add-category-button">Add</button>
+        <h2>Accounts</h2>
+        <i class="description">
+          Provide the names of the savings accounts that you want to track in
+          addition to the main (checkings) account.
+        </i>
+        <form>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Starting balance</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text" value="Main"></input></td>
+                <td><input type="text" value="1000"></input></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td><input type="text" value="Study"></input></td>
+                <td><input type="text" value="2000"></input></td>
+                <td><button class="button button-small">Remove</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="button button-small" id="add-category-button">Add</button>
+        </form>
 
         <h2>Categories</h2>
-        <i>Tracking different types of spending/income is possible by specifying categories. Give each category a name and ways for transactions to be identified.</i><br>
-        <button class="button button-small" id="add-category-button">Add</button>
+        <i class="description">
+          Tracking different types of spending/income is possible by specifying
+          categories. Give each category a name and ways for transactions to be
+          identified.
+        </i>
+        <form>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Counter-account</th>
+                <th>Counter-name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text" value="Groceries"></input></td>
+                <td><input type="text" value="PIN-automat"></input></td>
+                <td><input type="text" value="NL924938493029"></input></td>
+                <td><input type="text" value="Jumbo NLD"></input></td>
+                <td><button class="button button-small">Remove</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="button button-small" id="add-category-button">Add</button>
+        </form>
+
+        <button class="button">Create Graph</button>
       </section>
       <section class="container margin-top-10 page disabled" id="balance-page">
       </section>
