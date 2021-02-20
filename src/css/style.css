@@ -61,6 +61,10 @@
 	margin-bottom: 0.8rem;
 }
 
+.entry-column {
+	min-width: 20rem;
+}
+
 /* Override input text color to make it readable in dark-mode browsers. */
 input[type="color"], input[type="date"], input[type="datetime"],
 input[type="datetime-local"], input[type="email"], input[type="month"],
