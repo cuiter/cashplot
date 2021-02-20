@@ -1,17 +1,15 @@
 const HIDE_NAV_PAGES = ['home'];
 const NAV_ELEMENT = 'navigation';
 
-const NAV_LINKS = ['home', 'input', 'balance', 'totals', 'faq'];
-const SHOW_NAV_LINKS = {
-  'input': ['home', 'input', 'faq'],
-  'balance': ['home', 'input', 'balance', 'totals', 'faq'],
-  'totals': ['home', 'input', 'balance', 'totals', 'faq'],
-  'faq': ['home', 'faq'],
-};
+const WITHOUT_INPUT_NAV_LINKS = ['home', 'input', 'faq'];
+const WITH_INPUT_NAV_LINKS = ['home', 'input', 'balance', 'totals', 'faq'];
+
+let inputSubmitted = false;
 
 /**
  * Sets the page to be visible, while hiding all others.
- * A page is an element with class .page and id <name>-page.
+ * A page is an element with class .page, an id <name>-page,
+ * and a separate nav element with id nav-<name>-button.
  *
  * This function also shows/hides the navigation bar depending on the page,
  * and updates the navigation links accordingly.
@@ -45,24 +43,36 @@ export function setActivePage(pageName) {
 }
 
 /**
- * Updates the navigation links to reflect the current page to the user.
- * See NAV_LINKS and SHOW_NAV_LINKS which links are shown on which page.
+ * Sets whether the input has been submitted, which will affect the shown
+ * navigation links.
+ *
+ * @param {boolean} submitted - Whether the input has been submitted.
+ */
+export function setInputSubmitted(submitted) {
+  inputSubmitted = true;
+}
+
+/**
+ * Updates the navigation links to reflect whether the input has been
+ * submitted, and highlights the current page.
  *
  * @param {string} pageName - Name of the current page.
  */
 function updateNavLinks(pageName) {
-  if (SHOW_NAV_LINKS[pageName] !== undefined) {
-    const showNavLinks = SHOW_NAV_LINKS[pageName];
-    for (const navLink of NAV_LINKS) {
-      const navLinkElement =
-        document.getElementById('nav-' + navLink + '-button');
-      if (showNavLinks.indexOf(navLink) >= 0) {
-        navLinkElement.classList.remove('disabled');
-      } else {
-        navLinkElement.classList.add('disabled');
-      }
+  const shownNavLinks = inputSubmitted ? WITH_INPUT_NAV_LINKS : WITHOUT_INPUT_NAV_LINKS;
+  const allNavLinks = Array.from(new Set(WITH_INPUT_NAV_LINKS.concat(WITHOUT_INPUT_NAV_LINKS)));
+  for (const navLink of allNavLinks) {
+    const navLinkElement =
+      document.getElementById('nav-' + navLink + '-button');
 
-      if (navLink == pageName) {
+    if (shownNavLinks.indexOf(navLink) >= 0) {
+      navLinkElement.classList.remove('disabled');
+    } else {
+      navLinkElement.classList.add('disabled');
+    }
+
+    if (pageName !== null) {
+      if (navLink === pageName) {
         navLinkElement.classList.add('current');
       } else {
         navLinkElement.classList.remove('current');
