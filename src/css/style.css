@@ -61,8 +61,10 @@
 	margin-bottom: 0.8rem;
 }
 
-.entry-column {
-	min-width: 20rem;
+.entry-column:before {
+	content: '';
+	display: block;
+	width: 15rem;
 }
 
 /* Override input text color to make it readable in dark-mode browsers. */
