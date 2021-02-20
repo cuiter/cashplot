@@ -1,4 +1,4 @@
-import {setActivePage} from './ui';
+import {setActivePage, setInputSubmitted} from './ui';
 
 /**
  * Initialization method to be called when the page is done loading.
@@ -18,7 +18,10 @@ function init() {
   document.getElementById('get-started-button')
       .addEventListener('click', () => setActivePage('input'));
   document.getElementById('create-graph-button')
-      .addEventListener('click', () => setActivePage('balance'));
+      .addEventListener('click', () => {
+        setInputSubmitted(true);
+        setActivePage('balance');
+      });
 
   document.getElementById('transaction-data-upload')
       .addEventListener('change', onTransactionDataUpload);
