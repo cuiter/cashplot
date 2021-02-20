@@ -14,8 +14,23 @@
     <main class="wrapper">
       <nav class="navigation disabled" id="navigation">
         <section class="container">
-          <a class="navigation-title" id="home-button">
+          <a id="nav-home-button">
             <h1 class="title">CashPlot</h1>
+          </a>
+          <a id="nav-input-button">
+            <span class="splitter">&gt;</span>
+            <h1 class="title">Input</h1>
+          </a>
+          <a id="nav-balance-button">
+            <span class="splitter">&gt;</span>
+            <h1 class="title">Balance</h1>
+          </a>
+          <a id="nav-totals-button">
+            <span class="splitter">&gt;</span>
+            <h1 class="title">Totals</h1>
+          </a>
+          <a id="nav-faq-button" class="float-right">
+            <h1 class="title">FAQ</h1>
           </a>
         </section>
       </nav>
@@ -58,6 +73,7 @@
               <tr>
                 <th>Name</th>
                 <th>Starting balance</th>
+                <th>Add to net</th>
                 <th></th>
               </tr>
             </thead>
@@ -65,11 +81,13 @@
               <tr>
                 <td><input type="text" value="Main"></input></td>
                 <td><input type="text" value="1000"></input></td>
+                <td><input type="checkbox" checked></input></td>
                 <td></td>
               </tr>
               <tr>
                 <td><input type="text" value="Study"></input></td>
                 <td><input type="text" value="2000"></input></td>
+                <td><input type="checkbox" checked></input></td>
                 <td><button class="button button-small">Remove</button></td>
               </tr>
             </tbody>
@@ -79,9 +97,7 @@
 
         <h2>Categories</h2>
         <i class="description">
-          Tracking different types of spending/income is possible by specifying
-          categories. Give each category a name and ways for transactions to be
-          identified.
+          Tracking different types of spending/income is possible by assigning transactions to categories. Specify the text with which to match transactions with a particular category. It's possible to specify the same category multiple times to match on different values.
         </i>
         <form>
           <table>
@@ -90,14 +106,13 @@
                 <th>Name</th>
                 <th>Description</th>
                 <th>Counter-account</th>
-                <th>Counter-name</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td><input type="text" value="Groceries"></input></td>
                 <td><input type="text" value="PIN-automat"></input></td>
-                <td><input type="text" value="NL924938493029"></input></td>
                 <td><input type="text" value="Jumbo NLD"></input></td>
                 <td><button class="button button-small">Remove</button></td>
               </tr>
@@ -106,13 +121,19 @@
           <button class="button button-small" id="add-category-button">Add</button>
         </form>
 
-        <button class="button">Create Graph</button>
+        <button class="button" id="create-graph-button">Create Graph</button>
       </section>
-      <section class="container margin-top-10 page disabled" id="balance-page">
+
+      <section class="container margin-top-5 page disabled" id="balance-page">
+        <h1>Balance</h1>
       </section>
-      <section class="container margin-top-10 page disabled" id="totals-page">
+
+      <section class="container margin-top-5 page disabled" id="totals-page">
+        <h1>Totals</h1>
       </section>
-      <section class="container margin-top-10 page disabled" id="faq-page">
+
+      <section class="container margin-top-5 page disabled" id="faq-page">
+        <h1>Frequently Asked Questions</h1>
       </section>
     </main>
     <script src="js/deps/plotly-latest.min.js"></script>
