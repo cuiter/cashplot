@@ -108,7 +108,7 @@ function addAccount(name, locked = false) {
 }
 
 /**
- * Adds a new categry to the categories table.
+ * Adds a new category to the categories table.
  *
  * @param {string} name - Default category name.
  */
@@ -123,6 +123,33 @@ function addCategory(name) {
   removeButton.innerHTML =
     '<button class="button button-small remove-row-button">Remove</button>';
   removeButton.firstChild.addEventListener('click', onRemoveRowButtonClicked);
+}
+
+/**
+ * Sets the current transaction data - showing a message of the result.
+ *
+ * @param {string} data - Loaded transaction data.
+ * @param {string} fileName - File name to display if successful.
+ */
+function setTransactionData(data, fileName) {
+  let resultMessage = '';
+  let resultOk = false;
+  if (data === '') {
+    resultMessage = 'File is empty.';
+    resultOk = false;
+  } else {
+    resultOk = true;
+  }
+
+  if (resultOk) {
+    resultMessage = fileName;
+  }
+  document.getElementById('transaction-data-ok').style.display =
+    resultOk ? 'inline' : 'none';
+  document.getElementById('transaction-data-error').style.display =
+    resultOk ? 'none' : 'inline';
+  document.getElementById('transaction-data-message').textContent =
+    resultMessage;
 }
 
 
@@ -210,8 +237,7 @@ function onTransactionDataUpload() {
     const file = fileList[0];
     const reader = new FileReader();
     reader.addEventListener('loadend', (event) => {
-      document.getElementById('transaction-data-input').value =
-        event.target.result;
+      setTransactionData(event.target.result, file.name);
     });
     reader.readAsText(file);
   }
