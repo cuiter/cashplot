@@ -67,6 +67,25 @@
 	width: 15rem;
 }
 
+.text-icon {
+	font-weight: bold;
+	font-size: 4rem;
+	line-height: 3rem;
+	vertical-align: top;
+}
+
+.icon-cross {
+	color: #bb2244;
+}
+
+.icon-ack {
+	color: #229944;
+}
+
+#transaction-data-ok, #transaction-data-error {
+	display: none;
+}
+
 /* Override input text color to make it readable in dark-mode browsers. */
 input[type="color"], input[type="date"], input[type="datetime"],
 input[type="datetime-local"], input[type="email"], input[type="month"],

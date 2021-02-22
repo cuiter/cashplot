@@ -55,11 +55,13 @@
         </form>
 
         <h2>Transaction Data</h2>
-        <i class="description">Provide the transaction data to plot below or upload a file.</i>
+        <i class="description">Provide the data to plot by uploading a transactions file (.csv).</i>
         <form>
-          <textarea rows="5" cols="20" id="transaction-data-input"></textarea><br>
           <label class="button" for="transaction-data-upload">Upload Transactions</label>
           <input type="file" class="disabled" id="transaction-data-upload"></input>
+          <span class="text-icon icon-cross" id="transaction-data-error">&#10799;</span>
+          <span class="text-icon icon-ack" id="transaction-data-ok">&#10004;</span>
+          <span id="transaction-data-message">&nbsp;No file selected.</span>
         </form>
 
         <h2>Accounts</h2>
