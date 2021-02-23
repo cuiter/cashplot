@@ -1,3 +1,5 @@
+import {resizeGraphs} from './graph';
+
 const HIDE_NAV_PAGES = ['home'];
 const NAV_ELEMENT = 'navigation';
 const ACCOUNT_TABLE_ELEMENT = 'account-table';
@@ -5,6 +7,7 @@ const CATEGORY_TABLE_ELEMENT = 'category-table';
 
 const WITHOUT_INPUT_NAV_LINKS = ['home', 'input', 'faq'];
 const WITH_INPUT_NAV_LINKS = ['home', 'input', 'balance', 'totals', 'faq'];
+const RESIZE_GRAPH_PAGES = ['balance', 'totals'];
 
 let inputSubmitted = false;
 
@@ -35,6 +38,10 @@ function setActivePage(pageName) {
     throw new Error('Page ' + pageName + ' does not exist.');
   }
 
+  if (RESIZE_GRAPH_PAGES.indexOf(pageName) >= 0) {
+    resizeGraphs();
+  }
+
   if (HIDE_NAV_PAGES.indexOf(pageName) >= 0) {
     document.getElementById(NAV_ELEMENT).classList.add('disabled');
   } else {
@@ -45,13 +52,13 @@ function setActivePage(pageName) {
 }
 
 /**
- * Sets whether the input has been submitted, which will affect the shown
+ * Sets whether the input has been submitted, which will later affect the shown
  * navigation links.
  *
  * @param {boolean} submitted - Whether the input has been submitted.
  */
 function setInputSubmitted(submitted) {
-  inputSubmitted = true;
+  inputSubmitted = submitted;
 }
 
 /**

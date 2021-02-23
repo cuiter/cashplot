@@ -82,6 +82,12 @@
 	color: #229944;
 }
 
+.graph {
+	width: 100%;
+	min-height: 40rem;
+	height: 70vh;
+}
+
 #transaction-data-ok, #transaction-data-error {
 	display: none;
 }
