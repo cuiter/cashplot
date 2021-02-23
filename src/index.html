@@ -6,8 +6,8 @@
     <meta name="description" content="CashPlot">
     <meta name="keywords" content="finance graph charts">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/deps/normalize.css">
-    <link rel="stylesheet" href="css/deps/milligram.css">
+    <link rel="stylesheet" href="css/deps/normalize-8.0.1.css">
+    <link rel="stylesheet" href="css/deps/milligram-1.4.1.css">
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
@@ -106,21 +106,29 @@
         </form>
 
         <button class="button" id="create-graph-button">Create Graph</button>
+        <span class="text-icon icon-cross" id="create-graph-error">&#10799;</span>
+        <span id="create-graph-message">Error with input.</span>
       </section>
 
       <section class="container margin-top-5 page disabled" id="balance-page">
         <h1>Balance</h1>
+        <div class="graph" id="balance-graph"></div>
       </section>
 
       <section class="container margin-top-5 page disabled" id="totals-page">
         <h1>Totals</h1>
+        <div class="graph" id="daily-totals-graph"></div>
+        <div class="graph" id="weekly-totals-graph"></div>
+        <div class="graph" id="monthly-totals-graph"></div>
+        <div class="graph" id="quarterly-totals-graph"></div>
+        <div class="graph" id="yearly-totals-graph"></div>
       </section>
 
       <section class="container margin-top-5 page disabled" id="faq-page">
         <h1>Frequently Asked Questions</h1>
       </section>
     </main>
-    <script src="js/deps/plotly-latest.min.js"></script>
+    <script src="js/deps/plotly-1.58.4.min.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>
