@@ -24,7 +24,8 @@ class Parameters {
    * @param {string} transactionData
    * @param {string} transactionFileName
    * @param {Array} accounts - Every element must contain a name (string),
-   *                           startingBalance (number) and addToNet (boolean).
+   *                           startingBalance (number multiplied by
+   *                           utils.DECIMAL) and addToNet (boolean).
    * @param {Array} categories - Every element must contain a name (string),
    *                             descriptionPattern (string) and
    *                             counterAccountPattern (string).
@@ -44,52 +45,61 @@ class Parameters {
    */
   validate() {
     if (typeof(this.transactionData) !== 'string') {
-      return 'transactionData is not a string';
+      return 'Transaction data not provided';
     }
     if (typeof(this.transactionFileName) !== 'string') {
-      return 'transactionFileName is not a string';
+      return 'Transaction file name not provided';
     }
     if (!Array.isArray(this.accounts)) {
-      return 'accounts is not a string';
+      return 'Accounts is not an array';
     }
     if (this.accounts.length < 1) {
-      return 'accounts must have at least one element';
+      return 'Accounts must have at least one element';
     }
     for (const account of this.accounts) {
       if (typeof(account) !== 'object') {
-        return 'an element from accounts is not of type object';
+        return 'An account is not of type object';
       }
       if (typeof(account.name) !== 'string') {
-        return 'an account.name from accounts is not of type string';
+        return 'An account name is not of type string';
+      }
+      if (account.name === '') {
+        return 'An account name is empty';
       }
       if (typeof(account.startingBalance) !== 'number') {
-        return 'an account.startingBalance from accounts is not of type number';
+        return 'An account starting balance is not of type number';
+      }
+      if (!Number.isFinite(account.startingBalance)) {
+        return 'An account starting balance is not a number';
       }
       if (typeof(account.addToNet) !== 'boolean') {
-        return 'an account.addToNet from accounts is not of type boolean';
+        return 'An account add-to-net is not of type boolean';
       }
     }
     if (!Array.isArray(this.categories)) {
-      return 'categories is not a string';
+      return 'Categories is not an array';
     }
     for (const category of this.categories) {
       if (typeof(category) !== 'object') {
-        return 'an element from categories is not of type object';
+        return 'A category is not of type object';
       }
       if (typeof(category.name) !== 'string') {
-        return 'a category.name from categories is not of type string';
+        return 'A category name is not of type string';
+      }
+      if (category.name === '') {
+        return 'A category name is empty';
       }
       if (typeof(category.descriptionPattern) !== 'string') {
-        return 'a category.descriptionPattern from categories is not of type string';
+        return 'A category description pattern is not of type string';
       }
       if (!isValidRegex(category.descriptionPattern)) {
-        return 'a category.descriptionPattern from categories is not a valid regex';
+        return 'A category description pattern is not a valid regex';
       }
       if (typeof(category.counterAccountPattern) !== 'string') {
-        return 'a category.counterAccountPattern from categories is not of type string';
+        return 'A category counter-account pattern is not of type string';
       }
       if (!isValidRegex(category.counterAccountPattern)) {
-        return 'a category.counterAccountPattern from categories is not a valid regex';
+        return 'A category counter-account pattern is not a valid regex';
       }
     }
     return null;
