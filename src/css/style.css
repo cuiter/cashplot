@@ -88,10 +88,6 @@
 	height: 70vh;
 }
 
-#transaction-data-ok, #transaction-data-error {
-	display: none;
-}
-
 /* Override input text color to make it readable in dark-mode browsers. */
 input[type="color"], input[type="date"], input[type="datetime"],
 input[type="datetime-local"], input[type="email"], input[type="month"],

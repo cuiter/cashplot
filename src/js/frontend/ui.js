@@ -1,4 +1,6 @@
 import {resizeGraphs} from './graph';
+import {Parameters} from '../lib/parameters.js';
+import {DECIMAL} from '../lib/utils.js';
 
 const HIDE_NAV_PAGES = ['home'];
 const NAV_ELEMENT = 'navigation';
@@ -9,7 +11,9 @@ const WITHOUT_INPUT_NAV_LINKS = ['home', 'input', 'faq'];
 const WITH_INPUT_NAV_LINKS = ['home', 'input', 'balance', 'totals', 'faq'];
 const RESIZE_GRAPH_PAGES = ['balance', 'totals'];
 
-let inputSubmitted = false;
+let transactionData = null;
+let transactionFileName = null;
+let parameters = null;
 
 /**
  * Sets the page to be visible, while hiding all others.
@@ -52,23 +56,13 @@ function setActivePage(pageName) {
 }
 
 /**
- * Sets whether the input has been submitted, which will later affect the shown
- * navigation links.
- *
- * @param {boolean} submitted - Whether the input has been submitted.
- */
-function setInputSubmitted(submitted) {
-  inputSubmitted = submitted;
-}
-
-/**
  * Updates the navigation links to reflect whether the input has been
  * submitted, and highlights the current page.
  *
  * @param {string} pageName - Name of the current page.
  */
 function updateNavLinks(pageName) {
-  const shownNavLinks = inputSubmitted ?
+  const shownNavLinks = parameters !== null ?
     WITH_INPUT_NAV_LINKS : WITHOUT_INPUT_NAV_LINKS;
   const allNavLinks = Array.from(
       new Set(WITH_INPUT_NAV_LINKS.concat(WITHOUT_INPUT_NAV_LINKS)));
@@ -100,7 +94,7 @@ function updateNavLinks(pageName) {
  */
 function addAccount(name, locked = false) {
   const tableElement = document.getElementById(ACCOUNT_TABLE_ELEMENT);
-  const row = tableElement.insertRow(-1);
+  const row = tableElement.children[1].insertRow(-1);
   row.insertCell(-1).innerHTML =
     '<input type="text" value="' + name + '"></input>';
   row.insertCell(-1).innerHTML = '<input type="text" value="0"></input>';
@@ -121,7 +115,7 @@ function addAccount(name, locked = false) {
  */
 function addCategory(name) {
   const tableElement = document.getElementById(CATEGORY_TABLE_ELEMENT);
-  const row = tableElement.insertRow(-1);
+  const row = tableElement.children[1].insertRow(-1);
   row.insertCell(-1).innerHTML =
     '<input type="text" value="' + name + '"></input>';
   row.insertCell(-1).innerHTML = '<input type="text" value=""></input>';
@@ -150,11 +144,18 @@ function setTransactionData(data, fileName) {
 
   if (resultOk) {
     resultMessage = fileName;
+    transactionData = data;
+    transactionFileName = fileName;
+    document.getElementById('transaction-data-ok')
+        .classList.remove('disabled');
+    document.getElementById('transaction-data-error')
+        .classList.add('disabled');
+  } else {
+    document.getElementById('transaction-data-ok')
+        .classList.add('disabled');
+    document.getElementById('transaction-data-error')
+        .classList.remove('disabled');
   }
-  document.getElementById('transaction-data-ok').style.display =
-    resultOk ? 'inline' : 'none';
-  document.getElementById('transaction-data-error').style.display =
-    resultOk ? 'none' : 'inline';
   document.getElementById('transaction-data-message').textContent =
     resultMessage;
 }
@@ -184,10 +185,9 @@ export function init() {
   document.getElementById('add-category-button')
       .addEventListener('click', onAddCategoryButtonClicked);
   document.getElementById('create-graph-button')
-      .addEventListener('click', () => {
-        setInputSubmitted(true);
-        setActivePage('balance');
-      });
+      .addEventListener('click', submitParameters);
+  document.getElementById('totals-select')
+      .addEventListener('change', changeTotalsGraph);
 
   for (const element of document.querySelectorAll('.remove-row-button')) {
     element.addEventListener('click', onRemoveRowButtonClicked);
@@ -248,4 +248,67 @@ function onTransactionDataUpload() {
     });
     reader.readAsText(file);
   }
+}
+
+/**
+ * Callback for the button to submit the parameters and generate graphs.
+ */
+function submitParameters() {
+  const accounts = [];
+  const accountTableElement = document.getElementById('account-table');
+  for (const row of accountTableElement.children[1].children) {
+    accounts.push({
+      name: row.children[0].children[0].value,
+      startingBalance:
+        Math.round(Number(row.children[1].children[0].value) * DECIMAL),
+      addToNet: row.children[2].children[0].checked,
+    });
+  }
+
+  const categories = [];
+  const categoryTableElement = document.getElementById('category-table');
+  for (const row of categoryTableElement.children[1].children) {
+    categories.push({
+      name: row.children[0].children[0].value,
+      descriptionPattern: row.children[1].children[0].value,
+      counterAccountPattern: row.children[2].children[0].value,
+    });
+  }
+
+  parameters = new Parameters(
+      transactionData, transactionFileName, accounts, categories);
+
+  const validateError = parameters.validate();
+
+  if (validateError !== null) {
+    document.getElementById('create-graph-error')
+        .classList.remove('disabled');
+    document.getElementById('create-graph-message')
+        .textContent = validateError + '.';
+  } else {
+    document.getElementById('create-graph-error').classList.add('disabled');
+    document.getElementById('create-graph-message').textContent = '';
+    setActivePage('balance');
+  }
+}
+
+/**
+ * Callback for the totals dropdown. Changes the currently displayed graph.
+ * NOTE: Assumes that every totals graph element has the id
+ *       <period>-totals-graph.
+ */
+function changeTotalsGraph() {
+  const selectElement = this; // eslint-disable-line no-invalid-this
+
+  for (let i = 0; i < selectElement.options.length; i++) {
+    if (i === selectElement.selectedIndex) {
+      document.getElementById(selectElement.options[i].value + '-totals-graph')
+          .classList.remove('disabled');
+    } else {
+      document.getElementById(selectElement.options[i].value + '-totals-graph')
+          .classList.add('disabled');
+    }
+  }
+
+  resizeGraphs();
 }

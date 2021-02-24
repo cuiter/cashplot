@@ -59,8 +59,8 @@
         <form>
           <label class="button" for="transaction-data-upload">Upload Transactions</label>
           <input type="file" class="disabled" id="transaction-data-upload"></input>
-          <span class="text-icon icon-cross" id="transaction-data-error">&#10799;</span>
-          <span class="text-icon icon-ack" id="transaction-data-ok">&#10004;</span>
+          <span class="text-icon icon-cross disabled" id="transaction-data-error">&#10799;</span>
+          <span class="text-icon icon-ack disabled" id="transaction-data-ok">&#10004;</span>
           <span id="transaction-data-message">&nbsp;No file selected.</span>
         </form>
 
@@ -106,8 +106,8 @@
         </form>
 
         <button class="button" id="create-graph-button">Create Graph</button>
-        <span class="text-icon icon-cross" id="create-graph-error">&#10799;</span>
-        <span id="create-graph-message">Error with input.</span>
+        <span class="text-icon icon-cross disabled" id="create-graph-error">&#10799;</span>
+        <span id="create-graph-message"></span>
       </section>
 
       <section class="container margin-top-5 page disabled" id="balance-page">
@@ -117,11 +117,18 @@
 
       <section class="container margin-top-5 page disabled" id="totals-page">
         <h1>Totals</h1>
-        <div class="graph" id="daily-totals-graph"></div>
-        <div class="graph" id="weekly-totals-graph"></div>
+        <select id='totals-select'>
+          <option value='daily'>Daily</option>
+          <option value='weekly'>Weekly</option>
+          <option value='monthly' selected>Monthly</option>
+          <option value='quarterly'>Quarterly</option>
+          <option value='yearly'>Yearly</option>
+        </select>
+        <div class="graph disabled" id="daily-totals-graph"></div>
+        <div class="graph disabled" id="weekly-totals-graph"></div>
         <div class="graph" id="monthly-totals-graph"></div>
-        <div class="graph" id="quarterly-totals-graph"></div>
-        <div class="graph" id="yearly-totals-graph"></div>
+        <div class="graph disabled" id="quarterly-totals-graph"></div>
+        <div class="graph disabled" id="yearly-totals-graph"></div>
       </section>
 
       <section class="container margin-top-5 page disabled" id="faq-page">
