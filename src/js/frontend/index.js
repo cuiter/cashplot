@@ -1,5 +1,5 @@
-import {init} from './ui';
-import {generateGraphs} from './graph';
+import { init } from "./ui";
+import { generateGraphs } from "./graph";
 
-document.addEventListener('DOMContentLoaded', init);
-window.addEventListener('load', generateGraphs);
+document.addEventListener("DOMContentLoaded", init);
+window.addEventListener("load", generateGraphs);

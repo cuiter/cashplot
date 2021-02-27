@@ -1,7 +1,9 @@
 {
-  "extends": ["eslint:recommended", "google"],
-  "rules": { },
-  "plugins": ["jasmine"],
+  "extends": ["google", "prettier"],
+  "rules": {
+    "prettier/prettier": ["error"]
+  },
+  "plugins": ["jasmine", "prettier"],
   "globals": {
     "Plotly": true
   },
