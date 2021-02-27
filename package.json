@@ -8,10 +8,13 @@
     "lint": "eslint ./src/js/lib/ ./src/js/frontend/ ./tests/ --fix"
   },
   "devDependencies": {
-    "eslint": "^7.19.0",
+    "prettier-eslint": "^12.0.0",
+    "eslint-config-prettier": "^8.1.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-jasmine": "^4.1.2",
+    "eslint-plugin-prettier": "^3.3.1",
     "jasmine": "^3.6.4",
+    "assert": "^2.0.0",
     "webpack": "^5.21.2",
     "webpack-cli": "^4.5.0"
   }
