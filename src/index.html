@@ -49,9 +49,8 @@
           share the results with someone else.
         </i>
         <form>
-          <label class="button button-outline" for="config-upload">Upload Parameters</label>
-          <input type="file" class="disabled" id="config-upload"></input>
-          <button class="button" id="config-export">Export Parameters</button>
+          <label class="button button-outline" for="parameters-upload">Upload Parameters</label>
+          <input type="file" class="disabled" id="parameters-upload"></input>
         </form>
 
         <h2>Transaction Data</h2>
@@ -61,7 +60,7 @@
           <input type="file" class="disabled" id="transaction-data-upload"></input>
           <span class="text-icon icon-cross disabled" id="transaction-data-error">&#10799;</span>
           <span class="text-icon icon-ack disabled" id="transaction-data-ok">&#10004;</span>
-          <span id="transaction-data-message">&nbsp;No file selected.</span>
+          <span id="transaction-data-message"></span>
         </form>
 
         <h2>Accounts</h2>
@@ -106,6 +105,8 @@
         </form>
 
         <button class="button" id="create-graph-button">Create Graph</button>
+        <button class="button" id="export-parameters-button" download="cashplot.json">Export Parameters</button>
+        <a id="export-parameters-link"></a>
         <span class="text-icon icon-cross disabled" id="create-graph-error">&#10799;</span>
         <span id="create-graph-message"></span>
       </section>
