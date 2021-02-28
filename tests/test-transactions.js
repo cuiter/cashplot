@@ -1,8 +1,13 @@
+const fs = require("fs");
+
+const INGTransaction = require("../src/js/lib/sources/ing").INGTransaction;
 const transactions = require("../src/js/lib/transactions");
 const Transaction = transactions.Transaction;
 const DECIMAL = require("../src/js/lib/utils.js").DECIMAL;
 
 describe("Transaction", function () {
+  const transactionFilePath = "tests/data/test_transactions.csv";
+
   it("can be constructed", function () {
     const transaction = new Transaction(
       new Date(2020, 6, 28),
@@ -37,22 +42,11 @@ describe("Transaction", function () {
   });
 
   it("can be categorized", function () {
-    const uncategorizedTransactions = [
-      new Transaction(
-        new Date(2020, 6, 28),
-        "Company Inc.",
-        "NL01WORK0987654321",
-        "Salary for June 2020",
-        2000 * DECIMAL
-      ),
-      new Transaction(
-        new Date(2020, 7, 12),
-        "bol.com b.v.",
-        "NL02BOLC8899001122",
-        "Name: bol.com b.v. Description: 90340932902 2492049402",
-        -50 * DECIMAL
-      ),
-    ];
+    const transactionData = fs.readFileSync(transactionFilePath).toString();
+    const uncategorizedTransactions = INGTransaction.loadTransactions(
+      transactionData
+    ).map((tr) => tr.toTransaction());
+
     const categories = [
       {
         name: "Salary",
@@ -66,15 +60,21 @@ describe("Transaction", function () {
       },
       { name: "Other", descriptionPattern: "", counterAccountPattern: "" },
     ];
-
-    const categorizedTransactions = transactions.categorize(
-      uncategorizedTransactions,
-      categories
+    const categorizedTransactions = uncategorizedTransactions.map((tr) =>
+      tr.categorize(categories)
     );
 
     expect(categorizedTransactions).toEqual([
       new Transaction(
-        new Date(2020, 6, 28),
+        new Date("2020-06-28"),
+        "Company Inc.",
+        "NL01WORK0987654321",
+        "Bonus for June 2020",
+        500 * DECIMAL,
+        "Salary"
+      ),
+      new Transaction(
+        new Date("2020-06-28"),
         "Company Inc.",
         "NL01WORK0987654321",
         "Salary for June 2020",
@@ -82,9 +82,25 @@ describe("Transaction", function () {
         "Salary"
       ),
       new Transaction(
-        new Date(2020, 7, 12),
+        new Date("2020-06-29"),
+        "Mr. G",
+        "NL00MAIN1234567890",
+        "To Orange Savings Account ABC123456",
+        -100 * DECIMAL,
+        "Emergency"
+      ),
+      new Transaction(
+        new Date("2020-07-01"),
+        "Mr. G",
+        "NL00MAIN1234567890",
+        "To Orange Savings Account DEF999999",
+        -200 * DECIMAL,
+        "Loan"
+      ),
+      new Transaction(
+        new Date("2020-07-12"),
         "bol.com b.v.",
-        "NL02BOLC8899001122",
+        "NL00MAIN1234567890",
         "Name: bol.com b.v. Description: 90340932902 2492049402",
         -50 * DECIMAL,
         "Shopping"

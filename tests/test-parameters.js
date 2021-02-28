@@ -21,6 +21,7 @@ describe("Parameters", function () {
       counterAccountPattern: "",
     },
   ];
+
   it("can be constructed", function () {
     const parameters = new Parameters(
       testTransactionData,
@@ -60,16 +61,6 @@ describe("Parameters", function () {
     );
     expect(parameters3.validate()).toBe("Transaction file name not provided");
 
-    const parameters4 = new Parameters(
-      testTransactionData,
-      testTransationFileName,
-      [],
-      testCategories
-    );
-    expect(parameters4.validate()).toBe(
-      "Accounts must have at least one element"
-    );
-
     const parameters5Accounts = JSON.parse(JSON.stringify(testAccounts));
     parameters5Accounts[0].startingBalance = NaN;
     const parameters5 = new Parameters(
@@ -94,14 +85,38 @@ describe("Parameters", function () {
       "An account starting balance is not a number"
     );
 
+    const parameters7Categories = JSON.parse(JSON.stringify(testCategories));
+    parameters7Categories[0].name = "";
     const parameters7 = new Parameters(
       testTransactionData,
       testTransationFileName,
       testAccounts,
-      [{}]
+      parameters7Categories
     );
-    expect(parameters7.validate()).toBe(
-      "A category name is not of type string"
+    expect(parameters7.validate()).toBe("A category name is empty");
+  });
+
+  it("can be exported", function () {
+    const parameters = new Parameters(
+      testTransactionData,
+      testTransationFileName,
+      testAccounts,
+      testCategories
     );
+    const exportStr = parameters.export();
+    expect(typeof exportStr).toBe("string");
+    expect(typeof JSON.parse(exportStr)).toBe("object");
+  });
+
+  it("can be imported", function () {
+    const parameters = new Parameters(
+      testTransactionData,
+      testTransationFileName,
+      testAccounts,
+      testCategories
+    );
+    const exportStr = parameters.export();
+    const importedParameters = Parameters.import(exportStr);
+    expect(importedParameters).toEqual(parameters);
   });
 });

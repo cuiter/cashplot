@@ -1,4 +1,4 @@
-const assert = require("assert");
+const assert = require("nanoassert");
 const utils = require("./utils");
 
 /**
@@ -25,13 +25,13 @@ class Transaction {
     change,
     category = null
   ) {
-    assert.ok(utils.isValidDate(date));
-    assert.equal(typeof counterName, "string");
-    assert.equal(typeof counterAccount, "string");
-    assert.equal(typeof description, "string");
-    assert.ok(Number.isFinite(change));
+    assert(utils.isValidDate(date));
+    assert(typeof counterName === "string");
+    assert(typeof counterAccount === "string");
+    assert(typeof description === "string");
+    assert(Number.isFinite(change));
     if (category !== null) {
-      assert.equal(typeof category, "string");
+      assert(typeof category === "string");
     }
 
     this.date = date;
@@ -40,6 +40,41 @@ class Transaction {
     this.description = description;
     this.change = change;
     this.category = category;
+  }
+
+  /**
+   * Categorizes this transaction based on matching rules in the configuration.
+   * Throws an Error if no categories match.
+   *
+   * @param {Array<Category>} categories - Category matching rules (see Parameters).
+   * @return {Transaction} The categorized transaction.
+   */
+  categorize(categories) {
+    assert(Array.isArray(categories));
+    let categoryName = null;
+    categories.map((category) => {
+      if (
+        this.description.match(new RegExp(category.descriptionPattern)) &&
+        (this.counterName + " " + this.counterAccount).match(
+          new RegExp(category.counterAccountPattern)
+        )
+      ) {
+        categoryName = category.name;
+      }
+    });
+
+    if (categoryName === null) {
+      throw new Error("No categories matched.");
+    } else {
+      return new Transaction(
+        this.date,
+        this.counterName,
+        this.counterAccount,
+        this.description,
+        this.change,
+        categoryName
+      );
+    }
   }
 }
 
@@ -56,14 +91,14 @@ class TransactionBalance {
    *                                   resulting from the transaction.
    */
   constructor(transaction, changes, balances) {
-    assert.ok(transaction instanceof Transaction);
-    assert.equal(typeof changes, "object");
+    assert(transaction instanceof Transaction);
+    assert(typeof changes === "object");
     for (const account of Object.keys(changes)) {
-      assert.ok(Number.isFinite(typeof changes[account]));
+      assert(Number.isFinite(typeof changes[account]));
     }
-    assert.equal(typeof balances, "object");
+    assert(typeof balances === "object");
     for (const account of Object.keys(balances)) {
-      assert.ok(Number.isFinite(typeof balances[account]));
+      assert(Number.isFinite(typeof balances[account]));
     }
 
     this.transaction = transaction;
@@ -71,22 +106,6 @@ class TransactionBalance {
     this.balances = balances;
   }
 }
-
-/**
- * Categorize transactions based on matching rules in the configuration.
- * If no categories match a given transaction, throws an Error.
- *
- * @param {Array<Transaction>} transactions - The transactions to categorize.
- * @param {Array<Category>} categories - The category matching rules.
- * @return {Array<Transaction>} Categorized transactions.
- */
-exports.categorize = function (transactions, categories) {
-  assert.ok(Array.isArray(transactions));
-  assert.ok(Array.isArray(categories));
-  return transactions.map((transaction) => {
-    assert(transaction instanceof Transaction);
-  });
-};
 
 /**
  * Calculate the changes and balances for every account on each transaction.
@@ -101,8 +120,8 @@ exports.categorize = function (transactions, categories) {
  *                                       transactions+changes+balances.
  */
 exports.transactionBalances = function (transactions, accounts) {
-  assert.ok(Array.isArray(transactions));
-  assert.ok(Array.isArray(accounts));
+  assert(Array.isArray(transactions));
+  assert(Array.isArray(accounts));
   return transactions.map((transaction) => {
     assert(transaction instanceof Transaction);
   });

@@ -1,5 +1,6 @@
 const fs = require("fs");
 
+const Transaction = require("../src/js/lib/transactions").Transaction;
 const INGTransaction = require("../src/js/lib/sources/ing").INGTransaction;
 const DECIMAL = require("../src/js/lib/utils.js").DECIMAL;
 
@@ -21,7 +22,7 @@ describe("INGTransaction", function () {
 
   it("can be constructed", function () {
     const transaction = new INGTransaction(
-      new Date(2020, 6, 28),
+      new Date("2020-06-28"),
       "Company Inc.",
       "NL00MAIN1234567890",
       "NL01WORK0987654321",
@@ -32,7 +33,7 @@ describe("INGTransaction", function () {
       "Salary for June 2020"
     );
 
-    expect(transaction.date).toEqual(new Date(2020, 6, 28));
+    expect(transaction.date).toEqual(new Date("2020-06-28"));
     expect(transaction.counterName).toBe("Company Inc.");
     expect(transaction.account).toEqual("NL00MAIN1234567890");
     expect(transaction.counterAccount).toEqual("NL01WORK0987654321");
@@ -46,12 +47,34 @@ describe("INGTransaction", function () {
     expect(transaction.tag).toEqual(null);
   });
 
+  it("can be converted into a Transaction", function () {
+    const ingTransaction = new INGTransaction(
+      new Date("2020-06-28"),
+      "Company Inc.",
+      "NL00MAIN1234567890",
+      "NL01WORK0987654321",
+      "OV",
+      true,
+      2000 * DECIMAL,
+      "Transfer",
+      "Salary for June 2020"
+    );
+    const transaction = ingTransaction.toTransaction();
+
+    expect(transaction instanceof Transaction).toEqual(true);
+    expect(transaction.date).toEqual(new Date("2020-06-28"));
+    expect(transaction.counterName).toBe("Company Inc.");
+    expect(transaction.counterAccount).toEqual("NL01WORK0987654321");
+    expect(transaction.change).toEqual(2000 * DECIMAL);
+    expect(transaction.description).toEqual("Salary for June 2020");
+  });
+
   it("can be loaded from a parsed CSV row", function () {
     const transaction = INGTransaction.loadRow(testRow);
 
     expect(transaction).toEqual(
       new INGTransaction(
-        new Date(2020, 6, 28),
+        new Date("2020-06-28"),
         "Company Inc.",
         "NL00MAIN1234567890",
         "NL01WORK0987654321",
@@ -72,18 +95,7 @@ describe("INGTransaction", function () {
     const transactions = INGTransaction.loadTransactions(transactionData);
     expect(transactions).toEqual([
       new INGTransaction(
-        new Date(2020, 6, 28),
-        "Company Inc.",
-        "NL00MAIN1234567890",
-        "NL01WORK0987654321",
-        "OV",
-        true,
-        2000 * DECIMAL,
-        "Transfer",
-        "Salary for June 2020"
-      ),
-      new INGTransaction(
-        new Date(2020, 6, 28),
+        new Date("2020-06-28"),
         "Company Inc.",
         "NL00MAIN1234567890",
         "NL01WORK0987654321",
@@ -94,7 +106,18 @@ describe("INGTransaction", function () {
         "Bonus for June 2020"
       ),
       new INGTransaction(
-        new Date(2020, 6, 29),
+        new Date("2020-06-28"),
+        "Company Inc.",
+        "NL00MAIN1234567890",
+        "NL01WORK0987654321",
+        "OV",
+        true,
+        2000 * DECIMAL,
+        "Transfer",
+        "Salary for June 2020"
+      ),
+      new INGTransaction(
+        new Date("2020-06-29"),
         "Mr. G",
         "NL00MAIN1234567890",
         "NL00MAIN1234567890",
@@ -105,7 +128,7 @@ describe("INGTransaction", function () {
         "To Orange Savings Account ABC123456"
       ),
       new INGTransaction(
-        new Date(2020, 7, 1),
+        new Date("2020-07-01"),
         "Mr. G",
         "NL00MAIN1234567890",
         "NL00MAIN1234567890",
@@ -116,7 +139,7 @@ describe("INGTransaction", function () {
         "To Orange Savings Account DEF999999"
       ),
       new INGTransaction(
-        new Date(2020, 7, 12),
+        new Date("2020-07-12"),
         "bol.com b.v.",
         "NL27INGB0000026500",
         "NL00MAIN1234567890",
