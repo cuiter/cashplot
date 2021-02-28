@@ -91,16 +91,30 @@ function updateNavLinks(pageName) {
 /**
  * Adds a new account to the accounts table.
  *
- * @param {string} name - Default account name. (NOTE: Inserted as raw HTML)
+ * @param {string} name - Default account name.
  * @param {boolean} [locked] - Whether the account should not be removable.
+ * @param {number} [startingBalance] - The starting balance.
+ * @param {boolean} [addToNet] - Whether the account should be added to the net worth.
  */
-function addAccount(name, locked = false) {
+function addAccount(
+  name,
+  locked = false,
+  startingBalance = 0,
+  addToNet = true
+) {
+  console.log(startingBalance);
+  console.log(addToNet);
   const tableElement = document.getElementById(ACCOUNT_TABLE_ELEMENT);
   const row = tableElement.children[1].insertRow(-1);
+  const nameInput = row.insertCell(-1);
+  nameInput.innerHTML = '<input type="text" value=""></input>';
+  nameInput.firstChild.value = name;
   row.insertCell(-1).innerHTML =
-    '<input type="text" value="' + name + '"></input>';
-  row.insertCell(-1).innerHTML = '<input type="text" value="0"></input>';
-  row.insertCell(-1).innerHTML = '<input type="checkbox" checked></input>';
+    '<input type="text" value="' +
+    (startingBalance / DECIMAL).toFixed(0.01) +
+    '"></input>';
+  row.insertCell(-1).innerHTML =
+    '<input type="checkbox"' + (addToNet ? " checked" : "") + "></input>";
   const removeButton = row.insertCell(-1);
   removeButton.innerHTML =
     '<button class="button button-small remove-row-button">Remove</button>';
@@ -113,15 +127,26 @@ function addAccount(name, locked = false) {
 /**
  * Adds a new category to the categories table.
  *
- * @param {string} name - Default category name.
+ * @param {string} name - Category name.
+ * @param {string} descriptionPattern - Description pattern to match.
+ * @param {string} counterAccountPattern - Counter account pattern to match.
  */
-function addCategory(name) {
+function addCategory(
+  name,
+  descriptionPattern = "",
+  counterAccountPattern = ""
+) {
   const tableElement = document.getElementById(CATEGORY_TABLE_ELEMENT);
   const row = tableElement.children[1].insertRow(-1);
-  row.insertCell(-1).innerHTML =
-    '<input type="text" value="' + name + '"></input>';
-  row.insertCell(-1).innerHTML = '<input type="text" value=""></input>';
-  row.insertCell(-1).innerHTML = '<input type="text" value=""></input>';
+  const nameInput = row.insertCell(-1);
+  nameInput.innerHTML = '<input type="text" value=""></input>';
+  nameInput.firstChild.value = name;
+  const descriptionPatternInput = row.insertCell(-1);
+  descriptionPatternInput.innerHTML = '<input type="text" value=""></input>';
+  descriptionPatternInput.firstChild.value = descriptionPattern;
+  const counterAccountPatternInput = row.insertCell(-1);
+  counterAccountPatternInput.innerHTML = '<input type="text" value=""></input>';
+  counterAccountPatternInput.firstChild.value = counterAccountPattern;
   const removeButton = row.insertCell(-1);
   removeButton.innerHTML =
     '<button class="button button-small remove-row-button">Remove</button>';
@@ -135,30 +160,122 @@ function addCategory(name) {
  * @param {string} fileName - File name to display if successful.
  */
 function setTransactionData(data, fileName) {
-  let resultMessage = "";
-  let resultOk = false;
-  if (data === "") {
-    resultMessage = "File is empty.";
-    resultOk = false;
+  if (data === null && fileName === null) {
+    document.getElementById("transaction-data-ok").classList.add("disabled");
+    document.getElementById("transaction-data-error").classList.add("disabled");
+    document.getElementById("transaction-data-message").textContent =
+      "No file selected.";
   } else {
-    resultOk = true;
+    let resultMessage = "";
+    let resultOk = false;
+    if (data === "") {
+      resultMessage = "File is empty.";
+      resultOk = false;
+    } else {
+      resultOk = true;
+    }
+
+    if (resultOk) {
+      resultMessage = fileName;
+      transactionData = data;
+      transactionFileName = fileName;
+      document
+        .getElementById("transaction-data-ok")
+        .classList.remove("disabled");
+      document
+        .getElementById("transaction-data-error")
+        .classList.add("disabled");
+    } else {
+      document.getElementById("transaction-data-ok").classList.add("disabled");
+      document
+        .getElementById("transaction-data-error")
+        .classList.remove("disabled");
+    }
+    document.getElementById(
+      "transaction-data-message"
+    ).textContent = resultMessage;
+  }
+}
+
+/**
+ * Reads the entered parameters from the page.
+ * @return {Parameters} A Parameters instance containing the entered data.
+ */
+function readParameters() {
+  const accounts = [];
+  const accountTableElement = document.getElementById("account-table");
+  for (const row of accountTableElement.children[1].children) {
+    accounts.push({
+      name: row.children[0].children[0].value,
+      startingBalance: Math.round(
+        Number(row.children[1].children[0].value) * DECIMAL
+      ),
+      addToNet: row.children[2].children[0].checked,
+    });
   }
 
-  if (resultOk) {
-    resultMessage = fileName;
-    transactionData = data;
-    transactionFileName = fileName;
-    document.getElementById("transaction-data-ok").classList.remove("disabled");
-    document.getElementById("transaction-data-error").classList.add("disabled");
-  } else {
-    document.getElementById("transaction-data-ok").classList.add("disabled");
-    document
-      .getElementById("transaction-data-error")
-      .classList.remove("disabled");
+  const categories = [];
+  const categoryTableElement = document.getElementById("category-table");
+  for (const row of categoryTableElement.children[1].children) {
+    categories.push({
+      name: row.children[0].children[0].value,
+      descriptionPattern: row.children[1].children[0].value,
+      counterAccountPattern: row.children[2].children[0].value,
+    });
   }
-  document.getElementById(
-    "transaction-data-message"
-  ).textContent = resultMessage;
+
+  const parameters = new Parameters(
+    transactionData,
+    transactionFileName,
+    accounts,
+    categories
+  );
+
+  return parameters;
+}
+
+/**
+ * Clears the parameters on the page.
+ */
+function clearParameters() {
+  setTransactionData(null, null);
+
+  const accountTableElement = document.getElementById("account-table");
+  const categoryTableElement = document.getElementById("category-table");
+  accountTableElement.children[1].innerHTML = "";
+  categoryTableElement.children[1].innerHTML = "";
+}
+
+/**
+ * Imports parameters from an export and fills in the fields.
+ * @param {string} exportStr - String containing the export.
+ */
+function importParameters(exportStr) {
+  clearParameters();
+
+  const parameters = Parameters.import(exportStr);
+  setTransactionData(
+    parameters.transactionFileName,
+    parameters.transactionFileName
+  );
+
+  let firstAccount = true;
+  for (const account of parameters.accounts) {
+    addAccount(
+      account.name,
+      firstAccount,
+      account.startingBalance,
+      account.addToNet
+    );
+    firstAccount = false;
+  }
+  for (const category of parameters.categories) {
+    addCategory(
+      category.name,
+      category.descriptionPattern,
+      category.counterAccountPattern
+    );
+  }
 }
 
 /* Event listener and callback code */
@@ -196,8 +313,17 @@ export function init() {
     .getElementById("create-graph-button")
     .addEventListener("click", submitParameters);
   document
+    .getElementById("export-parameters-button")
+    .addEventListener("click", exportParameters);
+  document
     .getElementById("totals-select")
     .addEventListener("change", changeTotalsGraph);
+  document
+    .getElementById("parameters-upload")
+    .addEventListener("change", onParametersUpload);
+  document
+    .getElementById("transaction-data-upload")
+    .addEventListener("change", onTransactionDataUpload);
 
   for (const element of document.querySelectorAll(".remove-row-button")) {
     element.addEventListener("click", onRemoveRowButtonClicked);
@@ -211,9 +337,7 @@ export function init() {
     });
   }
 
-  document
-    .getElementById("transaction-data-upload")
-    .addEventListener("change", onTransactionDataUpload);
+  setTransactionData(null, null);
 
   addAccount("Main", true);
   addCategory("Other");
@@ -246,7 +370,7 @@ function onAddCategoryButtonClicked(event) {
 }
 
 /**
- * Callback for the transaction data "Browse file" button.
+ * Callback for the Upload Transactions button.
  */
 function onTransactionDataUpload() {
   const fileList = this.files; // eslint-disable-line no-invalid-this
@@ -261,39 +385,27 @@ function onTransactionDataUpload() {
 }
 
 /**
- * Callback for the button to submit the parameters and generate graphs.
+ * Callback for the Upload Parameters button.
+ */
+function onParametersUpload() {
+  const fileList = this.files; // eslint-disable-line no-invalid-this
+  if (fileList.length > 0) {
+    const file = fileList[0];
+    const reader = new FileReader();
+    reader.addEventListener("loadend", (event) => {
+      importParameters(event.target.result);
+    });
+    reader.readAsText(file);
+  }
+}
+
+/**
+ * Callback for the Create Graph button.
+ * Submits the entered parameters and generates graphs.
  */
 function submitParameters() {
-  const accounts = [];
-  const accountTableElement = document.getElementById("account-table");
-  for (const row of accountTableElement.children[1].children) {
-    accounts.push({
-      name: row.children[0].children[0].value,
-      startingBalance: Math.round(
-        Number(row.children[1].children[0].value) * DECIMAL
-      ),
-      addToNet: row.children[2].children[0].checked,
-    });
-  }
-
-  const categories = [];
-  const categoryTableElement = document.getElementById("category-table");
-  for (const row of categoryTableElement.children[1].children) {
-    categories.push({
-      name: row.children[0].children[0].value,
-      descriptionPattern: row.children[1].children[0].value,
-      counterAccountPattern: row.children[2].children[0].value,
-    });
-  }
-
-  parameters = new Parameters(
-    transactionData,
-    transactionFileName,
-    accounts,
-    categories
-  );
-
-  const validateError = parameters.validate();
+  const inputParameters = readParameters();
+  const validateError = inputParameters.validate();
 
   if (validateError !== null) {
     document.getElementById("create-graph-error").classList.remove("disabled");
@@ -302,8 +414,27 @@ function submitParameters() {
   } else {
     document.getElementById("create-graph-error").classList.add("disabled");
     document.getElementById("create-graph-message").textContent = "";
+    parameters = inputParameters;
     setActivePage("balance");
   }
+}
+
+/**
+ * Callback for the Export Parameters button.
+ * If parameters are valid, exports them into a file the user can download.
+ */
+function exportParameters() {
+  const parameters = readParameters();
+  const exportStr = parameters.export();
+  const data = new Blob([exportStr], { type: "application/json" });
+  const url = window.URL.createObjectURL(data);
+  const exportParametersLink = document.getElementById(
+    "export-parameters-link"
+  );
+  exportParametersLink.href = url;
+  exportParametersLink.download = "cashplot.json";
+  exportParametersLink.click();
+  window.URL.revokeObjectURL(url);
 }
 
 /**
