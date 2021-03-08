@@ -3,10 +3,16 @@ const fs = require("fs");
 const INGTransaction = require("../src/js/lib/sources/ing").INGTransaction;
 const transactions = require("../src/js/lib/transactions");
 const Transaction = transactions.Transaction;
+const Parameters = require("../src/js/lib/parameters").Parameters;
 const DECIMAL = require("../src/js/lib/utils.js").DECIMAL;
 
 describe("Transaction", function () {
   const transactionFilePath = "tests/data/test_transactions.csv";
+  const parametersFilePath = "tests/data/test_parameters.json";
+
+  const testParameters = Parameters.import(
+    fs.readFileSync(parametersFilePath).toString()
+  );
 
   it("can be constructed", function () {
     const transaction = new Transaction(
@@ -47,21 +53,8 @@ describe("Transaction", function () {
       transactionData
     ).map((tr) => tr.toTransaction());
 
-    const categories = [
-      {
-        name: "Salary",
-        descriptionPattern: "Salary",
-        counterAccountPattern: "Company Inc",
-      },
-      {
-        name: "Shopping",
-        descriptionPattern: "",
-        counterAccountPattern: "bol\\.com",
-      },
-      { name: "Other", descriptionPattern: "", counterAccountPattern: "" },
-    ];
     const categorizedTransactions = uncategorizedTransactions.map((tr) =>
-      tr.categorize(categories)
+      tr.categorize(testParameters.categories)
     );
 
     expect(categorizedTransactions).toEqual([
