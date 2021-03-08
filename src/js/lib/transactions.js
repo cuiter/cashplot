@@ -1,6 +1,8 @@
 const assert = require("nanoassert");
 const utils = require("./utils");
 
+const NET_ACCOUNT_NAME = "Net";
+
 /**
  * A single transaction. May have a category assigned.
  */
@@ -52,16 +54,17 @@ class Transaction {
   categorize(categories) {
     assert(Array.isArray(categories));
     let categoryName = null;
-    categories.map((category) => {
+    for (const category of categories) {
       if (
-        this.description.match(new RegExp(category.descriptionPattern)) &&
-        (this.counterName + " " + this.counterAccount).match(
+        !!this.description.match(new RegExp(category.descriptionPattern)) &&
+        !!(this.counterName + " " + this.counterAccount).match(
           new RegExp(category.counterAccountPattern)
         )
       ) {
         categoryName = category.name;
+        break;
       }
-    });
+    }
 
     if (categoryName === null) {
       throw new Error("No categories matched.");
@@ -122,9 +125,88 @@ class TransactionBalance {
 exports.transactionBalances = function (transactions, accounts) {
   assert(Array.isArray(transactions));
   assert(Array.isArray(accounts));
-  return transactions.map((transaction) => {
-    assert(transaction instanceof Transaction);
-  });
+  assert(accounts.length > 0);
+
+  const mainAccountName = accounts[0].name;
+
+  /**
+   * @return {Object} An object with the keys set to the account names and values set to 0.
+   */
+  function zeroAccounts() {
+    const balances = {};
+    for (const account of accounts) {
+      balances[account.name] = 0;
+    }
+    return balances;
+  }
+
+  /**
+   * @param {string} accountName - The account name to check.
+   * @return {boolean} Whether an account doesn't contribute to the net total.
+   */
+  function isNetIgnoreAccount(accountName) {
+    for (const account of accounts) {
+      if (account.name === accountName && !account.addToNet) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * @param {string} accountName - The account name to check.
+   * @return {boolean} Whether an account is a savings account (i.e. not the first account).
+   */
+  function isSavingsAccount(accountName) {
+    for (const account of accounts) {
+      if (account.name === accountName) {
+        return account.name !== mainAccountName;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * @param {object} changes - The changes per account (account name => change objects).
+   * @return {number} The total of the changes that contribute to the net value.
+   *
+   */
+  function calculateNetChange(changes) {
+    let netChange = 0;
+    for (const accountName of Object.keys(changes)) {
+      if (!isNetIgnoreAccount(accountName)) {
+        netChange += changes[accountName];
+      }
+    }
+    return netChange;
+  }
+
+  const oldBalances = zeroAccounts();
+  for (const account of accounts) {
+    oldBalances[account.name] = account.startingBalance;
+  }
+  const trBalances = [];
+
+  for (const transaction of transactions) {
+    const changes = zeroAccounts();
+
+    changes[mainAccountName] = transaction.change;
+    if (isSavingsAccount(transaction.category)) {
+      changes[transaction.category] = -transaction.change;
+    }
+
+    balances = zeroAccounts();
+    for (const accountName of Object.keys(oldBalances)) {
+      balances[accountName] = oldBalances[accountName] + changes[accountName];
+    }
+
+    changes[NET_ACCOUNT_NAME] = calculateNetChange(changes);
+    balances[NET_ACCOUNT_NAME] = calculateNetChange(balances);
+
+    trBalances.push(new TransactionBalance(transaction, changes, balances));
+  }
+
+  return trBalances;
 };
 
 exports.Transaction = Transaction;
