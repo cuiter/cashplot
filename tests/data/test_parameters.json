@@ -15,7 +15,7 @@
 		{
 			"name": "Loan",
 			"startingBalance": 50,
-			"addToNet": true
+			"addToNet": false
 		}
 	],
 	"categories": [
