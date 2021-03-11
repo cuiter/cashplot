@@ -102,8 +102,6 @@ function addAccount(
   startingBalance = 0,
   addToNet = true
 ) {
-  console.log(startingBalance);
-  console.log(addToNet);
   const tableElement = document.getElementById(ACCOUNT_TABLE_ELEMENT);
   const row = tableElement.children[1].insertRow(-1);
   const nameInput = row.insertCell(-1);
@@ -251,9 +249,22 @@ function clearParameters() {
  * @param {string} exportStr - String containing the export.
  */
 function importParameters(exportStr) {
+  let parameters;
+  try {
+    parameters = Parameters.import(exportStr);
+  } catch (err) {
+    document
+      .getElementById("parameters-upload-error")
+      .classList.remove("disabled");
+    document.getElementById("parameters-upload-message").textContent =
+      err.message;
+    return;
+  }
+  document.getElementById("parameters-upload-error").classList.add("disabled");
+  document.getElementById("parameters-upload-message").textContent = "";
+
   clearParameters();
 
-  const parameters = Parameters.import(exportStr);
   setTransactionData(
     parameters.transactionFileName,
     parameters.transactionFileName
