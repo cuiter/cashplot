@@ -97,11 +97,11 @@ class TransactionBalance {
     assert(transaction instanceof Transaction);
     assert(typeof changes === "object");
     for (const account of Object.keys(changes)) {
-      assert(Number.isFinite(typeof changes[account]));
+      assert(Number.isFinite(changes[account]));
     }
     assert(typeof balances === "object");
     for (const account of Object.keys(balances)) {
-      assert(Number.isFinite(typeof balances[account]));
+      assert(Number.isFinite(balances[account]));
     }
 
     this.transaction = transaction;
@@ -181,7 +181,7 @@ exports.transactionBalances = function (transactions, accounts) {
     return netChange;
   }
 
-  const oldBalances = zeroAccounts();
+  let oldBalances = zeroAccounts();
   for (const account of accounts) {
     oldBalances[account.name] = account.startingBalance;
   }
@@ -195,10 +195,13 @@ exports.transactionBalances = function (transactions, accounts) {
       changes[transaction.category] = -transaction.change;
     }
 
-    balances = zeroAccounts();
+    const balances = zeroAccounts();
     for (const accountName of Object.keys(oldBalances)) {
       balances[accountName] = oldBalances[accountName] + changes[accountName];
     }
+
+    // Deep-copy new balances to oldBalances.
+    oldBalances = JSON.parse(JSON.stringify(balances));
 
     changes[NET_ACCOUNT_NAME] = calculateNetChange(changes);
     balances[NET_ACCOUNT_NAME] = calculateNetChange(balances);
@@ -211,3 +214,4 @@ exports.transactionBalances = function (transactions, accounts) {
 
 exports.Transaction = Transaction;
 exports.TransactionBalance = TransactionBalance;
+exports.NET_ACCOUNT_NAME = NET_ACCOUNT_NAME;
