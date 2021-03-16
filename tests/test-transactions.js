@@ -31,14 +31,14 @@ function getTestTransactions() {
 describe("Transaction", function () {
   it("can be constructed", function () {
     const transaction = new Transaction(
-      new Date(2020, 6, 28),
+      new Date("2020-06-28"),
       "Company Inc.",
       "NL01WORK0987654321",
       "Salary for June 2020",
       2000 * DECIMAL
     );
 
-    expect(transaction.date).toEqual(new Date(2020, 6, 28));
+    expect(transaction.date).toEqual(new Date("2020-06-28"));
     expect(transaction.counterName).toBe("Company Inc.");
     expect(transaction.counterAccount).toEqual("NL01WORK0987654321");
     expect(transaction.description).toEqual("Salary for June 2020");
@@ -46,7 +46,7 @@ describe("Transaction", function () {
     expect(transaction.category).toEqual(null);
 
     const categorizedTransaction = new Transaction(
-      new Date(2020, 6, 28),
+      new Date("2020-06-28"),
       "Company Inc.",
       "NL01WORK0987654321",
       "Salary for June 2020",
@@ -54,7 +54,7 @@ describe("Transaction", function () {
       "Salary"
     );
 
-    expect(categorizedTransaction.date).toEqual(new Date(2020, 6, 28));
+    expect(categorizedTransaction.date).toEqual(new Date("2020-06-28"));
     expect(categorizedTransaction.counterName).toBe("Company Inc.");
     expect(categorizedTransaction.counterAccount).toEqual("NL01WORK0987654321");
     expect(categorizedTransaction.description).toEqual("Salary for June 2020");
@@ -117,7 +117,7 @@ describe("Transaction", function () {
 describe("TransactionBalance", function () {
   it("can be constructed", function () {
     const transaction = new Transaction(
-      new Date(2020, 6, 28),
+      new Date("2020-06-28"),
       "Company Inc.",
       "NL01WORK0987654321",
       "Salary for June 2020",
@@ -129,7 +129,7 @@ describe("TransactionBalance", function () {
       { Main: 0, Loan: 50 * DECIMAL }
     );
 
-    expect(transactionBalance.transaction.date).toEqual(new Date(2020, 6, 28));
+    expect(transactionBalance.transaction.date).toEqual(new Date("2020-06-28"));
     expect(transactionBalance.transaction.counterName).toBe("Company Inc.");
     expect(transactionBalance.transaction.counterAccount).toEqual(
       "NL01WORK0987654321"
