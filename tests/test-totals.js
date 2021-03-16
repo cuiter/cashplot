@@ -151,4 +151,42 @@ describe("Totals", function () {
       totals.nextPeriod(new Date("2000-01-01"), totals.Period.DAY)
     ).toEqual(new Date("2000-01-02"));
   });
+
+  it("can calculate the dates 1/3rd and 2/3rds through a period", function () {
+    expect(
+      totals.periodThirds(new Date("2020-05-01"), totals.Period.YEAR)
+    ).toEqual([new Date("2020-05-02"), new Date("2020-09-01")]);
+    expect(
+      totals.periodThirds(new Date("2020-05-01"), totals.Period.QUARTER)
+    ).toEqual([new Date("2020-05-01"), new Date("2020-05-31")]);
+    expect(
+      totals.periodThirds(new Date("2020-05-01"), totals.Period.MONTH)
+    ).toEqual([new Date("2020-05-11"), new Date("2020-05-21")]);
+    expect(
+      totals.periodThirds(new Date("2020-05-01"), totals.Period.WEEK)
+    ).toEqual([new Date("2020-04-29"), new Date("2020-05-01")]);
+    expect(
+      totals.periodThirds(new Date("2020-05-01"), totals.Period.DAY)
+    ).toEqual([new Date("2020-05-01 08:00Z"), new Date("2020-05-01 16:00Z")]);
+  });
+
+  it("can calculate the dates half through a period", function () {
+    expect(
+      totals.periodHalves(new Date("2020-05-01"), totals.Period.YEAR)
+    ).toEqual(new Date("2020-07-02"));
+    expect(
+      totals.periodHalves(new Date("2020-05-01"), totals.Period.QUARTER)
+    ).toEqual(new Date("2020-05-16"));
+    expect(
+      totals.periodHalves(new Date("2020-05-01"), totals.Period.MONTH)
+    ).toEqual(new Date("2020-05-16"));
+    expect(
+      totals.periodHalves(new Date("2020-05-01"), totals.Period.WEEK)
+    ).toEqual(new Date("2020-04-30"));
+    expect(
+      totals.periodHalves(new Date("2020-05-01"), totals.Period.DAY)
+    ).toEqual(new Date("2020-05-01 12:00Z"));
+  });
+
+  // TODO: add tests for categoriesChanges
 });

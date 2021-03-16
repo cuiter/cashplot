@@ -31,3 +31,18 @@ exports.isValidRegex = function (pattern) {
   }
   return valid;
 };
+
+/**
+ * Creates an object with each key set to the given value.
+ *
+ * @param {Array<string>} keys - The keys to set.
+ * @param {any} value - The value to set to.
+ * @return {Object} The newly created object.
+ */
+exports.fillObject = function (keys, value) {
+  const object = {};
+  for (const key of keys) {
+    object[key] = value;
+  }
+  return object;
+};

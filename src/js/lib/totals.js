@@ -1,4 +1,5 @@
 const transactions = require("./transactions");
+const utils = require("./utils");
 const assert = require("nanoassert");
 
 const Period = {
@@ -151,7 +152,38 @@ function nextPeriod(date, period) {
  * @param {Period} period - The period.
  * @return {Array<Date>} Dates of 1/3rd and 2/3rds through the period.
  */
-function periodThirds(date, period) {}
+function periodThirds(date, period) {
+  const fromDate = floorPeriod(date, period);
+  const untilDate = nextPeriod(date, period);
+
+  const oneThirdDate = new Date(
+    fromDate.getTime() + (untilDate.getTime() - fromDate.getTime()) / 3
+  );
+  const twoThirdsDate = new Date(
+    fromDate.getTime() + ((untilDate.getTime() - fromDate.getTime()) / 3) * 2
+  );
+
+  if (period == Period.DAY) {
+    return [oneThirdDate, twoThirdsDate];
+  } else {
+    return [
+      new Date(
+        Date.UTC(
+          oneThirdDate.getUTCFullYear(),
+          oneThirdDate.getUTCMonth(),
+          oneThirdDate.getUTCDate()
+        )
+      ),
+      new Date(
+        Date.UTC(
+          twoThirdsDate.getUTCFullYear(),
+          twoThirdsDate.getUTCMonth(),
+          twoThirdsDate.getUTCDate()
+        )
+      ),
+    ];
+  }
+}
 
 /**
  * Given a date, return the date but half through the period.
@@ -159,7 +191,26 @@ function periodThirds(date, period) {}
  * @param {Period} period - The period.
  * @return {Array<Date>} Dates half through the period.
  */
-function periodHalves(date, period) {}
+function periodHalves(date, period) {
+  const fromDate = floorPeriod(date, period);
+  const untilDate = nextPeriod(date, period);
+
+  const halfDate = new Date(
+    fromDate.getTime() + (untilDate.getTime() - fromDate.getTime()) / 2
+  );
+
+  if (period == Period.DAY) {
+    return halfDate;
+  } else {
+    return new Date(
+      Date.UTC(
+        halfDate.getUTCFullYear(),
+        halfDate.getUTCMonth(),
+        halfDate.getUTCDate()
+      )
+    );
+  }
+}
 
 /**
  * Calculate the period total income/expenses for each category occurring in the given transactions+balances.
@@ -168,7 +219,45 @@ function periodHalves(date, period) {}
  * @return {Array.<Array<Date>,Object<string,number>,Object<string,number>>} -
  *   An array of periods, an array of income totals and an array of expenses totals.
  */
-function categoriesChanges(trBalances, period) {}
+function categoriesChanges(trBalances, period) {
+  const categories = getCategories(trBalances);
+
+  const firstPeriod = floorPeriod(trBalances[0].date, period);
+  const lastPeriod = floorPeriod(
+    trBalances[trBalances.length - 1].date,
+    period
+  );
+
+  const incomeChanges = utils.fillObject(categories, []);
+  const expensesChanges = utils.fillObject(categories, []);
+
+  const periods = [];
+  const curPeriod = firstPeriod;
+
+  while (curPeriod <= lastPeriod) {
+    curIncomeChanges = utils.fillObject(categories, 0);
+    curExpensesChanges = utils.fillObject(categories, 0);
+    for (const trBalance of trBalances) {
+      const tr = trBalance.transaction;
+      if (
+        floorPeriod(tr.date, period) === curPeriod &&
+        categories.indexOf(tr.category) !== -1
+      ) {
+        if (tr.change >= 0) {
+          curIncomeChanges[tr.category] += tr.change;
+        } else {
+          curExpensesChanges[tr.category] += -tr.change;
+        }
+      }
+    }
+    for (const category of categories) {
+      incomeChanges[category].push(curIncomeChanges[category]);
+      expensesChanges[category].push(curExpensesChanges[category]);
+    }
+  }
+
+  return [periods, incomeChanges, expensesChanges];
+}
 
 exports.Period = Period;
 exports.getCategories = getCategories;
