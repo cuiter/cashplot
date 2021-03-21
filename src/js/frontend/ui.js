@@ -266,7 +266,7 @@ function importParameters(exportStr) {
   clearParameters();
 
   setTransactionData(
-    parameters.transactionFileName,
+    parameters.transactionData,
     parameters.transactionFileName
   );
 
@@ -423,11 +423,22 @@ function submitParameters() {
     document.getElementById("create-graph-message").textContent =
       validateError + ".";
   } else {
-    document.getElementById("create-graph-error").classList.add("disabled");
-    document.getElementById("create-graph-message").textContent = "";
     parameters = inputParameters;
-    generateGraphs(parameters);
-    setActivePage("balance");
+
+    try {
+      generateGraphs(parameters);
+      document.getElementById("create-graph-error").classList.add("disabled");
+      document.getElementById("create-graph-message").textContent = "";
+      setActivePage("balance");
+    } catch (err) {
+      console.error(err);
+      document
+        .getElementById("create-graph-error")
+        .classList.remove("disabled");
+      document.getElementById("create-graph-message").textContent =
+        "Error generating graph: " + err.message + ".";
+      return;
+    }
   }
 }
 
