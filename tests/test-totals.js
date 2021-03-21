@@ -4,7 +4,7 @@ const INGTransaction = require("../src/js/lib/sources/ing").INGTransaction;
 const transactions = require("../src/js/lib/transactions");
 const Parameters = require("../src/js/lib/parameters").Parameters;
 const totals = require("../src/js/lib/totals");
-const DECIMAL = require("../src/js/lib/utils.js").DECIMAL;
+const DECIMAL = require("../src/js/lib/utils").DECIMAL;
 
 const transactionFilePath = "tests/data/test_transactions.csv";
 const parametersFilePath = "tests/data/test_parameters.json";

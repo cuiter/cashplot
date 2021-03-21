@@ -51,3 +51,15 @@ exports.fillObject = function (keys, value, deepClone = false) {
   }
   return object;
 };
+
+/**
+ * Interleaves the values of two lists into a new array.
+ * Example: [1, 2], [3, 4] => [1, 3, 2, 4]
+ *
+ * @param {Array} list1 - First list.
+ * @param {Array} list2 - Second list.
+ * @return {Array} The interleaved list.
+ */
+exports.interleaveLists = function (list1, list2) {
+  return list1.map((value, idx) => [value, list2[idx]]).flat();
+};
