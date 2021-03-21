@@ -4,6 +4,7 @@ const INGTransaction = require("../src/js/lib/sources/ing").INGTransaction;
 const transactions = require("../src/js/lib/transactions");
 const Parameters = require("../src/js/lib/parameters").Parameters;
 const totals = require("../src/js/lib/totals");
+const DECIMAL = require("../src/js/lib/utils.js").DECIMAL;
 
 const transactionFilePath = "tests/data/test_transactions.csv";
 const parametersFilePath = "tests/data/test_parameters.json";
@@ -188,5 +189,88 @@ describe("Totals", function () {
     ).toEqual(new Date("2020-05-01 12:00Z"));
   });
 
-  // TODO: add tests for categoriesChanges
+  it("can calculate the changes per period grouped by category", function () {
+    const [
+      yearPeriods,
+      yearIncomeChanges,
+      yearExpensesChanges,
+    ] = totals.categoriesChanges(testTrBalances, totals.Period.YEAR);
+    expect(yearPeriods).toEqual([new Date("2020-01-01")]);
+    expect(yearIncomeChanges).toEqual({
+      Salary: [2500 * DECIMAL],
+      Shopping: [0],
+    });
+    expect(yearExpensesChanges).toEqual({
+      Salary: [0],
+      Shopping: [50 * DECIMAL],
+    });
+
+    const [
+      quarterPeriods,
+      quarterIncomeChanges,
+      quarterExpensesChanges,
+    ] = totals.categoriesChanges(testTrBalances, totals.Period.QUARTER);
+    expect(quarterPeriods).toEqual([
+      new Date("2020-04-01"),
+      new Date("2020-07-01"),
+    ]);
+    expect(quarterIncomeChanges).toEqual({
+      Salary: [2500 * DECIMAL, 0],
+      Shopping: [0, 0],
+    });
+    expect(quarterExpensesChanges).toEqual({
+      Salary: [0, 0],
+      Shopping: [0, 50 * DECIMAL],
+    });
+
+    const [
+      monthPeriods,
+      monthIncomeChanges,
+      monthExpensesChanges,
+    ] = totals.categoriesChanges(testTrBalances, totals.Period.MONTH);
+    expect(monthPeriods).toEqual([
+      new Date("2020-06-01"),
+      new Date("2020-07-01"),
+    ]);
+    expect(monthIncomeChanges).toEqual({
+      Salary: [2500 * DECIMAL, 0],
+      Shopping: [0, 0],
+    });
+    expect(monthExpensesChanges).toEqual({
+      Salary: [0, 0],
+      Shopping: [0, 50 * DECIMAL],
+    });
+
+    const [
+      weekPeriods,
+      weekIncomeChanges,
+      weekExpensesChanges,
+    ] = totals.categoriesChanges(testTrBalances, totals.Period.WEEK);
+    expect(weekPeriods).toEqual([
+      new Date("2020-06-22"),
+      new Date("2020-06-29"),
+      new Date("2020-07-06"),
+    ]);
+    expect(weekIncomeChanges).toEqual({
+      Salary: [2500 * DECIMAL, 0, 0],
+      Shopping: [0, 0, 0],
+    });
+    expect(weekExpensesChanges).toEqual({
+      Salary: [0, 0, 0],
+      Shopping: [0, 0, 50 * DECIMAL],
+    });
+
+    const [
+      dayPeriods,
+      dayIncomeChanges,
+      dayExpensesChanges,
+    ] = totals.categoriesChanges(testTrBalances, totals.Period.DAY);
+    expect(dayPeriods.length).toEqual(15);
+    expect(dayPeriods[0]).toEqual(new Date("2020-06-28"));
+    expect(dayPeriods[dayPeriods.length - 1]).toEqual(new Date("2020-07-12"));
+    expect(dayIncomeChanges["Salary"][0]).toEqual(2500 * DECIMAL);
+    expect(dayIncomeChanges["Salary"].slice(-1)[0]).toEqual(0);
+    expect(dayExpensesChanges["Shopping"][0]).toEqual(0);
+    expect(dayExpensesChanges["Shopping"].slice(-1)[0]).toEqual(50 * DECIMAL);
+  });
 });

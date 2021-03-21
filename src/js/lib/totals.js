@@ -222,17 +222,17 @@ function periodHalves(date, period) {
 function categoriesChanges(trBalances, period) {
   const categories = getCategories(trBalances);
 
-  const firstPeriod = floorPeriod(trBalances[0].date, period);
+  const firstPeriod = floorPeriod(trBalances[0].transaction.date, period);
   const lastPeriod = floorPeriod(
-    trBalances[trBalances.length - 1].date,
+    trBalances[trBalances.length - 1].transaction.date,
     period
   );
 
-  const incomeChanges = utils.fillObject(categories, []);
-  const expensesChanges = utils.fillObject(categories, []);
+  const incomeChanges = utils.fillObject(categories, [], true);
+  const expensesChanges = utils.fillObject(categories, [], true);
 
   const periods = [];
-  const curPeriod = firstPeriod;
+  let curPeriod = firstPeriod;
 
   while (curPeriod <= lastPeriod) {
     curIncomeChanges = utils.fillObject(categories, 0);
@@ -240,7 +240,7 @@ function categoriesChanges(trBalances, period) {
     for (const trBalance of trBalances) {
       const tr = trBalance.transaction;
       if (
-        floorPeriod(tr.date, period) === curPeriod &&
+        floorPeriod(tr.date, period).getTime() === curPeriod.getTime() &&
         categories.indexOf(tr.category) !== -1
       ) {
         if (tr.change >= 0) {
@@ -254,6 +254,8 @@ function categoriesChanges(trBalances, period) {
       incomeChanges[category].push(curIncomeChanges[category]);
       expensesChanges[category].push(curExpensesChanges[category]);
     }
+    periods.push(curPeriod);
+    curPeriod = nextPeriod(curPeriod, period);
   }
 
   return [periods, incomeChanges, expensesChanges];
