@@ -1,3 +1,5 @@
+const assert = require("nanoassert");
+
 // Factor all input numbers should be multiplied by so they won't lose
 // precision due to floating point losses.
 exports.DECIMAL = 100;
@@ -9,7 +11,7 @@ exports.DECIMAL = 100;
  * @return {boolean} Whether the date is valid (true) or not (false).
  */
 exports.isValidDate = function (date) {
-  return (
+  return !!(
     date &&
     Object.prototype.toString.call(date) === "[object Date]" &&
     !isNaN(date)
@@ -25,6 +27,7 @@ exports.isValidDate = function (date) {
 exports.isValidRegex = function (pattern) {
   let valid = true;
   try {
+    assert(typeof pattern === "string");
     new RegExp(pattern);
   } catch (e) {
     valid = false;
@@ -41,6 +44,9 @@ exports.isValidRegex = function (pattern) {
  * @return {Object} The newly created object.
  */
 exports.fillObject = function (keys, value, deepClone = false) {
+  assert(Array.isArray(keys));
+  assert(keys.every((key) => typeof key === "string"));
+
   const object = {};
   for (const key of keys) {
     if (deepClone) {
@@ -53,13 +59,17 @@ exports.fillObject = function (keys, value, deepClone = false) {
 };
 
 /**
- * Interleaves the values of two lists into a new array.
+ * Interleaves the values of two arrays into a new array.
  * Example: [1, 2], [3, 4] => [1, 3, 2, 4]
  *
- * @param {Array} list1 - First list.
- * @param {Array} list2 - Second list.
- * @return {Array} The interleaved list.
+ * @param {Array} array1 - First array.
+ * @param {Array} array2 - Second array.
+ * @return {Array} The interleaved array.
  */
-exports.interleaveLists = function (list1, list2) {
-  return list1.map((value, idx) => [value, list2[idx]]).flat();
+exports.interleaveArrays = function (array1, array2) {
+  assert(Array.isArray(array1));
+  assert(Array.isArray(array2));
+  assert(array1.length === array2.length);
+
+  return array1.map((value, idx) => [value, array2[idx]]).flat();
 };

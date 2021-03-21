@@ -6,7 +6,7 @@ import {
   periodHalves,
   categoriesChanges,
 } from "../lib/totals.js";
-import { DECIMAL, interleaveLists } from "../lib/utils.js";
+import { DECIMAL, interleaveArrays } from "../lib/utils.js";
 
 const GRAPH_IDS = {
   BALANCE: "balance-graph",
@@ -127,14 +127,14 @@ function createTotalsGraph(trBalances, period, graphId) {
   const incomePeriodDates = thirdsPeriodDates.map((p) => p[0]);
   const expensesPeriodDates = thirdsPeriodDates.map((p) => p[1]);
 
-  const combinedPeriods = interleaveLists(
+  const combinedPeriods = interleaveArrays(
     incomePeriodDates,
     expensesPeriodDates
   );
 
   const data = [];
   for (const category of Object.keys(incomeChanges)) {
-    const combinedChanges = interleaveLists(
+    const combinedChanges = interleaveArrays(
       incomeChanges[category],
       expensesChanges[category]
     );
