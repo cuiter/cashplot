@@ -1,4 +1,4 @@
-import { resizeGraphs } from "./graph";
+import { generateGraphs, resizeGraphs } from "./graph";
 import { Parameters } from "../lib/parameters.js";
 import { DECIMAL } from "../lib/utils.js";
 
@@ -426,6 +426,7 @@ function submitParameters() {
     document.getElementById("create-graph-error").classList.add("disabled");
     document.getElementById("create-graph-message").textContent = "";
     parameters = inputParameters;
+    generateGraphs(parameters);
     setActivePage("balance");
   }
 }
