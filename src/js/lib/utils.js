@@ -37,12 +37,17 @@ exports.isValidRegex = function (pattern) {
  *
  * @param {Array<string>} keys - The keys to set.
  * @param {any} value - The value to set to.
+ * @param {boolean} [deepClone=false] - Whether to deep-clone the value for each key.
  * @return {Object} The newly created object.
  */
-exports.fillObject = function (keys, value) {
+exports.fillObject = function (keys, value, deepClone = false) {
   const object = {};
   for (const key of keys) {
-    object[key] = value;
+    if (deepClone) {
+      object[key] = JSON.parse(JSON.stringify(value));
+    } else {
+      object[key] = value;
+    }
   }
   return object;
 };
