@@ -39,7 +39,7 @@
 
 		{
 			"name": "Shopping",
-			"counterAccountPattern": "bol\\.com b\\.v\\.",
+			"counterAccountPattern": "Bol\\.com b\\.v\\.",
 			"descriptionPattern": ""
 		},
 
