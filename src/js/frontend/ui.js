@@ -1,3 +1,4 @@
+import exampleParameters from "../../assets/example-parameters.json";
 import { generateGraphs, resizeGraphs } from "./graph";
 import { Parameters } from "../lib/parameters.js";
 import { DECIMAL } from "../lib/utils.js";
@@ -315,6 +316,9 @@ export function init() {
     .getElementById("get-started-button")
     .addEventListener("click", () => setActivePage("input"));
   document
+    .getElementById("example-parameters-button")
+    .addEventListener("click", onExampleParametersButtonClicked);
+  document
     .getElementById("add-account-button")
     .addEventListener("click", onAddAccountButtonClicked);
   document
@@ -352,6 +356,13 @@ export function init() {
 
   addAccount("Main", true);
   addCategory("Other");
+}
+
+/**
+ * Callback for the example parameters button.
+ */
+function onExampleParametersButtonClicked() {
+  importParameters(JSON.stringify(exampleParameters));
 }
 
 /**
