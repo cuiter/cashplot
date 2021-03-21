@@ -1,0 +1,68 @@
+{
+    "transactionData": "\"Date\";\"Name / Description\";\"Account\";\"Counterparty\";\"Code\";\"Debit/credit\";\"Amount (EUR)\";\"Transaction type\";\"Notifications\"\n\"20201128\";\"Far Star Solutions\";\"\";\"NL77INGB2920291023\";\"OV\";\"Credit\";\"4150\";\"Transfer\";\"Salary for November 2020\"\n\"20201118\";\"Tekso York\";\"\";\"NL20INGB6723623827\";\"BA\";\"Debit\";\"150\";\"Payment Terminal\";\"Card payment - see you soon\"\n\"20201108\";\"Internal Revenue Service\";\"\";\"NL11INGB1111111111\";\"IC\";\"Debit\";\"800\";\"SEPA Direct Debit\";\"Income tax for period of one month\"\n\"20201104\";\"Green Cross Health Insurance\";\"\";\"NL98INGB9392919089\";\"IC\";\"Debit\";\"120\";\"SEPA Direct Debit\";\"Health insurance premium\"\n\"20201103\";\"WalBlues Groceries Inc.\";\"\";\"NL33INGB9012841337\";\"BA\";\"Debit\";\"120\";\"Payment Terminal\";\"Card payment - eat your veggies\"\n\"20201102\";\"McIvy Car Insurance\";\"\";\"NL92INGB2930239492\";\"IC\";\"Debit\";\"80\";\"SEPA Direct Debit\";\"Car insurance for license plate 29-FD-VM\"\n\"20201029\";\"Land Lord the Fifth\";\"\";\"NL91INGB0923094949\";\"GT\";\"Debit\";\"1200\";\"Online Banking\";\"Rent for one month\"\n\"20201028\";\"Far Star Solutions\";\"\";\"NL77INGB2920291023\";\"OV\";\"Credit\";\"4000\";\"Transfer\";\"Salary for October 2020\"\n\"20201025\";\"WalBlues Groceries Inc.\";\"\";\"NL33INGB9012841337\";\"BA\";\"Debit\";\"120\";\"Payment Terminal\";\"Card payment - eat your veggies\"\n\"20201014\";\"Tekso York\";\"\";\"NL20INGB6723623827\";\"BA\";\"Debit\";\"150\";\"Payment Terminal\";\"Card payment - see you soon\"\n\"20201008\";\"Internal Revenue Service\";\"\";\"NL11INGB1111111111\";\"IC\";\"Debit\";\"800\";\"SEPA Direct Debit\";\"Income tax for period of one month\"\n\"20201004\";\"Green Cross Health Insurance\";\"\";\"NL98INGB9392919089\";\"IC\";\"Debit\";\"120\";\"SEPA Direct Debit\";\"Health insurance premium\"\n\"20201002\";\"McIvy Car Insurance\";\"\";\"NL92INGB2930239492\";\"IC\";\"Debit\";\"80\";\"SEPA Direct Debit\";\"Car insurance for license plate 29-FD-VM\"\n\"20200929\";\"Land Lord the Fifth\";\"\";\"NL91INGB0923094949\";\"GT\";\"Debit\";\"1200\";\"Online Banking\";\"Rent for one month\"\n\"20200928\";\"WalBlues Groceries Inc.\";\"\";\"NL33INGB9012841337\";\"BA\";\"Debit\";\"120\";\"Payment Terminal\";\"Card payment - eat your veggies\"\n\"20200928\";\"Far Star Solutions\";\"\";\"NL77INGB2920291023\";\"OV\";\"Credit\";\"4000\";\"Transfer\";\"Salary for September 2020\"\n\"20200911\";\"Tekso York\";\"\";\"NL20INGB6723623827\";\"BA\";\"Debit\";\"150\";\"Payment Terminal\";\"Card payment - see you soon\"\n\"20200908\";\"Internal Revenue Service\";\"\";\"NL11INGB1111111111\";\"IC\";\"Debit\";\"800\";\"SEPA Direct Debit\";\"Income tax for period of one month\"\n\"20200905\";\"Hr J Doe\";\"\";\"\";\"GT\";\"Debit\";\"8000,00\";\"Online Banking\";\"To Orange Savings Account V12345678\"\n\"20200904\";\"Green Cross Health Insurance\";\"\";\"NL98INGB9392919089\";\"IC\";\"Debit\";\"120\";\"SEPA Direct Debit\";\"Health insurance premium\"\n\"20200902\";\"McIvy Car Insurance\";\"\";\"NL92INGB2930239492\";\"IC\";\"Debit\";\"80\";\"SEPA Direct Debit\";\"Car insurance for license plate 29-FD-VM\"\n\"20200829\";\"Land Lord the Fifth\";\"\";\"NL91INGB0923094949\";\"GT\";\"Debit\";\"1200\";\"Online Banking\";\"Rent for one month\"\n\"20200828\";\"Far Star Solutions\";\"\";\"NL77INGB2920291023\";\"OV\";\"Credit\";\"4000\";\"Transfer\";\"Salary for August 2020\"\n\"20200822\";\"WalBlues Groceries Inc.\";\"\";\"NL33INGB9012841337\";\"BA\";\"Debit\";\"120\";\"Payment Terminal\";\"Card payment - eat your veggies\"\n\"20200808\";\"Internal Revenue Service\";\"\";\"NL11INGB1111111111\";\"IC\";\"Debit\";\"800\";\"SEPA Direct Debit\";\"Income tax for period of one month\"\n\"20200807\";\"Tekso York\";\"\";\"NL20INGB6723623827\";\"BA\";\"Debit\";\"150\";\"Payment Terminal\";\"Card payment - see you soon\"\n\"20200804\";\"Green Cross Health Insurance\";\"\";\"NL98INGB9392919089\";\"IC\";\"Debit\";\"120\";\"SEPA Direct Debit\";\"Health insurance premium\"\n\"20200802\";\"McIvy Car Insurance\";\"\";\"NL92INGB2930239492\";\"IC\";\"Debit\";\"80\";\"SEPA Direct Debit\";\"Car insurance for license plate 29-FD-VM\"\n\"20200729\";\"Land Lord the Fifth\";\"\";\"NL91INGB0923094949\";\"GT\";\"Debit\";\"1200\";\"Online Banking\";\"Rent for one month\"\n\"20200728\";\"Far Star Solutions\";\"\";\"NL77INGB2920291023\";\"OV\";\"Credit\";\"3500\";\"Transfer\";\"Salary for July 2020\"\n\"20200720\";\"Joe Shmuck Used Cars\";\"\";\"NL01INGB9933998899\";\"GT\";\"Debit\";\"4000\";\"Online Banking\";\"Car purchase 29-FD-VM\"\n\"20200719\";\"Hr J Doe\";\"\";\"\";\"GT\";\"Credit\";\"3500,00\";\"Online Banking\";\"From Orange Savings Account V12345678\"\n\"20200708\";\"Internal Revenue Service\";\"\";\"NL11INGB1111111111\";\"IC\";\"Debit\";\"800\";\"SEPA Direct Debit\";\"Income tax for period of one month\"\n\"20200705\";\"Tekso York\";\"\";\"NL20INGB6723623827\";\"BA\";\"Debit\";\"150\";\"Payment Terminal\";\"Card payment - see you soon\"\n\"20200704\";\"Green Cross Health Insurance\";\"\";\"NL98INGB9392919089\";\"IC\";\"Debit\";\"120\";\"SEPA Direct Debit\";\"Health insurance premium\"\n\"20200629\";\"Land Lord the Fifth\";\"\";\"NL91INGB0923094949\";\"GT\";\"Debit\";\"1200\";\"Online Banking\";\"Rent for one month\"\n\"20200628\";\"Far Star Solutions\";\"\";\"NL77INGB2920291023\";\"OV\";\"Credit\";\"3500\";\"Transfer\";\"Salary for June 2020\"\n\"20200625\";\"Tekso York\";\"\";\"NL20INGB6723623827\";\"BA\";\"Debit\";\"150\";\"Payment Terminal\";\"Card payment - see you soon\"\n\"20200608\";\"Internal Revenue Service\";\"\";\"NL11INGB1111111111\";\"IC\";\"Debit\";\"800\";\"SEPA Direct Debit\";\"Income tax for period of one month\"\n\"20200604\";\"Green Cross Health Insurance\";\"\";\"NL98INGB9392919089\";\"IC\";\"Debit\";\"120\";\"SEPA Direct Debit\";\"Health insurance premium\"\n\"20200601\";\"Tekso York\";\"\";\"NL20INGB6723623827\";\"BA\";\"Debit\";\"150\";\"Payment Terminal\";\"Card payment - see you soon\"\n\"20200529\";\"Land Lord the Fifth\";\"\";\"NL91INGB0923094949\";\"GT\";\"Debit\";\"1200\";\"Online Banking\";\"Rent for one month\"\n\"20200528\";\"Far Star Solutions\";\"\";\"NL77INGB2920291023\";\"OV\";\"Credit\";\"3500\";\"Transfer\";\"Salary for May 2020\"\n\"20200513\";\"Tekso York\";\"\";\"NL20INGB6723623827\";\"BA\";\"Debit\";\"150\";\"Payment Terminal\";\"Card payment - see you soon\"\n\"20200508\";\"Internal Revenue Service\";\"\";\"NL11INGB1111111111\";\"IC\";\"Debit\";\"800\";\"SEPA Direct Debit\";\"Income tax for period of one month\"\n\"20200504\";\"Green Cross Health Insurance\";\"\";\"NL98INGB9392919089\";\"IC\";\"Debit\";\"120\";\"SEPA Direct Debit\";\"Health insurance premium\"\n\"20200429\";\"Land Lord the Fifth\";\"\";\"NL91INGB0923094949\";\"GT\";\"Debit\";\"1200\";\"Online Banking\";\"Rent for one month\"\n\"20200428\";\"Far Star Solutions\";\"\";\"NL77INGB2920291023\";\"OV\";\"Credit\";\"3500\";\"Transfer\";\"Salary for April 2020\"\n\"20200425\";\"Tekso York\";\"\";\"NL20INGB6723623827\";\"BA\";\"Debit\";\"150\";\"Payment Terminal\";\"Card payment - see you soon\"\n\"20200410\";\"Tekso York\";\"\";\"NL20INGB6723623827\";\"BA\";\"Debit\";\"150\";\"Payment Terminal\";\"Card payment - see you soon\"\n\"20200408\";\"Internal Revenue Service\";\"\";\"NL11INGB1111111111\";\"IC\";\"Debit\";\"800\";\"SEPA Direct Debit\";\"Income tax for period of one month\"\n\"20200404\";\"Green Cross Health Insurance\";\"\";\"NL98INGB9392919089\";\"IC\";\"Debit\";\"120\";\"SEPA Direct Debit\";\"Health insurance premium\"\n\"20200329\";\"Land Lord the Fifth\";\"\";\"NL91INGB0923094949\";\"GT\";\"Debit\";\"1200\";\"Online Banking\";\"Rent for one month\"\n\"20200328\";\"Far Star Solutions\";\"\";\"NL77INGB2920291023\";\"OV\";\"Credit\";\"3500\";\"Transfer\";\"Salary for March 2020\"\n\"20200321\";\"Tekso York\";\"\";\"NL20INGB6723623827\";\"BA\";\"Debit\";\"150\";\"Payment Terminal\";\"Card payment - see you soon\"\n\"20200308\";\"Internal Revenue Service\";\"\";\"NL11INGB1111111111\";\"IC\";\"Debit\";\"800\";\"SEPA Direct Debit\";\"Income tax for period of one month\"\n\"20200305\";\"Tekso York\";\"\";\"NL20INGB6723623827\";\"BA\";\"Debit\";\"150\";\"Payment Terminal\";\"Card payment - see you soon\"\n\"20200304\";\"Green Cross Health Insurance\";\"\";\"NL98INGB9392919089\";\"IC\";\"Debit\";\"120\";\"SEPA Direct Debit\";\"Health insurance premium\"\n\"20200229\";\"Land Lord the Fifth\";\"\";\"NL91INGB0923094949\";\"GT\";\"Debit\";\"1200\";\"Online Banking\";\"Rent for one month\"\n\"20200228\";\"Far Star Solutions\";\"\";\"NL77INGB2920291023\";\"OV\";\"Credit\";\"3500\";\"Transfer\";\"Salary for February 2020\"\n\"20200220\";\"Tekso York\";\"\";\"NL20INGB6723623827\";\"BA\";\"Debit\";\"150\";\"Payment Terminal\";\"Card payment - see you soon\"\n",
+    "transactionFileName": "NL11INGB9023845839_01-02-2020_18-11-2020.csv",
+    "accounts": [
+        {
+            "name": "Main",
+            "startingBalance": 120000,
+            "addToNet": true
+        },
+        {
+            "name": "Savings",
+            "startingBalance": 1850000,
+            "addToNet": true
+        }
+    ],
+    "categories": [
+        {
+            "name": "Savings",
+            "descriptionPattern": "Orange Savings Account V12345678",
+            "counterAccountPattern": "hr j doe"
+        },
+        {
+            "name": "Salary",
+            "descriptionPattern": "Salary",
+            "counterAccountPattern": "Far Star Solutions"
+        },
+        {
+            "name": "Tax",
+            "descriptionPattern": "Income tax",
+            "counterAccountPattern": "Internal Revenue Service"
+        },
+        {
+            "name": "Tax",
+            "descriptionPattern": "Road tax for license plate 29-FD-VM",
+            "counterAccountPattern": "Department of Motor Vehicles"
+        },
+        {
+            "name": "Insurance",
+            "descriptionPattern": "",
+            "counterAccountPattern": "McIvy Car Insurance"
+        },
+        {
+            "name": "Insurance",
+            "descriptionPattern": "Health Insurance",
+            "counterAccountPattern": "NL98INGB9392919089"
+        },
+        {
+            "name": "Rent",
+            "descriptionPattern": "Rent for one month",
+            "counterAccountPattern": "Land Lord the Fifth"
+        },
+        {
+            "name": "Groceries",
+            "descriptionPattern": "",
+            "counterAccountPattern": "WalBlues Groceries Inc\\."
+        },
+        {
+            "name": "Groceries",
+            "descriptionPattern": "",
+            "counterAccountPattern": "Tekso York"
+        },
+        {
+            "name": "Other",
+            "descriptionPattern": "",
+            "counterAccountPattern": ""
+        }
+    ]
+}
