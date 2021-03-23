@@ -12,6 +12,7 @@ const WITHOUT_INPUT_NAV_LINKS = ["home", "input", "faq"];
 const WITH_INPUT_NAV_LINKS = ["home", "input", "balance", "totals", "faq"];
 const RESIZE_GRAPH_PAGES = ["balance", "totals"];
 
+const LOCALSTORAGE_PARAMETER_KEY = "parameters";
 let transactionData = null;
 let transactionFileName = null;
 let parameters = null;
@@ -290,6 +291,28 @@ function importParameters(exportStr) {
   }
 }
 
+/**
+ * Callback for the "generate graphs" timeout.
+ * This timeout is used to split off letting the user know that the graph is
+ * being generated, from actually generating the graph (which is
+ * time-intensive).
+ */
+function onGenerateGraphsTimeout() {
+  try {
+    generateGraphs(parameters);
+    localStorage.setItem(LOCALSTORAGE_PARAMETER_KEY, parameters.export());
+    document.getElementById("create-graph-error").classList.add("disabled");
+    document.getElementById("create-graph-message").textContent = "";
+    setActivePage("balance");
+  } catch (err) {
+    console.error(err);
+    document.getElementById("create-graph-error").classList.remove("disabled");
+    document.getElementById("create-graph-message").textContent =
+      "Error generating graph: " + err.message + ".";
+    return;
+  }
+}
+
 /* Event listener and callback code */
 
 /**
@@ -352,10 +375,15 @@ export function init() {
     });
   }
 
-  setTransactionData(null, null);
+  const storedParameters = localStorage.getItem(LOCALSTORAGE_PARAMETER_KEY);
+  if (storedParameters !== null) {
+    importParameters(storedParameters);
+  } else {
+    setTransactionData(null, null);
 
-  addAccount("Main", true);
-  addCategory("Other");
+    addAccount("Main", true);
+    addCategory("Other");
+  }
 }
 
 /**
@@ -435,21 +463,10 @@ function submitParameters() {
       validateError + ".";
   } else {
     parameters = inputParameters;
-
-    try {
-      generateGraphs(parameters);
-      document.getElementById("create-graph-error").classList.add("disabled");
-      document.getElementById("create-graph-message").textContent = "";
-      setActivePage("balance");
-    } catch (err) {
-      console.error(err);
-      document
-        .getElementById("create-graph-error")
-        .classList.remove("disabled");
-      document.getElementById("create-graph-message").textContent =
-        "Error generating graph: " + err.message + ".";
-      return;
-    }
+    document.getElementById("create-graph-message").textContent =
+      "Generating graph. This may take a while...";
+    // Give the browser some time to update the screen before generating the graph.
+    setTimeout(onGenerateGraphsTimeout, 100);
   }
 }
 
