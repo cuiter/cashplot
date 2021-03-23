@@ -25,6 +25,12 @@ const PERIOD_FORMATS = {
   [Period.DAY]: "%b %e, %Y",
 };
 
+const LEGEND_OPTIONS = {
+  orientation: "h",
+  xanchor: "right",
+  x: 1,
+  y: 1,
+};
 const RANGE_SELECTOR_OPTIONS = {
   buttons: [
     {
@@ -104,6 +110,7 @@ function createBalanceGraph(trBalances, graphId) {
 
   const layout = {
     font: { size: 18 },
+    legend: LEGEND_OPTIONS,
     xaxis: { rangeselector: RANGE_SELECTOR_OPTIONS },
   };
   const config = { responsive: true };
@@ -152,6 +159,7 @@ function createTotalsGraph(trBalances, period, graphId) {
   const layout = {
     font: { size: 18 },
     barmode: "relative",
+    legend: LEGEND_OPTIONS,
     xaxis: {
       rangeselector: period === Period.YEAR ? null : RANGE_SELECTOR_OPTIONS,
       tickmode: "array",
