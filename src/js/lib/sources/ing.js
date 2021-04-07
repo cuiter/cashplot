@@ -1,3 +1,4 @@
+/** @module */
 const assert = require("nanoassert");
 const Papa = require("papaparse");
 const utils = require("../utils");

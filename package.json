@@ -5,19 +5,21 @@
     "dev": "webpack && xdg-open ./src/index.html",
     "build": "webpack",
     "test": "node ./tests/index.js",
-    "lint": "eslint ./src/js/lib/ ./src/js/frontend/ ./tests/ --fix"
+    "lint": "eslint ./src/js/lib/ ./src/js/frontend/ ./tests/ --fix",
+    "doc": "jsdoc ./src/js/lib/ ./src/js/frontend/ -R ./README.md -d ./doc/"
   },
   "dependencies": {
     "papaparse": "^5.3.0",
     "nanoassert": "^2.0.0"
   },
   "devDependencies": {
-    "prettier-eslint": "^12.0.0",
-    "eslint-config-prettier": "^8.1.0",
     "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-jasmine": "^4.1.2",
     "eslint-plugin-prettier": "^3.3.1",
     "jasmine": "^3.6.4",
+    "jsdoc": "^3.6.6",
+    "prettier-eslint": "^12.0.0",
     "webpack": "^5.21.2",
     "webpack-cli": "^4.5.0"
   }

@@ -1,3 +1,4 @@
+/** @module */
 import exampleParameters from "../../assets/example-parameters.json";
 import { generateGraphs, resizeGraphs } from "./graph";
 import { Parameters } from "../lib/parameters.js";

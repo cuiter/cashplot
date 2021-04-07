@@ -1,3 +1,4 @@
+/** @module */
 const assert = require("nanoassert");
 const utils = require("./utils");
 
