@@ -16,21 +16,21 @@ exports.Period = {
  * @param {Array<TransactionBalance>} trBalances - Transactions+balances.
  * @return {Array<string>} All categories occurring in the transactions+balances.
  */
-exports.getCategories = function(trBalances) {
+exports.getCategories = function (trBalances) {
   const accountNames = Object.keys(trBalances[0].balances);
   const isNotAnAccount = (category) => accountNames.indexOf(category) === -1;
 
   const rawCategories = trBalances.map((tr) => tr.transaction.category);
   // Remove duplicates and account names from categories.
   return [...new Set(rawCategories)].filter(isNotAnAccount);
-}
+};
 
 /**
  * Calculate the date range from a year prior to the last transaction, to the last transaction.
  * @param {Array<TransactionBalance>} trBalances - Transactions+balances.
  * @return {Array.<Date, Date>} The dates.
  */
-exports.lastYearRange = function(trBalances) {
+exports.lastYearRange = function (trBalances) {
   assert(Array.isArray(trBalances));
   assert(trBalances.length > 0);
   assert(
@@ -40,7 +40,7 @@ exports.lastYearRange = function(trBalances) {
   const afterDate = new Date(untilDate.valueOf());
   afterDate.setFullYear(afterDate.getFullYear() - 1);
   return [afterDate, untilDate];
-}
+};
 
 /**
  * Floors the date to the first day in the given period.
@@ -51,7 +51,7 @@ exports.lastYearRange = function(trBalances) {
  * @param {exports.Period} period - The period.
  * @return {Date} The floored date.
  */
-exports.floorPeriod = function(date, period) {
+exports.floorPeriod = function (date, period) {
   assert(date instanceof Date);
   switch (period) {
     case exports.Period.YEAR: {
@@ -85,7 +85,7 @@ exports.floorPeriod = function(date, period) {
       throw new Error("Unknown period " + period);
     }
   }
-}
+};
 
 /**
  * Given a date, return the first day of the next period.
@@ -93,7 +93,7 @@ exports.floorPeriod = function(date, period) {
  * @param {exports.Period} period - The period.
  * @return {Date} The first day in the next period.
  */
-exports.nextPeriod = function(date, period) {
+exports.nextPeriod = function (date, period) {
   assert(date instanceof Date);
   const floorDate = exports.floorPeriod(date, period);
   switch (period) {
@@ -146,7 +146,7 @@ exports.nextPeriod = function(date, period) {
       throw new Error("Unknown period " + period);
     }
   }
-}
+};
 
 /**
  * Given a date, return the dates of 1/3rd and 2/3rds through the period.
@@ -154,7 +154,7 @@ exports.nextPeriod = function(date, period) {
  * @param {exports.Period} period - The period.
  * @return {Array<Date>} Dates of 1/3rd and 2/3rds through the period.
  */
-exports.periodThirds = function(date, period) {
+exports.periodThirds = function (date, period) {
   const fromDate = exports.floorPeriod(date, period);
   const untilDate = exports.nextPeriod(date, period);
 
@@ -185,7 +185,7 @@ exports.periodThirds = function(date, period) {
       ),
     ];
   }
-}
+};
 
 /**
  * Given a date, return the date but half through the period.
@@ -193,7 +193,7 @@ exports.periodThirds = function(date, period) {
  * @param {exports.Period} period - The period.
  * @return {Array<Date>} Dates half through the period.
  */
-exports.periodHalves = function(date, period) {
+exports.periodHalves = function (date, period) {
   const fromDate = exports.floorPeriod(date, period);
   const untilDate = exports.nextPeriod(date, period);
 
@@ -212,7 +212,7 @@ exports.periodHalves = function(date, period) {
       )
     );
   }
-}
+};
 
 /**
  * Calculate the period total income/expenses for each category occurring in the given transactions+balances.
@@ -221,10 +221,13 @@ exports.periodHalves = function(date, period) {
  * @return {Array.<Array<Date>,Object<string,number>,Object<string,number>>} -
  *   An array of periods, an array of income totals and an array of expenses totals.
  */
-exports.categoriesChanges = function(trBalances, period) {
+exports.categoriesChanges = function (trBalances, period) {
   const categories = exports.getCategories(trBalances);
 
-  const firstPeriod = exports.floorPeriod(trBalances[0].transaction.date, period);
+  const firstPeriod = exports.floorPeriod(
+    trBalances[0].transaction.date,
+    period
+  );
   const lastPeriod = exports.floorPeriod(
     trBalances[trBalances.length - 1].transaction.date,
     period
@@ -242,7 +245,8 @@ exports.categoriesChanges = function(trBalances, period) {
     for (const trBalance of trBalances) {
       const tr = trBalance.transaction;
       if (
-        exports.floorPeriod(tr.date, period).getTime() === curPeriod.getTime() &&
+        exports.floorPeriod(tr.date, period).getTime() ===
+          curPeriod.getTime() &&
         categories.indexOf(tr.category) !== -1
       ) {
         if (tr.change >= 0) {
@@ -261,4 +265,4 @@ exports.categoriesChanges = function(trBalances, period) {
   }
 
   return [periods, incomeChanges, expensesChanges];
-}
+};

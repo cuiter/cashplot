@@ -26,11 +26,24 @@ const PERIOD_FORMATS = {
   [Period.DAY]: "%b %e, %Y",
 };
 
-const LEGEND_OPTIONS = {
-  orientation: "h",
-  xanchor: "right",
-  x: 1,
-  y: 1,
+const LAYOUT_OPTIONS = {
+  margin: {
+    l: 0,
+    r: 0,
+    b: 0,
+    t: 0,
+    pad: 0,
+  },
+  yaxis: {
+    automargin: true,
+  },
+  font: { size: 18 },
+  legend: {
+    orientation: "h",
+    xanchor: "right",
+    x: 1,
+    y: 1,
+  },
 };
 const RANGE_SELECTOR_OPTIONS = {
   buttons: [
@@ -109,11 +122,15 @@ function createBalanceGraph(trBalances, graphId) {
     data.push(trace);
   }
 
-  const layout = {
-    font: { size: 18 },
-    legend: LEGEND_OPTIONS,
-    xaxis: { rangeselector: RANGE_SELECTOR_OPTIONS },
-  };
+  const layout = Object.assign(
+    {
+      xaxis: {
+        automargin: true,
+        rangeselector: RANGE_SELECTOR_OPTIONS,
+      },
+    },
+    LAYOUT_OPTIONS
+  );
   const config = { responsive: true };
   Plotly.newPlot(graphId, data, layout, config);
 }
@@ -157,17 +174,19 @@ function createTotalsGraph(trBalances, period, graphId) {
     data.push(trace);
   }
 
-  const layout = {
-    font: { size: 18 },
-    barmode: "relative",
-    legend: LEGEND_OPTIONS,
-    xaxis: {
-      rangeselector: period === Period.YEAR ? null : RANGE_SELECTOR_OPTIONS,
-      tickmode: "array",
-      tickvals: periods.map((p) => periodHalves(p, period)),
-      tickformat: PERIOD_FORMATS[period],
+  const layout = Object.assign(
+    {
+      barmode: "relative",
+      xaxis: {
+        automargin: true,
+        rangeselector: period === Period.YEAR ? null : RANGE_SELECTOR_OPTIONS,
+        tickmode: "array",
+        tickvals: periods.map((p) => periodHalves(p, period)),
+        tickformat: PERIOD_FORMATS[period],
+      },
     },
-  };
+    LAYOUT_OPTIONS
+  );
   const config = { responsive: true };
 
   Plotly.newPlot(graphId, data, layout, config);
