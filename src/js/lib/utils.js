@@ -1,3 +1,4 @@
+/** @module */
 const assert = require("nanoassert");
 
 // Factor all input numbers should be multiplied by so they won't lose

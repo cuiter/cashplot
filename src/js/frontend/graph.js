@@ -1,3 +1,4 @@
+/** @module */
 import { INGTransaction } from "../lib/sources/ing.js";
 import { transactionBalances } from "../lib/transactions.js";
 import {

@@ -1,8 +1,10 @@
+/** @module */
 const transactions = require("./transactions");
 const utils = require("./utils");
 const assert = require("nanoassert");
 
-const Period = {
+/** Enum denoting a span of time (YEAR/QUARTER/...). */
+exports.Period = {
   YEAR: 1,
   QUARTER: 2,
   MONTH: 3,
@@ -14,7 +16,7 @@ const Period = {
  * @param {Array<TransactionBalance>} trBalances - Transactions+balances.
  * @return {Array<string>} All categories occurring in the transactions+balances.
  */
-function getCategories(trBalances) {
+exports.getCategories = function(trBalances) {
   const accountNames = Object.keys(trBalances[0].balances);
   const isNotAnAccount = (category) => accountNames.indexOf(category) === -1;
 
@@ -28,7 +30,7 @@ function getCategories(trBalances) {
  * @param {Array<TransactionBalance>} trBalances - Transactions+balances.
  * @return {Array.<Date, Date>} The dates.
  */
-function lastYearRange(trBalances) {
+exports.lastYearRange = function(trBalances) {
   assert(Array.isArray(trBalances));
   assert(trBalances.length > 0);
   assert(
@@ -43,19 +45,19 @@ function lastYearRange(trBalances) {
 /**
  * Floors the date to the first day in the given period.
  *
- * For example, given July 23rd and Period.MONTH, floors it down to July 1st.
+ * For example, given July 23rd and exports.Period.MONTH, floors it down to July 1st.
  *
  * @param {Date} date - The date.
- * @param {Period} period - The period.
+ * @param {exports.Period} period - The period.
  * @return {Date} The floored date.
  */
-function floorPeriod(date, period) {
+exports.floorPeriod = function(date, period) {
   assert(date instanceof Date);
   switch (period) {
-    case Period.YEAR: {
+    case exports.Period.YEAR: {
       return new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
     }
-    case Period.QUARTER: {
+    case exports.Period.QUARTER: {
       return new Date(
         Date.UTC(
           date.getUTCFullYear(),
@@ -64,17 +66,17 @@ function floorPeriod(date, period) {
         )
       );
     }
-    case Period.MONTH: {
+    case exports.Period.MONTH: {
       return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1));
     }
-    case Period.WEEK: {
+    case exports.Period.WEEK: {
       // https://stackoverflow.com/a/4156516
       const d = new Date(date);
       const day = d.getDay();
       const diff = d.getDate() - day + (day == 0 ? -6 : 1); // Adjust when day is sunday.
       return new Date(d.setDate(diff));
     }
-    case Period.DAY: {
+    case exports.Period.DAY: {
       return new Date(
         Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
       );
@@ -88,14 +90,14 @@ function floorPeriod(date, period) {
 /**
  * Given a date, return the first day of the next period.
  * @param {Date} date - The date.
- * @param {Period} period - The period.
+ * @param {exports.Period} period - The period.
  * @return {Date} The first day in the next period.
  */
-function nextPeriod(date, period) {
+exports.nextPeriod = function(date, period) {
   assert(date instanceof Date);
-  const floorDate = floorPeriod(date, period);
+  const floorDate = exports.floorPeriod(date, period);
   switch (period) {
-    case Period.YEAR: {
+    case exports.Period.YEAR: {
       return new Date(
         Date.UTC(
           floorDate.getUTCFullYear() + 1,
@@ -104,7 +106,7 @@ function nextPeriod(date, period) {
         )
       );
     }
-    case Period.QUARTER: {
+    case exports.Period.QUARTER: {
       return new Date(
         Date.UTC(
           floorDate.getUTCFullYear(),
@@ -113,7 +115,7 @@ function nextPeriod(date, period) {
         )
       );
     }
-    case Period.MONTH: {
+    case exports.Period.MONTH: {
       return new Date(
         Date.UTC(
           floorDate.getUTCFullYear(),
@@ -122,7 +124,7 @@ function nextPeriod(date, period) {
         )
       );
     }
-    case Period.WEEK: {
+    case exports.Period.WEEK: {
       return new Date(
         Date.UTC(
           floorDate.getUTCFullYear(),
@@ -131,7 +133,7 @@ function nextPeriod(date, period) {
         )
       );
     }
-    case Period.DAY: {
+    case exports.Period.DAY: {
       return new Date(
         Date.UTC(
           floorDate.getUTCFullYear(),
@@ -149,12 +151,12 @@ function nextPeriod(date, period) {
 /**
  * Given a date, return the dates of 1/3rd and 2/3rds through the period.
  * @param {Date} date - The date.
- * @param {Period} period - The period.
+ * @param {exports.Period} period - The period.
  * @return {Array<Date>} Dates of 1/3rd and 2/3rds through the period.
  */
-function periodThirds(date, period) {
-  const fromDate = floorPeriod(date, period);
-  const untilDate = nextPeriod(date, period);
+exports.periodThirds = function(date, period) {
+  const fromDate = exports.floorPeriod(date, period);
+  const untilDate = exports.nextPeriod(date, period);
 
   const oneThirdDate = new Date(
     fromDate.getTime() + (untilDate.getTime() - fromDate.getTime()) / 3
@@ -163,7 +165,7 @@ function periodThirds(date, period) {
     fromDate.getTime() + ((untilDate.getTime() - fromDate.getTime()) / 3) * 2
   );
 
-  if (period == Period.DAY) {
+  if (period == exports.Period.DAY) {
     return [oneThirdDate, twoThirdsDate];
   } else {
     return [
@@ -188,18 +190,18 @@ function periodThirds(date, period) {
 /**
  * Given a date, return the date but half through the period.
  * @param {Date} date - The date.
- * @param {Period} period - The period.
+ * @param {exports.Period} period - The period.
  * @return {Array<Date>} Dates half through the period.
  */
-function periodHalves(date, period) {
-  const fromDate = floorPeriod(date, period);
-  const untilDate = nextPeriod(date, period);
+exports.periodHalves = function(date, period) {
+  const fromDate = exports.floorPeriod(date, period);
+  const untilDate = exports.nextPeriod(date, period);
 
   const halfDate = new Date(
     fromDate.getTime() + (untilDate.getTime() - fromDate.getTime()) / 2
   );
 
-  if (period == Period.DAY) {
+  if (period == exports.Period.DAY) {
     return halfDate;
   } else {
     return new Date(
@@ -215,15 +217,15 @@ function periodHalves(date, period) {
 /**
  * Calculate the period total income/expenses for each category occurring in the given transactions+balances.
  * @param {Array<TransactionBalance>} trBalances - The transactions+balances.
- * @param {Period} period - The period by which to group income/expenses by.
+ * @param {exports.Period} period - The period by which to group income/expenses by.
  * @return {Array.<Array<Date>,Object<string,number>,Object<string,number>>} -
  *   An array of periods, an array of income totals and an array of expenses totals.
  */
-function categoriesChanges(trBalances, period) {
-  const categories = getCategories(trBalances);
+exports.categoriesChanges = function(trBalances, period) {
+  const categories = exports.getCategories(trBalances);
 
-  const firstPeriod = floorPeriod(trBalances[0].transaction.date, period);
-  const lastPeriod = floorPeriod(
+  const firstPeriod = exports.floorPeriod(trBalances[0].transaction.date, period);
+  const lastPeriod = exports.floorPeriod(
     trBalances[trBalances.length - 1].transaction.date,
     period
   );
@@ -240,7 +242,7 @@ function categoriesChanges(trBalances, period) {
     for (const trBalance of trBalances) {
       const tr = trBalance.transaction;
       if (
-        floorPeriod(tr.date, period).getTime() === curPeriod.getTime() &&
+        exports.floorPeriod(tr.date, period).getTime() === curPeriod.getTime() &&
         categories.indexOf(tr.category) !== -1
       ) {
         if (tr.change >= 0) {
@@ -255,17 +257,8 @@ function categoriesChanges(trBalances, period) {
       expensesChanges[category].push(curExpensesChanges[category]);
     }
     periods.push(curPeriod);
-    curPeriod = nextPeriod(curPeriod, period);
+    curPeriod = exports.nextPeriod(curPeriod, period);
   }
 
   return [periods, incomeChanges, expensesChanges];
 }
-
-exports.Period = Period;
-exports.getCategories = getCategories;
-exports.lastYearRange = lastYearRange;
-exports.floorPeriod = floorPeriod;
-exports.nextPeriod = nextPeriod;
-exports.periodThirds = periodThirds;
-exports.periodHalves = periodHalves;
-exports.categoriesChanges = categoriesChanges;
