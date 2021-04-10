@@ -52,31 +52,38 @@
           <h1 id="title" class="text-center">CashPlot</h1>
         </header>
         <section class="container flex-center margin-top-10">
-          <button class="button" id="get-started-button">Get Started</button>
+          <i>Create peace-of-mind by consciously steering your financials.</i>
+        </section>
+        <section class="container flex-center margin-top-10">
+          <button class="button" id="start-button">Start</button>
+          <span>&nbsp;</span>
+          <button class="button button-outline" id="start-demo-button">Demo</button>
         </section>
       </div>
       <section class="container margin-top-5 page disabled" id="input-transactions-page">
-        <i class="description">
-          Start entering the data by filling in the fields. It's possible to
-          create an export, for example if you want to create a back-up or
-          share the results with someone else.
-        </i>
+        <h2>Data</h2>
+        <i class="description">Enter the transactions to be graphed.</i>
         <form>
-          <label class="button button-outline" for="parameters-upload">Upload Parameters</label>
-          <input type="file" class="disabled" id="parameters-upload"></input>
-          <button class="button button-outline" id="example-parameters-button">Show Example</button>
-          <span class="text-icon icon-cross disabled" id="parameters-upload-error">&#10799;</span>
-          <span id="parameters-upload-message"></span>
-        </form>
-
-        <h2>Transaction Data</h2>
-        <i class="description">Provide the data to plot by uploading a transactions file (.csv).</i>
-        <form>
-          <label class="button" for="transaction-data-upload">Upload Transactions</label>
+          <label class="button" for="transaction-data-upload">Upload</label>
           <input type="file" class="disabled" id="transaction-data-upload"></input>
           <span class="text-icon icon-cross disabled" id="transaction-data-error">&#10799;</span>
           <span class="text-icon icon-ack disabled" id="transaction-data-ok">&#10004;</span>
           <span id="transaction-data-message"></span>
+        </form>
+        <i class="description">ING Bank .csv files are supported. See the FAQ for how to download these from the ING Bank portal.</i>
+
+        <br />
+        <br />
+        <i class="description">
+          If you've already used CashPlot before, you can transfer the results from/to another device.
+        </i>
+        <form>
+          <label class="button button-outline" for="parameters-upload">Import</label>
+          <input type="file" class="disabled" id="parameters-upload"></input>
+          <button class="button button-outline" id="export-parameters-button" download="cashplot.json">Export</button>
+          <a id="export-parameters-link"></a>
+          <span class="text-icon icon-cross disabled" id="parameters-upload-error">&#10799;</span>
+          <span id="parameters-upload-message"></span>
         </form>
 
       </section>
@@ -84,8 +91,7 @@
 
         <h2>Accounts</h2>
         <i class="description">
-          Provide the names of the savings accounts that you want to track in
-          addition to the main (checkings) account.
+          Provide the accounts you want to track.
         </i>
         <form>
           <table id="account-table">
@@ -107,7 +113,7 @@
 
         <h2>Categories</h2>
         <i class="description">
-          Tracking different types of spending/income is possible by assigning transactions to categories. Specify the text with which to match transactions with a particular category. It's possible to specify the same category multiple times to match on different values.
+          Specify the categories to split transactions into. Transactions from/to savings accounts should be categorized with the same name as the account itself.
         </i>
         <form>
           <table id="category-table">
@@ -125,8 +131,6 @@
           <button class="button button-small" id="add-category-button">Add</button>
         </form>
 
-        <button class="button" id="export-parameters-button" download="cashplot.json">Export Parameters</button>
-        <a id="export-parameters-link"></a>
       </section>
 
       <section class="container margin-top-5 page disabled" id="balance-page">

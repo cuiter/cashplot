@@ -42,6 +42,7 @@
 	line-height: 5.2rem;
 	padding: 0;
 	text-decoration: none;
+	cursor: pointer;
 }
 
 .navigation .site-title {
@@ -111,7 +112,7 @@
 
 /* Override Milligram defaults */
 .container {
-	max-width: 60rem;
+	max-width: 75rem;
 }
 
 /* Override input text color to make it readable in dark-mode browsers. */

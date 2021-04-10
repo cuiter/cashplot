@@ -190,6 +190,7 @@ function setTransactionData(data, fileName) {
       resultMessage = fileName;
       transactionData = data;
       transactionFileName = fileName;
+      updateNavLinks("input-transactions");
       document
         .getElementById("transaction-data-ok")
         .classList.remove("disabled");
@@ -338,11 +339,11 @@ export function init() {
       .addEventListener("click", () => setActivePage(navLink));
   }
   document
-    .getElementById("get-started-button")
+    .getElementById("start-button")
     .addEventListener("click", () => setActivePage("input-transactions"));
   document
-    .getElementById("example-parameters-button")
-    .addEventListener("click", onExampleParametersButtonClicked);
+    .getElementById("start-demo-button")
+    .addEventListener("click", onStartDemoButtonClicked);
   document
     .getElementById("add-account-button")
     .addEventListener("click", onAddAccountButtonClicked);
@@ -386,10 +387,11 @@ export function init() {
 }
 
 /**
- * Callback for the example parameters button.
+ * Callback for the "start demo" button.
  */
-function onExampleParametersButtonClicked() {
+function onStartDemoButtonClicked() {
   importParameters(JSON.stringify(exampleParameters));
+  setActivePage("input-transactions");
 }
 
 /**
