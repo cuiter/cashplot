@@ -1,17 +1,26 @@
 /** @module */
+import deepEqual from "fast-deep-equal";
 import exampleParameters from "../../assets/example-parameters.json";
 import { generateGraphs, resizeGraphs } from "./graph";
 import { Parameters } from "../lib/parameters.js";
 import { DECIMAL } from "../lib/utils.js";
 
 const HIDE_NAV_PAGES = ["home"];
+const GRAPH_PAGES = ["balance", "totals"];
 const NAV_ELEMENT = "navigation";
 const ACCOUNT_TABLE_ELEMENT = "account-table";
 const CATEGORY_TABLE_ELEMENT = "category-table";
 
-const WITHOUT_INPUT_NAV_LINKS = ["home", "input", "faq"];
-const WITH_INPUT_NAV_LINKS = ["home", "input", "balance", "totals", "faq"];
-const RESIZE_GRAPH_PAGES = ["balance", "totals"];
+const WITHOUT_INPUT_NAV_LINKS = ["home", "input-transactions", "faq"];
+const WITH_INPUT_NAV_LINKS = [
+  "home",
+  "input-transactions",
+  "input-accounts",
+  "input-categories",
+  "balance",
+  "totals",
+  "faq",
+];
 
 const LOCALSTORAGE_PARAMETER_KEY = "parameters";
 let transactionData = null;
@@ -45,12 +54,13 @@ function setActivePage(pageName) {
     throw new Error("Page " + pageName + " does not exist.");
   }
 
-  if (RESIZE_GRAPH_PAGES.indexOf(pageName) >= 0) {
-    resizeGraphs();
+  if (GRAPH_PAGES.indexOf(pageName) >= 0) {
+    submitParameters();
   }
 
   if (HIDE_NAV_PAGES.indexOf(pageName) >= 0) {
     document.getElementById(NAV_ELEMENT).classList.add("disabled");
+    document.getElementById("create-graph-bar").classList.add("disabled");
   } else {
     document.getElementById(NAV_ELEMENT).classList.remove("disabled");
   }
@@ -66,7 +76,7 @@ function setActivePage(pageName) {
  */
 function updateNavLinks(pageName) {
   const shownNavLinks =
-    parameters !== null ? WITH_INPUT_NAV_LINKS : WITHOUT_INPUT_NAV_LINKS;
+    transactionData !== null ? WITH_INPUT_NAV_LINKS : WITHOUT_INPUT_NAV_LINKS;
   const allNavLinks = Array.from(
     new Set(WITH_INPUT_NAV_LINKS.concat(WITHOUT_INPUT_NAV_LINKS))
   );
@@ -76,9 +86,9 @@ function updateNavLinks(pageName) {
     );
 
     if (shownNavLinks.indexOf(navLink) >= 0) {
-      navLinkElement.classList.remove("disabled");
+      navLinkElement.classList.remove("faded");
     } else {
-      navLinkElement.classList.add("disabled");
+      navLinkElement.classList.add("faded");
     }
 
     if (pageName !== null) {
@@ -302,12 +312,13 @@ function onGenerateGraphsTimeout() {
   try {
     generateGraphs(parameters);
     localStorage.setItem(LOCALSTORAGE_PARAMETER_KEY, parameters.export());
-    document.getElementById("create-graph-error").classList.add("disabled");
+    document.getElementById("create-graph-bar").classList.add("disabled");
+    document.getElementById("create-graph-bar").classList.remove("error-bar");
     document.getElementById("create-graph-message").textContent = "";
-    setActivePage("balance");
+    resizeGraphs();
   } catch (err) {
     console.error(err);
-    document.getElementById("create-graph-error").classList.remove("disabled");
+    document.getElementById("create-graph-bar").classList.add("error-bar");
     document.getElementById("create-graph-message").textContent =
       "Error generating graph: " + err.message + ".";
     return;
@@ -321,24 +332,14 @@ function onGenerateGraphsTimeout() {
  * Registers event handlers.
  */
 export function init() {
-  document
-    .getElementById("nav-home-button")
-    .addEventListener("click", () => setActivePage("home"));
-  document
-    .getElementById("nav-input-button")
-    .addEventListener("click", () => setActivePage("input"));
-  document
-    .getElementById("nav-balance-button")
-    .addEventListener("click", () => setActivePage("balance"));
-  document
-    .getElementById("nav-totals-button")
-    .addEventListener("click", () => setActivePage("totals"));
-  document
-    .getElementById("nav-faq-button")
-    .addEventListener("click", () => setActivePage("faq"));
+  for (const navLink of WITH_INPUT_NAV_LINKS) {
+    document
+      .getElementById("nav-" + navLink + "-button")
+      .addEventListener("click", () => setActivePage(navLink));
+  }
   document
     .getElementById("get-started-button")
-    .addEventListener("click", () => setActivePage("input"));
+    .addEventListener("click", () => setActivePage("input-transactions"));
   document
     .getElementById("example-parameters-button")
     .addEventListener("click", onExampleParametersButtonClicked);
@@ -348,9 +349,6 @@ export function init() {
   document
     .getElementById("add-category-button")
     .addEventListener("click", onAddCategoryButtonClicked);
-  document
-    .getElementById("create-graph-button")
-    .addEventListener("click", submitParameters);
   document
     .getElementById("export-parameters-button")
     .addEventListener("click", exportParameters);
@@ -459,15 +457,23 @@ function submitParameters() {
   const validateError = inputParameters.validate();
 
   if (validateError !== null) {
-    document.getElementById("create-graph-error").classList.remove("disabled");
+    document.getElementById("create-graph-bar").classList.remove("disabled");
+    document.getElementById("create-graph-bar").classList.add("error-bar");
     document.getElementById("create-graph-message").textContent =
       validateError + ".";
   } else {
-    parameters = inputParameters;
-    document.getElementById("create-graph-message").textContent =
-      "Generating graph. This may take a while...";
-    // Give the browser some time to update the screen before generating the graph.
-    setTimeout(onGenerateGraphsTimeout, 100);
+    if (!deepEqual(parameters, inputParameters)) {
+      parameters = inputParameters;
+      document.getElementById("create-graph-bar").classList.remove("disabled");
+      document.getElementById("create-graph-bar").classList.remove("error-bar");
+      document.getElementById("create-graph-message").textContent =
+        "Generating graph. This may take a while...";
+      // Give the browser some time to update the screen before generating the graph.
+      setTimeout(onGenerateGraphsTimeout, 100);
+    } else {
+      // Only resize the graphs since the inputs haven't changed.
+      resizeGraphs();
+    }
   }
 }
 

@@ -15,23 +15,36 @@
       <nav class="navigation disabled" id="navigation">
         <section class="container">
           <a id="nav-home-button">
-            <h1 class="title">CashPlot</h1>
+            <h1 class="title site-title">CashPlot</h1>
           </a>
-          <a id="nav-input-button">
+          <a id="nav-input-transactions-button">
+            <h1 class="title">Data</h1>
+          </a>
+          <a id="nav-input-accounts-button">
             <span class="splitter">&gt;</span>
-            <h1 class="title">Input</h1>
+            <h1 class="title">Accounts</h1>
+          </a>
+          <a id="nav-input-categories-button">
+            <span class="splitter">&gt;</span>
+            <h1 class="title">Categories</h1>
           </a>
           <a id="nav-balance-button">
             <span class="splitter">&gt;</span>
             <h1 class="title">Balance</h1>
           </a>
           <a id="nav-totals-button">
-            <span class="splitter">&gt;</span>
+            <span class="splitter">|</span>
             <h1 class="title">Totals</h1>
           </a>
           <a id="nav-faq-button" class="float-right">
             <h1 class="title">FAQ</h1>
           </a>
+        </section>
+      </nav>
+      <nav class="navigation disabled" id="create-graph-bar">
+        <section class="container">
+          <span class="message" id="create-graph-message"></span>
+          <span>&nbsp;</span>
         </section>
       </nav>
       <div class="page" id="home-page">
@@ -42,7 +55,7 @@
           <button class="button" id="get-started-button">Get Started</button>
         </section>
       </div>
-      <section class="container margin-top-5 page disabled" id="input-page">
+      <section class="container margin-top-5 page disabled" id="input-transactions-page">
         <i class="description">
           Start entering the data by filling in the fields. It's possible to
           create an export, for example if you want to create a back-up or
@@ -66,6 +79,9 @@
           <span id="transaction-data-message"></span>
         </form>
 
+      </section>
+      <section class="container margin-top-5 page disabled" id="input-accounts-page">
+
         <h2>Accounts</h2>
         <i class="description">
           Provide the names of the savings accounts that you want to track in
@@ -86,6 +102,8 @@
           </table>
           <button class="button button-small" id="add-account-button">Add</button>
         </form>
+      </section>
+      <section class="container margin-top-5 page disabled" id="input-categories-page">
 
         <h2>Categories</h2>
         <i class="description">
@@ -107,11 +125,8 @@
           <button class="button button-small" id="add-category-button">Add</button>
         </form>
 
-        <button class="button" id="create-graph-button">Create Graph</button>
         <button class="button" id="export-parameters-button" download="cashplot.json">Export Parameters</button>
         <a id="export-parameters-link"></a>
-        <span class="text-icon icon-cross disabled" id="create-graph-error">&#10799;</span>
-        <span id="create-graph-message"></span>
       </section>
 
       <section class="container margin-top-5 page disabled" id="balance-page">
