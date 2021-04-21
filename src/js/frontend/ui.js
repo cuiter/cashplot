@@ -345,6 +345,15 @@ export function init() {
     .getElementById("start-demo-button")
     .addEventListener("click", onStartDemoButtonClicked);
   document
+    .getElementById("input-transactions-next-button")
+    .addEventListener("click", () => setActivePage("input-accounts"));
+  document
+    .getElementById("input-accounts-next-button")
+    .addEventListener("click", () => setActivePage("input-categories"));
+  document
+    .getElementById("input-categories-next-button")
+    .addEventListener("click", () => setActivePage("balance"));
+  document
     .getElementById("add-account-button")
     .addEventListener("click", onAddAccountButtonClicked);
   document
