@@ -66,7 +66,7 @@
       <section class="container margin-top-5 page disabled" id="input-transactions-page">
         <h2>Data</h2>
         <i class="description">First step is to get the raw data. Your bank usually provides a way to download all the transactions you've made in a certain format, such as CSV. This is where you enter that data.</i>
-        <i class="description">ING Bank .csv files are supported. See the FAQ for how to download these from the ING Bank portal.</i>
+        <i class="description">ING Bank .csv files are supported. See the <a href="#faq">FAQ</a> for how to download these from the ING Bank portal.</i>
         <form>
           <label class="button" for="transaction-data-upload">Upload</label>
           <input type="file" class="disabled" id="transaction-data-upload"></input>
@@ -162,6 +162,32 @@
 
       <section class="container margin-top-5 page disabled" id="faq-page">
         <h1>Frequently Asked Questions</h1>
+
+        <h3>How do I get transaction files from my bank?</h3>
+        <p>
+          If you use ING Bank, go to the ING Bank Portal (for example <a href="https://mijn.ing.nl/">https://mijn.ing.nl/</a>).
+          Log in and press the download icon as shown here.
+          <img src="./assets/img/faq-export-ing-1.png" class="image-block">
+          This will open up a dialog. If you have multiple checking accounts, select the one you want to use.
+          Select the earliest start date possible (usually January 1st of 9 years ago).
+          Leave the rest as-is. All CSV types are supported. Both English and Dutch languages are supported as well.
+          <img src="./assets/img/faq-export-ing-2.png" class="image-block">
+          Hit the Download button and you should have a transaction file in your downloads folder.
+        </p>
+
+        <h3>Can you add support for my bank?</h3>
+        <p>
+          Yes, I would gladly do that. See the <a href="https://github.com/cuiter/cashplot#feedback">Github project</a> for more info.
+        </p>
+        <h3>I have some ideas on how to improve CashPlot. Where can I share this?</h3>
+        <p>
+          Awesome, please do. See the <a href="https://github.com/cuiter/cashplot#feedback">Github project</a> for more info.
+        </p>
+
+        <h3>Why is there no Privacy Policy?</h3>
+        <p>
+          CashPlot stores everything locally in the browser. I (the author) don't record any data, not even website access logs. It's none of my business.
+        </p>
       </section>
     </main>
     <script src="js/deps/plotly-1.58.4.min.js"></script>

@@ -6,6 +6,7 @@ import { Parameters } from "../lib/parameters.js";
 import { DECIMAL } from "../lib/utils.js";
 
 const HIDE_NAV_PAGES = ["home"];
+const HASH_PAGES = ["faq"];
 const GRAPH_PAGES = ["balance", "totals"];
 const NAV_ELEMENT = "navigation";
 const ACCOUNT_TABLE_ELEMENT = "account-table";
@@ -36,8 +37,9 @@ let parameters = null;
  * and updates the navigation links accordingly.
  *
  * @param {string} pageName - Name of the page to switch to.
+ * @param {boolean} [changeHash] - Whether to change the hash of the URL if applicable.
  */
-function setActivePage(pageName) {
+function setActivePage(pageName, changeHash = true) {
   const elements = document.querySelectorAll(".page");
 
   let found = false;
@@ -52,6 +54,19 @@ function setActivePage(pageName) {
 
   if (!found) {
     throw new Error("Page " + pageName + " does not exist.");
+  }
+
+  if (changeHash) {
+    if (HASH_PAGES.indexOf(pageName) >= 0) {
+      window.location.hash = "#" + pageName;
+    } else if (window.location.hash !== "") {
+      // Attempt to remove the hash part of the URL.
+      try {
+        history.replaceState(null, null, " ");
+      } catch (_e) {
+        window.location.hash = "";
+      }
+    }
   }
 
   if (GRAPH_PAGES.indexOf(pageName) >= 0) {
@@ -326,6 +341,16 @@ function onGenerateGraphsTimeout() {
   }
 }
 
+/**
+ * Callback for the "on URL hash change" event.
+ */
+function onHashChange() {
+  const locationHash = (window.location.hash || "").substr(1);
+  if (HASH_PAGES.indexOf(locationHash) >= 0) {
+    setActivePage(locationHash, false);
+  }
+}
+
 /* Event listener and callback code */
 
 /**
@@ -333,6 +358,8 @@ function onGenerateGraphsTimeout() {
  * Registers event handlers.
  */
 export function init() {
+  window.addEventListener("hashchange", onHashChange, false);
+
   for (const navLink of WITH_INPUT_NAV_LINKS) {
     document
       .getElementById("nav-" + navLink + "-button")
@@ -393,6 +420,9 @@ export function init() {
     addAccount("Main", true);
     addCategory("Other");
   }
+
+  // Switch to hash page if specified in the URL.
+  onHashChange();
 }
 
 /**
