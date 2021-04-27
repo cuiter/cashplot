@@ -1,10 +1,10 @@
-# TODO list
-/TODO.md
-/sketches/
-
 # Node.JS
 /node_modules/
 # Compiled output
 /src/js/main.js
 # Generated documentation
 /doc/
+
+# Misc
+/TODO.md
+/README.pdf
