@@ -15,7 +15,6 @@ const GRAPH_IDS = {
   QUARTER: "quarterly-totals-graph",
   MONTH: "monthly-totals-graph",
   WEEK: "weekly-totals-graph",
-  DAY: "daily-totals-graph",
 };
 
 const PERIOD_FORMATS = {
@@ -28,16 +27,13 @@ const PERIOD_FORMATS = {
 
 const LAYOUT_OPTIONS = {
   margin: {
-    l: 0,
-    r: 0,
-    b: 0,
+    l: 80,
+    r: 20,
+    b: 80,
     t: 0,
     pad: 0,
   },
-  yaxis: {
-    automargin: true,
-  },
-  font: { size: 18 },
+  font: { size: 16 },
   legend: {
     orientation: "h",
     xanchor: "right",
@@ -92,7 +88,25 @@ export function generateGraphs(parameters) {
 
   createBalanceGraph(trBalances, GRAPH_IDS["BALANCE"]);
   for (const periodName of Object.keys(Period)) {
-    createTotalsGraph(trBalances, Period[periodName], GRAPH_IDS[periodName]);
+    if (GRAPH_IDS[periodName] !== undefined) {
+      createTotalsGraph(trBalances, Period[periodName], GRAPH_IDS[periodName]);
+    }
+  }
+}
+
+/**
+ * Wrapper function around Plotly.newPlot / Plotly.react that creates a graph
+ * if it doesn't already exist and updates it if it does.
+ * @param {string} graphId - The element ID of the graph <div>.
+ * @param {Object} data - The data to be plotted.
+ * @param {Object} layout - Layout configuration.
+ * @param {Object} config - Graph configuration.
+ */
+function plotGraph(graphId, data, layout, config) {
+  if (document.getElementById(graphId).children.length === 0) {
+    Plotly.newPlot(graphId, data, layout, config);
+  } else {
+    Plotly.react(graphId, data, layout, config);
   }
 }
 
@@ -116,7 +130,7 @@ function createBalanceGraph(trBalances, graphId) {
       name: accountName,
       mode: "line",
       line: { shape: "hv" },
-      type: "scatter",
+      type: "scattergl",
     };
 
     data.push(trace);
@@ -125,14 +139,13 @@ function createBalanceGraph(trBalances, graphId) {
   const layout = Object.assign(
     {
       xaxis: {
-        automargin: true,
         rangeselector: RANGE_SELECTOR_OPTIONS,
       },
     },
     LAYOUT_OPTIONS
   );
   const config = { responsive: true };
-  Plotly.newPlot(graphId, data, layout, config);
+  plotGraph(graphId, data, layout, config);
 }
 
 /**
@@ -178,7 +191,6 @@ function createTotalsGraph(trBalances, period, graphId) {
     {
       barmode: "relative",
       xaxis: {
-        automargin: true,
         rangeselector: period === Period.YEAR ? null : RANGE_SELECTOR_OPTIONS,
         tickmode: "array",
         tickvals: periods.map((p) => periodHalves(p, period)),
@@ -189,7 +201,7 @@ function createTotalsGraph(trBalances, period, graphId) {
   );
   const config = { responsive: true };
 
-  Plotly.newPlot(graphId, data, layout, config);
+  plotGraph(graphId, data, layout, config);
 }
 
 /**
