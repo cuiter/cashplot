@@ -1,6 +1,5 @@
 /** @module */
 const assert = require("nanoassert");
-const utils = require("./utils");
 
 /**
  * Parameters holds the various inputs for generating graphs.
@@ -71,12 +70,6 @@ class Parameters {
     for (const category of this.categories) {
       if (category.name === "") {
         return "A category name is empty";
-      }
-      if (!utils.isValidRegex(category.descriptionPattern)) {
-        return "A category description pattern is not a valid regex";
-      }
-      if (!utils.isValidRegex(category.counterAccountPattern)) {
-        return "A category counter-account pattern is not a valid regex";
       }
     }
     return null;

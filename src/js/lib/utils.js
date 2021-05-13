@@ -1,5 +1,6 @@
 /** @module */
 const assert = require("nanoassert");
+const matcher = require("matcher");
 
 // Factor all input numbers should be multiplied by so they won't lose
 // precision due to floating point losses.
@@ -73,4 +74,22 @@ exports.interleaveArrays = function (array1, array2) {
   assert(array1.length === array2.length);
 
   return array1.map((value, idx) => [value, array2[idx]]).flat();
+};
+
+/**
+ * Checks whether the given string matches a specific pattern at any position.
+ * The pattern may include globs (*) or be empty (which means it will match all inputs).
+ * Matching is done case-insensitive.
+ * @param {string} str - The string to match.
+ * @param {string} pattern - The pattern to match with.
+ * @return {boolean} Whether the string matches the pattern.
+ */
+exports.match = function (str, pattern) {
+  assert(typeof str === "string");
+  assert(typeof pattern === "string");
+  if (pattern === "") {
+    return true;
+  } else {
+    return matcher.isMatch(str, "*" + pattern + "*", { caseSensitive: false });
+  }
 };

@@ -21,7 +21,7 @@
 	"categories": [
 		{
 			"name": "Salary",
-			"counterAccountPattern": "Company Inc\\.",
+			"counterAccountPattern": "Company Inc.",
 			"descriptionPattern": ""
 		},
 
@@ -39,7 +39,7 @@
 
 		{
 			"name": "Shopping",
-			"counterAccountPattern": "Bol\\.com b\\.v\\.",
+			"counterAccountPattern": "Bol.com b.v.",
 			"descriptionPattern": ""
 		},
 
