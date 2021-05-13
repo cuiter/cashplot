@@ -27,9 +27,9 @@ const PERIOD_FORMATS = {
 
 const LAYOUT_OPTIONS = {
   margin: {
-    l: 80,
-    r: 20,
-    b: 80,
+    l: 70,
+    r: 5,
+    b: 92,
     t: 0,
     pad: 0,
   },
