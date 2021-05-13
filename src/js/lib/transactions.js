@@ -57,11 +57,10 @@ class Transaction {
     let categoryName = null;
     for (const category of categories) {
       if (
-        !!this.description.match(
-          new RegExp(category.descriptionPattern, "i")
-        ) &&
-        !!(this.counterName + " " + this.counterAccount).match(
-          new RegExp(category.counterAccountPattern, "i")
+        utils.match(this.description, category.descriptionPattern) &&
+        utils.match(
+          this.counterName + " " + this.counterAccount,
+          category.counterAccountPattern
         )
       ) {
         categoryName = category.name;
