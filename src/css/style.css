@@ -99,7 +99,8 @@
 }
 
 .graph {
-	width: 100%;
+	margin-right: -20px;
+	margin-left: -20px;
 	min-height: 40rem;
 	height: 70vh;
 }
