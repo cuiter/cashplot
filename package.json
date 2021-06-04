@@ -9,21 +9,21 @@
     "doc": "jsdoc ./src/js/lib/ ./src/js/frontend/ -R ./README.md -d ./doc/"
   },
   "dependencies": {
-    "papaparse": "^5.3.0",
-    "matcher": "^4.0.0",
-    "path-browserify": "^1.0.0",
     "fast-deep-equal": "^3.1.0",
-    "nanoassert": "^2.0.0"
+    "matcher": "^4.0.0",
+    "nanoassert": "^2.0.0",
+    "papaparse": "^5.3.1",
+    "path-browserify": "^1.0.0"
   },
   "devDependencies": {
     "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jasmine": "^4.1.0",
-    "eslint-plugin-prettier": "^3.3.0",
-    "jasmine": "^3.6.0",
-    "jsdoc": "^3.6.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "jasmine": "^3.7.0",
+    "jsdoc": "^3.6.7",
     "prettier-eslint": "^12.0.0",
-    "webpack": "^5.21.0",
-    "webpack-cli": "^4.5.0"
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.0"
   }
 }
