@@ -75,7 +75,7 @@ function setActivePage(pageName, changeHash = true) {
 
   if (HIDE_NAV_PAGES.indexOf(pageName) >= 0) {
     document.getElementById(NAV_ELEMENT).classList.add("disabled");
-    document.getElementById("create-graph-bar").classList.add("disabled");
+    hideStatusBar();
   } else {
     document.getElementById(NAV_ELEMENT).classList.remove("disabled");
   }
@@ -287,8 +287,9 @@ function importParameters(exportStr) {
     document
       .getElementById("parameters-upload-error")
       .classList.remove("disabled");
-    document.getElementById("parameters-upload-message").textContent =
-      err.message;
+    document.getElementById(
+      "parameters-upload-message"
+    ).textContent = getErrorMessage(err);
     return;
   }
   document.getElementById("parameters-upload-error").classList.add("disabled");
@@ -329,16 +330,19 @@ function importParameters(exportStr) {
 function onGenerateGraphsTimeout() {
   try {
     generateGraphs(parameters);
-    localStorage.setItem(LOCALSTORAGE_PARAMETER_KEY, parameters.export());
-    document.getElementById("create-graph-bar").classList.add("disabled");
-    document.getElementById("create-graph-bar").classList.remove("error-bar");
-    document.getElementById("create-graph-message").textContent = "";
+    hideStatusBar();
     resizeGraphs();
   } catch (err) {
     console.error(err);
-    document.getElementById("create-graph-bar").classList.add("error-bar");
-    document.getElementById("create-graph-message").textContent =
-      "Error generating graph: " + err.message + ".";
+    showStatusError("Error generating graph: " + getErrorMessage(err) + ".");
+    return;
+  }
+
+  try {
+    localStorage.setItem(LOCALSTORAGE_PARAMETER_KEY, parameters.export());
+  } catch (err) {
+    console.error(err);
+    showStatusError("Error saving parameters: " + getErrorMessage(err) + ".");
     return;
   }
 }
@@ -369,7 +373,7 @@ export function init() {
   }
   document
     .getElementById("start-button")
-    .addEventListener("click", () => setActivePage("input-transactions"));
+    .addEventListener("click", onStartButtonClicked);
   document
     .getElementById("start-demo-button")
     .addEventListener("click", onStartDemoButtonClicked);
@@ -413,7 +417,21 @@ export function init() {
     });
   }
 
-  const storedParameters = localStorage.getItem(LOCALSTORAGE_PARAMETER_KEY);
+  // Switch to hash page if specified in the URL.
+  onHashChange();
+}
+
+/**
+ * Callback for the "start" button.
+ */
+function onStartButtonClicked() {
+  let storedParameters = null;
+  try {
+    storedParameters = localStorage.getItem(LOCALSTORAGE_PARAMETER_KEY);
+  } catch (err) {
+    console.error(err);
+    showStatusError("Error loading parameters: " + getErrorMessage(err) + ".");
+  }
   if (storedParameters !== null) {
     importParameters(storedParameters);
   } else {
@@ -422,8 +440,7 @@ export function init() {
     addAccount("Main", true);
   }
 
-  // Switch to hash page if specified in the URL.
-  onHashChange();
+  setActivePage("input-transactions");
 }
 
 /**
@@ -491,6 +508,52 @@ function onParametersUpload() {
 }
 
 /**
+ * Show the given message on the status bar.
+ * @param {string} message - The message to be displayed.
+ */
+function showStatusMessage(message) {
+  document.getElementById("status-bar").classList.remove("disabled");
+  document.getElementById("status-bar").classList.remove("error-bar");
+  document.getElementById("status-message").textContent = message;
+}
+
+/**
+ * Show the given error message on the status bar.
+ * @param {string} errorMessage - The error message to be displayed.
+ */
+function showStatusError(errorMessage) {
+  document.getElementById("status-bar").classList.remove("disabled");
+  document.getElementById("status-bar").classList.add("error-bar");
+  document.getElementById("status-message").textContent = errorMessage;
+}
+
+/**
+ * Hide the status bar.
+ */
+function hideStatusBar() {
+  document.getElementById("status-bar").classList.add("disabled");
+}
+
+/**
+ * Get a human-readable error message from the given Error.
+ * @param {Error} err - The error to extract the message from.
+ * @return {string} A human-readable error message.
+ */
+function getErrorMessage(err) {
+  if (err.message) {
+    return err.message.toString();
+  } else if (err.name) {
+    if (err.name === "NS_ERROR_FILE_NO_DEVICE_SPACE") {
+      return "File error: No device space";
+    } else {
+      return err.name.toString();
+    }
+  } else {
+    return err.toString();
+  }
+}
+
+/**
  * Callback for the Create Graph button.
  * Submits the entered parameters and generates graphs.
  */
@@ -499,17 +562,11 @@ function submitParameters() {
   const validateError = inputParameters.validate();
 
   if (validateError !== null) {
-    document.getElementById("create-graph-bar").classList.remove("disabled");
-    document.getElementById("create-graph-bar").classList.add("error-bar");
-    document.getElementById("create-graph-message").textContent =
-      validateError + ".";
+    showStatusError(validateError + ".");
   } else {
     if (!deepEqual(parameters, inputParameters)) {
       parameters = inputParameters;
-      document.getElementById("create-graph-bar").classList.remove("disabled");
-      document.getElementById("create-graph-bar").classList.remove("error-bar");
-      document.getElementById("create-graph-message").textContent =
-        "Generating graph. This may take a while...";
+      showStatusMessage("Generating graph. This may take a while...");
       // Give the browser some time to update the screen before generating the graph.
       setTimeout(onGenerateGraphsTimeout, 100);
     } else {

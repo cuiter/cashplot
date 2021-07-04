@@ -71,7 +71,10 @@ class Parameters {
       if (category.name === "") {
         return "A category name is empty";
       }
-      if (category.descriptionPattern === "" && category.counterAccountPattern === "") {
+      if (
+        category.descriptionPattern === "" &&
+        category.counterAccountPattern === ""
+      ) {
         return `No description or counter-account given for category ${category.name}`;
       }
     }
