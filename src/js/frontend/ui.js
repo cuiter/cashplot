@@ -232,11 +232,11 @@ function readParameters() {
   const accounts = [];
   const accountTableElement = document.getElementById("account-table");
   for (const row of accountTableElement.children[1].children) {
+    // Allow commas as well as periods.
+    let startingBalance = Number(row.children[1].children[0].value.replace(/\,/g, '.'));
     accounts.push({
       name: row.children[0].children[0].value,
-      startingBalance: Math.round(
-        Number(row.children[1].children[0].value) * DECIMAL
-      ),
+      startingBalance: Math.round(startingBalance * DECIMAL),
       addToNet: row.children[2].children[0].checked,
     });
   }
