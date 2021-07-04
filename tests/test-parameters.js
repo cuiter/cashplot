@@ -37,12 +37,13 @@ describe("Parameters", function () {
   });
 
   it("can be validated", function () {
-    const validParameters = () => new Parameters(
-      testTransactionData,
-      testTransationFileName,
-      JSON.parse(JSON.stringify(testAccounts)),
-      JSON.parse(JSON.stringify(testCategories))
-    );
+    const validParameters = () =>
+      new Parameters(
+        testTransactionData,
+        testTransationFileName,
+        JSON.parse(JSON.stringify(testAccounts)),
+        JSON.parse(JSON.stringify(testCategories))
+      );
 
     const parameters1 = validParameters();
     expect(parameters1.validate()).toBe(null);
@@ -63,33 +64,34 @@ describe("Parameters", function () {
     );
     expect(parameters3.validate()).toBe("Transaction file name not provided");
 
-    let parameters4 = validParameters();
+    const parameters4 = validParameters();
     parameters4.accounts[0].startingBalance = NaN;
     expect(parameters4.validate()).toBe(
       "Starting balance for account Main is not a number"
     );
 
-    let parameters5 = validParameters();
+    const parameters5 = validParameters();
     parameters5.accounts[0].startingBalance = Infinity;
     expect(parameters5.validate()).toBe(
       "Starting balance for account Main is not a number"
     );
 
-    let parameters6 = validParameters();
+    const parameters6 = validParameters();
     parameters6.categories[0].name = "";
     expect(parameters6.validate()).toBe("A category name is empty");
 
-    let parameters7 = validParameters();
+    const parameters7 = validParameters();
     parameters7.categories[0].descriptionPattern = "";
     expect(parameters7.validate()).toBe(null);
-    let parameters8 = validParameters();
+    const parameters8 = validParameters();
     parameters8.categories[0].counterAccountPattern = "";
     expect(parameters8.validate()).toBe(null);
-    let parameters9 = validParameters();
+    const parameters9 = validParameters();
     parameters9.categories[0].descriptionPattern = "";
     parameters9.categories[0].counterAccountPattern = "";
-    expect(parameters9.validate()).toBe("No description or counter-account given for category Salary");
-
+    expect(parameters9.validate()).toBe(
+      "No description or counter-account given for category Salary"
+    );
   });
 
   it("can be exported", function () {
