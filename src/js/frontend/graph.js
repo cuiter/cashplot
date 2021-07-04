@@ -34,11 +34,11 @@ const LAYOUT_OPTIONS = {
     pad: 0,
   },
   font: { size: 16 },
+  showlegend: true,
   legend: {
     orientation: "h",
-    xanchor: "right",
-    x: 1,
-    y: 1,
+    x: 0,
+    y: 1
   },
 };
 const RANGE_SELECTOR_OPTIONS = {
