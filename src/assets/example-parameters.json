@@ -58,11 +58,6 @@
             "name": "Groceries",
             "descriptionPattern": "",
             "counterAccountPattern": "Tekso York"
-        },
-        {
-            "name": "Other",
-            "descriptionPattern": "",
-            "counterAccountPattern": ""
         }
     ]
 }

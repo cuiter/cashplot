@@ -233,7 +233,9 @@ function readParameters() {
   const accountTableElement = document.getElementById("account-table");
   for (const row of accountTableElement.children[1].children) {
     // Allow commas as well as periods.
-    let startingBalance = Number(row.children[1].children[0].value.replace(/\,/g, '.'));
+    const startingBalance = Number(
+      row.children[1].children[0].value.replace(/\,/g, ".")
+    );
     accounts.push({
       name: row.children[0].children[0].value,
       startingBalance: Math.round(startingBalance * DECIMAL),
@@ -418,7 +420,6 @@ export function init() {
     setTransactionData(null, null);
 
     addAccount("Main", true);
-    addCategory("Other");
   }
 
   // Switch to hash page if specified in the URL.
@@ -447,7 +448,7 @@ function onRemoveRowButtonClicked() {
  * @param {Event} event - DOM event.
  */
 function onAddAccountButtonClicked(event) {
-  addAccount("Savings");
+  addAccount("New Account");
 }
 
 /**
@@ -456,7 +457,7 @@ function onAddAccountButtonClicked(event) {
  * @param {Event} event - DOM event.
  */
 function onAddCategoryButtonClicked(event) {
-  addCategory("Category");
+  addCategory("New Category");
 }
 
 /**

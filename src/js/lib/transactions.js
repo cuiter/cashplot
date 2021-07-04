@@ -47,12 +47,12 @@ class Transaction {
 
   /**
    * Categorizes this transaction based on matching rules in the configuration.
-   * Throws an Error if no categories match.
    *
    * @param {Array<Category>} categories - Category matching rules (see Parameters).
+   * @param {string} [defaultCategory] - Category name if no rules match.
    * @return {Transaction} The categorized transaction.
    */
-  categorize(categories) {
+  categorize(categories, defaultCategory = "Other") {
     assert(Array.isArray(categories));
     let categoryName = null;
     for (const category of categories) {
@@ -68,18 +68,14 @@ class Transaction {
       }
     }
 
-    if (categoryName === null) {
-      throw new Error("No categories matched.");
-    } else {
-      return new Transaction(
-        this.date,
-        this.counterName,
-        this.counterAccount,
-        this.description,
-        this.change,
-        categoryName
-      );
-    }
+    return new Transaction(
+      this.date,
+      this.counterName,
+      this.counterAccount,
+      this.description,
+      this.change,
+      categoryName !== null ? categoryName : defaultCategory
+    );
   }
 }
 

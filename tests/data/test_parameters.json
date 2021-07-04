@@ -41,12 +41,6 @@
 			"name": "Shopping",
 			"counterAccountPattern": "Bol.com b.v.",
 			"descriptionPattern": ""
-		},
-
-		{
-			"name": "Other",
-			"counterAccountPattern": "",
-			"descriptionPattern": ""
 		}
   ]
 }
