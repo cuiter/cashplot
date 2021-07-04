@@ -112,6 +112,23 @@ describe("Transaction", function () {
       ),
     ]);
   });
+
+  it("can be categorized to a default when no rules match", function () {
+    const transaction = new Transaction(
+      new Date("2020-06-28"),
+      "Company Inc.",
+      "NL01WORK0987654321",
+      "Bonus for June 2020",
+      500 * DECIMAL
+    );
+    // Don't pass any matching rules. It should fall back to the default.
+    const categorizedTransaction = transaction.categorize(
+      [],
+      "Default Category"
+    );
+
+    expect(categorizedTransaction.category).toBe("Default Category");
+  });
 });
 
 describe("TransactionBalance", function () {

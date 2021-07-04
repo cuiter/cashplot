@@ -64,12 +64,15 @@ class Parameters {
         return "An account name is empty";
       }
       if (!Number.isFinite(account.startingBalance)) {
-        return "An account starting balance is not a number";
+        return `Starting balance for account ${account.name} is not a number`;
       }
     }
     for (const category of this.categories) {
       if (category.name === "") {
         return "A category name is empty";
+      }
+      if (category.descriptionPattern === "" && category.counterAccountPattern === "") {
+        return `No description or counter-account given for category ${category.name}`;
       }
     }
     return null;

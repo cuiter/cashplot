@@ -16,9 +16,9 @@ describe("Parameters", function () {
   ];
   const testCategories = [
     {
-      name: "Other",
-      descriptionPattern: "",
-      counterAccountPattern: "",
+      name: "Salary",
+      descriptionPattern: "Salary for *",
+      counterAccountPattern: "Company Inc.",
     },
   ];
 
@@ -37,12 +37,14 @@ describe("Parameters", function () {
   });
 
   it("can be validated", function () {
-    const parameters1 = new Parameters(
+    const validParameters = () => new Parameters(
       testTransactionData,
       testTransationFileName,
-      testAccounts,
-      testCategories
+      JSON.parse(JSON.stringify(testAccounts)),
+      JSON.parse(JSON.stringify(testCategories))
     );
+
+    const parameters1 = validParameters();
     expect(parameters1.validate()).toBe(null);
 
     const parameters2 = new Parameters(
@@ -61,39 +63,33 @@ describe("Parameters", function () {
     );
     expect(parameters3.validate()).toBe("Transaction file name not provided");
 
-    const parameters5Accounts = JSON.parse(JSON.stringify(testAccounts));
-    parameters5Accounts[0].startingBalance = NaN;
-    const parameters5 = new Parameters(
-      testTransactionData,
-      testTransationFileName,
-      parameters5Accounts,
-      testCategories
+    let parameters4 = validParameters();
+    parameters4.accounts[0].startingBalance = NaN;
+    expect(parameters4.validate()).toBe(
+      "Starting balance for account Main is not a number"
     );
+
+    let parameters5 = validParameters();
+    parameters5.accounts[0].startingBalance = Infinity;
     expect(parameters5.validate()).toBe(
-      "An account starting balance is not a number"
+      "Starting balance for account Main is not a number"
     );
 
-    const parameters6Accounts = JSON.parse(JSON.stringify(testAccounts));
-    parameters6Accounts[0].startingBalance = Infinity;
-    const parameters6 = new Parameters(
-      testTransactionData,
-      testTransationFileName,
-      parameters6Accounts,
-      testCategories
-    );
-    expect(parameters6.validate()).toBe(
-      "An account starting balance is not a number"
-    );
+    let parameters6 = validParameters();
+    parameters6.categories[0].name = "";
+    expect(parameters6.validate()).toBe("A category name is empty");
 
-    const parameters7Categories = JSON.parse(JSON.stringify(testCategories));
-    parameters7Categories[0].name = "";
-    const parameters7 = new Parameters(
-      testTransactionData,
-      testTransationFileName,
-      testAccounts,
-      parameters7Categories
-    );
-    expect(parameters7.validate()).toBe("A category name is empty");
+    let parameters7 = validParameters();
+    parameters7.categories[0].descriptionPattern = "";
+    expect(parameters7.validate()).toBe(null);
+    let parameters8 = validParameters();
+    parameters8.categories[0].counterAccountPattern = "";
+    expect(parameters8.validate()).toBe(null);
+    let parameters9 = validParameters();
+    parameters9.categories[0].descriptionPattern = "";
+    parameters9.categories[0].counterAccountPattern = "";
+    expect(parameters9.validate()).toBe("No description or counter-account given for category Salary");
+
   });
 
   it("can be exported", function () {
