@@ -7,6 +7,7 @@ import {
   periodHalves,
   categoriesChanges,
 } from "../lib/totals.js";
+import { calculateTotals } from "../lib/graph-data.js";
 import { DECIMAL, interleaveArrays } from "../lib/utils.js";
 
 const GRAPH_IDS = {
@@ -37,8 +38,8 @@ const LAYOUT_OPTIONS = {
   showlegend: true,
   legend: {
     orientation: "h",
-    x: 0,
-    y: 1
+    yanchor: "bottom",
+    y: 1.09
   },
 };
 const RANGE_SELECTOR_OPTIONS = {
@@ -78,6 +79,7 @@ const RANGE_SELECTOR_OPTIONS = {
  * @param {Parameters} parameters - Input data including transactions.
  */
 export function generateGraphs(parameters) {
+  console.time("processTransactions");
   const uncategorizedTransactions = INGTransaction.loadTransactions(
     parameters.transactionData
   ).map((tr) => tr.toTransaction());
@@ -85,11 +87,16 @@ export function generateGraphs(parameters) {
     uncategorizedTransactions.map((tr) => tr.categorize(parameters.categories)),
     parameters.accounts
   );
+  console.timeEnd("processTransactions");
 
+  console.time("renderBalanceGraph");
   createBalanceGraph(trBalances, GRAPH_IDS["BALANCE"]);
+  console.timeEnd("renderBalanceGraph");
   for (const periodName of Object.keys(Period)) {
     if (GRAPH_IDS[periodName] !== undefined) {
+      console.time("render" + periodName + "Graph");
       createTotalsGraph(trBalances, Period[periodName], GRAPH_IDS[periodName]);
+      console.timeEnd("render" + periodName + "Graph");
     }
   }
 }
@@ -156,37 +163,7 @@ function createBalanceGraph(trBalances, graphId) {
  * @param {string} graphId - Id of the graph <div> element.
  */
 function createTotalsGraph(trBalances, period, graphId) {
-  const [periods, incomeChanges, expensesChanges] = categoriesChanges(
-    trBalances,
-    period
-  );
-
-  const thirdsPeriodDates = periods.map((p) => periodThirds(p, period));
-  const incomePeriodDates = thirdsPeriodDates.map((p) => p[0]);
-  const expensesPeriodDates = thirdsPeriodDates.map((p) => p[1]);
-
-  const combinedPeriods = interleaveArrays(
-    incomePeriodDates,
-    expensesPeriodDates
-  );
-
-  const data = [];
-  for (const category of Object.keys(incomeChanges)) {
-    const combinedChanges = interleaveArrays(
-      incomeChanges[category],
-      expensesChanges[category]
-    );
-
-    const trace = {
-      x: combinedPeriods,
-      y: combinedChanges.map((amount) => amount / DECIMAL),
-      name: category,
-      type: "bar",
-    };
-
-    data.push(trace);
-  }
-
+  const [data, periods] = calculateTotals(trBalances, period);
   const layout = Object.assign(
     {
       barmode: "relative",
