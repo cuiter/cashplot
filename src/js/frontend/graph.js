@@ -21,7 +21,8 @@ const PERIOD_FORMATS = {
   [Period.DAY]: "%b %e, %Y",
 };
 
-const LAYOUT_OPTIONS = {
+// Options for the Plotly.JS graphs.
+const BASE_LAYOUT_OPTIONS = {
   margin: {
     l: 70,
     r: 5,
@@ -30,6 +31,8 @@ const LAYOUT_OPTIONS = {
     pad: 0,
   },
   font: { size: 16 },
+  paper_bgcolor: "rgba(0, 0, 0, 0)",
+  plot_bgcolor: "rgba(0, 0, 0, 0)",
   showlegend: true,
   legend: {
     orientation: "h",
@@ -84,13 +87,42 @@ export function generateGraphs(parameters) {
   );
   console.timeEnd("processTransactions");
 
+  let baseLayoutOptions = JSON.parse(JSON.stringify(BASE_LAYOUT_OPTIONS));
+  let rangeSelectorOptions = JSON.parse(JSON.stringify(RANGE_SELECTOR_OPTIONS));
+  const rootElementStyle = window.getComputedStyle(document.documentElement);
+  baseLayoutOptions.font.color = rootElementStyle.getPropertyValue("--color-primary");
+  rangeSelectorOptions.bgcolor = rootElementStyle.getPropertyValue("--color-background-light");
+  rangeSelectorOptions.activecolor = rootElementStyle.getPropertyValue("--color-background-light-hover");
+
+  let balanceGraphLayout = Object.assign(
+    {
+      xaxis: {
+        rangeselector: rangeSelectorOptions,
+      },
+    },
+    baseLayoutOptions
+  );
+
   console.time("renderBalanceGraph");
-  createBalanceGraph(trBalances, GRAPH_IDS["BALANCE"]);
+  createBalanceGraph(trBalances, balanceGraphLayout, GRAPH_IDS["BALANCE"]);
   console.timeEnd("renderBalanceGraph");
   for (const periodName of Object.keys(Period)) {
     if (GRAPH_IDS[periodName] !== undefined) {
       console.time("render" + periodName + "Graph");
-      createTotalsGraph(trBalances, Period[periodName], GRAPH_IDS[periodName]);
+
+      let totalsGraphLayout = Object.assign(
+        {
+          barmode: "relative",
+          xaxis: {
+            rangeselector: periodName === "YEAR" ? null : rangeSelectorOptions,
+            tickmode: "array",
+            tickformat: PERIOD_FORMATS[Period[periodName]],
+          },
+        },
+        baseLayoutOptions
+      );
+      createTotalsGraph(trBalances, Period[periodName], totalsGraphLayout, GRAPH_IDS[periodName]);
+
       console.timeEnd("render" + periodName + "Graph");
     }
   }
@@ -115,9 +147,10 @@ function plotGraph(graphId, data, layout, config) {
 /**
  * Generates a balance graph.
  * @param {Array<TransactionBalance>} trBalances - Transactions+balances to plot.
+ * @param {Object} layout - Layout configuration for the Plotly.JS graph.
  * @param {string} graphId - Id of the graph <div> element.
  */
-function createBalanceGraph(trBalances, graphId) {
+function createBalanceGraph(trBalances, layout, graphId) {
   const x = trBalances.map((tr) => tr.transaction.date);
 
   const data = [];
@@ -138,14 +171,6 @@ function createBalanceGraph(trBalances, graphId) {
     data.push(trace);
   }
 
-  const layout = Object.assign(
-    {
-      xaxis: {
-        rangeselector: RANGE_SELECTOR_OPTIONS,
-      },
-    },
-    LAYOUT_OPTIONS
-  );
   const config = { responsive: true };
   plotGraph(graphId, data, layout, config);
 }
@@ -155,25 +180,17 @@ function createBalanceGraph(trBalances, graphId) {
  * @param {Array<TransactionBalance>} trBalances - Transactions+balances
  *                                                 from which to calculate the totals.
  * @param {Period} period - Period to group totals by.
+ * @param {Object} layout - Layout configuration for the Plotly.JS graph.
  * @param {string} graphId - Id of the graph <div> element.
  */
-function createTotalsGraph(trBalances, period, graphId) {
+function createTotalsGraph(trBalances, period, layout, graphId) {
   const [data, periods] = calculateTotals(trBalances, period);
-  const layout = Object.assign(
-    {
-      barmode: "relative",
-      xaxis: {
-        rangeselector: period === Period.YEAR ? null : RANGE_SELECTOR_OPTIONS,
-        tickmode: "array",
-        tickvals: periods.map((p) => periodHalves(p, period)),
-        tickformat: PERIOD_FORMATS[period],
-      },
-    },
-    LAYOUT_OPTIONS
-  );
   const config = { responsive: true };
 
-  plotGraph(graphId, data, layout, config);
+  let layoutWithTickvals = JSON.parse(JSON.stringify(layout));
+  layoutWithTickvals.xaxis.tickvals = periods.map((p) => periodHalves(p, period));
+
+  plotGraph(graphId, data, layoutWithTickvals, config);
 }
 
 /**
