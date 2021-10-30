@@ -1,14 +1,13 @@
-const transactionBalances = require("./transactions").transactionBalances;
-const totals = require("./totals");
+const { categoriesChanges, periodThirds } = require("./totals");
 const utils = require("./utils");
 
-exports.calculateTotals = function(trBalances, period) {
-  const [periods, incomeChanges, expensesChanges] = totals.categoriesChanges(
+exports.calculateTotals = function (trBalances, period) {
+  const [periods, incomeChanges, expensesChanges] = categoriesChanges(
     trBalances,
     period
   );
 
-  const thirdsPeriodDates = periods.map((p) => totals.periodThirds(p, period));
+  const thirdsPeriodDates = periods.map((p) => periodThirds(p, period));
   const incomePeriodDates = thirdsPeriodDates.map((p) => p[0]);
   const expensesPeriodDates = thirdsPeriodDates.map((p) => p[1]);
 
@@ -35,4 +34,4 @@ exports.calculateTotals = function(trBalances, period) {
   }
 
   return [data, periods];
-}
+};

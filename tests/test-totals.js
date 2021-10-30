@@ -5,31 +5,11 @@ const transactions = require("../src/js/lib/transactions");
 const Parameters = require("../src/js/lib/parameters").Parameters;
 const totals = require("../src/js/lib/totals");
 const DECIMAL = require("../src/js/lib/utils").DECIMAL;
-
-const transactionFilePath = "tests/data/test_transactions.csv";
-const parametersFilePath = "tests/data/test_parameters.json";
-
-/**
- * @return {Parameters} Parameters that can be used for testing.
- */
-function getTestParameters() {
-  return Parameters.import(fs.readFileSync(parametersFilePath).toString());
-}
-/**
- * @return {Array<Transaction>} Transactions that can be used for testing.
- */
-function getTestTransactions() {
-  const transactionData = fs.readFileSync(transactionFilePath).toString();
-  const uncategorizedTransactions = INGTransaction.loadTransactions(
-    transactionData
-  ).map((tr) => tr.toTransaction());
-
-  return uncategorizedTransactions;
-}
+const testUtils = require("./utils");
 
 describe("Totals", function () {
-  const testParameters = getTestParameters();
-  const testTransactions = getTestTransactions();
+  const testParameters = testUtils.loadTestParameters();
+  const testTransactions = testUtils.loadTestTransactions();
   const testTrBalances = transactions.transactionBalances(
     testTransactions.map((tr) => tr.categorize(testParameters.categories)),
     testParameters.accounts

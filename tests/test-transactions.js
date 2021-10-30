@@ -5,28 +5,9 @@ const transactions = require("../src/js/lib/transactions");
 const Transaction = transactions.Transaction;
 const TransactionBalance = transactions.TransactionBalance;
 const Parameters = require("../src/js/lib/parameters").Parameters;
-const DECIMAL = require("../src/js/lib/utils.js").DECIMAL;
+const DECIMAL = require("../src/js/lib/utils").DECIMAL;
 
-const transactionFilePath = "tests/data/test_transactions.csv";
-const parametersFilePath = "tests/data/test_parameters.json";
-
-/**
- * @return {Parameters} Parameters that can be used for testing.
- */
-function getTestParameters() {
-  return Parameters.import(fs.readFileSync(parametersFilePath).toString());
-}
-/**
- * @return {Array<Transaction>} Transactions that can be used for testing.
- */
-function getTestTransactions() {
-  const transactionData = fs.readFileSync(transactionFilePath).toString();
-  const uncategorizedTransactions = INGTransaction.loadTransactions(
-    transactionData
-  ).map((tr) => tr.toTransaction());
-
-  return uncategorizedTransactions;
-}
+const testUtils = require("./utils");
 
 describe("Transaction", function () {
   it("can be constructed", function () {
@@ -63,8 +44,8 @@ describe("Transaction", function () {
   });
 
   it("can be categorized", function () {
-    const testParameters = getTestParameters();
-    const uncategorizedTransactions = getTestTransactions();
+    const testParameters = testUtils.loadTestParameters();
+    const uncategorizedTransactions = testUtils.loadTestTransactions();
     const categorizedTransactions = uncategorizedTransactions.map((tr) =>
       tr.categorize(testParameters.categories)
     );
@@ -163,8 +144,8 @@ describe("TransactionBalance", function () {
   });
 
   it("can be calculated from a list of transactions", function () {
-    const testParameters = getTestParameters();
-    const uncategorizedTransactions = getTestTransactions();
+    const testParameters = testUtils.loadTestParameters();
+    const uncategorizedTransactions = testUtils.loadTestTransactions();
     const categorizedTransactions = uncategorizedTransactions.map((tr) =>
       tr.categorize(testParameters.categories)
     );

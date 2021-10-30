@@ -1,14 +1,9 @@
 /** @module */
 import { INGTransaction } from "../lib/sources/ing.js";
 import { transactionBalances } from "../lib/transactions.js";
-import {
-  Period,
-  periodThirds,
-  periodHalves,
-  categoriesChanges,
-} from "../lib/totals.js";
+import { Period, periodHalves } from "../lib/totals.js";
 import { calculateTotals } from "../lib/graph-data.js";
-import { DECIMAL, interleaveArrays } from "../lib/utils.js";
+import { DECIMAL } from "../lib/utils.js";
 
 const GRAPH_IDS = {
   BALANCE: "balance-graph",
@@ -39,7 +34,7 @@ const LAYOUT_OPTIONS = {
   legend: {
     orientation: "h",
     yanchor: "bottom",
-    y: 1.09
+    y: 1.09,
   },
 };
 const RANGE_SELECTOR_OPTIONS = {
