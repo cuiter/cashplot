@@ -87,14 +87,22 @@ export function generateGraphs(parameters) {
   );
   console.timeEnd("processTransactions");
 
-  let baseLayoutOptions = JSON.parse(JSON.stringify(BASE_LAYOUT_OPTIONS));
-  let rangeSelectorOptions = JSON.parse(JSON.stringify(RANGE_SELECTOR_OPTIONS));
+  const baseLayoutOptions = JSON.parse(JSON.stringify(BASE_LAYOUT_OPTIONS));
+  const rangeSelectorOptions = JSON.parse(
+    JSON.stringify(RANGE_SELECTOR_OPTIONS)
+  );
   const rootElementStyle = window.getComputedStyle(document.documentElement);
-  baseLayoutOptions.font.color = rootElementStyle.getPropertyValue("--color-primary");
-  rangeSelectorOptions.bgcolor = rootElementStyle.getPropertyValue("--color-background-light");
-  rangeSelectorOptions.activecolor = rootElementStyle.getPropertyValue("--color-background-light-hover");
+  baseLayoutOptions.font.color = rootElementStyle.getPropertyValue(
+    "--color-primary"
+  );
+  rangeSelectorOptions.bgcolor = rootElementStyle.getPropertyValue(
+    "--color-background-light"
+  );
+  rangeSelectorOptions.activecolor = rootElementStyle.getPropertyValue(
+    "--color-background-light-hover"
+  );
 
-  let balanceGraphLayout = Object.assign(
+  const balanceGraphLayout = Object.assign(
     {
       xaxis: {
         rangeselector: rangeSelectorOptions,
@@ -110,7 +118,7 @@ export function generateGraphs(parameters) {
     if (GRAPH_IDS[periodName] !== undefined) {
       console.time("render" + periodName + "Graph");
 
-      let totalsGraphLayout = Object.assign(
+      const totalsGraphLayout = Object.assign(
         {
           barmode: "relative",
           xaxis: {
@@ -121,7 +129,12 @@ export function generateGraphs(parameters) {
         },
         baseLayoutOptions
       );
-      createTotalsGraph(trBalances, Period[periodName], totalsGraphLayout, GRAPH_IDS[periodName]);
+      createTotalsGraph(
+        trBalances,
+        Period[periodName],
+        totalsGraphLayout,
+        GRAPH_IDS[periodName]
+      );
 
       console.timeEnd("render" + periodName + "Graph");
     }
@@ -187,8 +200,10 @@ function createTotalsGraph(trBalances, period, layout, graphId) {
   const [data, periods] = calculateTotals(trBalances, period);
   const config = { responsive: true };
 
-  let layoutWithTickvals = JSON.parse(JSON.stringify(layout));
-  layoutWithTickvals.xaxis.tickvals = periods.map((p) => periodHalves(p, period));
+  const layoutWithTickvals = JSON.parse(JSON.stringify(layout));
+  layoutWithTickvals.xaxis.tickvals = periods.map((p) =>
+    periodHalves(p, period)
+  );
 
   plotGraph(graphId, data, layoutWithTickvals, config);
 }

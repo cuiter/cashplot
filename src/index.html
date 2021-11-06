@@ -121,25 +121,43 @@
 
         <h2>Categories</h2>
         <i class="description">
-          In order to make sense of the kinds of things you're spending/earning on, it's possible to group transactions into categories. These categories will later be summed up to get a total amount spent/earned for a certain period.
-          CashPlot isn't able to tell when a transaction occurs between the main and savings accounts. For that to work, you have to group these transactions into a category with the same name as the savings account.
+          Transactions can be grouped into categories, which will help determine what you're spending/earning.
+          Note: CashPlot isn't able to tell automatically when a transaction occurs between the main and savings accounts. For that to work, you have to group these transactions into a category with the same name as the savings account.
+        </i>
+
+        <div id="category-names-outer-container">
+          <div id="category-names-container">
+            <button class="button large-button" id="add-category-name-button">Add</button>
+          </div>
+        </div>
+
+        <button class="button" id="input-categories-next-button">Next</button>
+
+      </section>
+
+      <section class="container margin-top-5 page disabled" id="input-category-edit-page">
+
+        <a id="category-overview-button">&lt; Back</a>
+        <h2>Edit Category <button class="button float-right" id="delete-category-button">Delete</button></h2>
+        <i class="description">
+          Transactions can be matched to a category based on the description and/or counter-account.
         </i>
         <form>
+          <b>Name</b><input type="text" id="category-name-input" /><br>
           <table id="category-table">
             <thead>
               <tr>
-                <th class="entry-column">Name</th>
                 <th class="entry-column">Description</th>
                 <th class="entry-column">Counter-account</th>
                 <th></th>
+                <th><!--Category name, hidden--></th>
               </tr>
             </thead>
             <tbody>
             </tbody>
           </table>
-          <button class="button button-small" id="add-category-button">Add</button>
+          <button class="button button-small" id="add-category-row-button">Add</button>
         </form>
-        <button class="button" id="input-categories-next-button">Next</button>
 
       </section>
 

@@ -11,6 +11,8 @@ const GRAPH_PAGES = ["balance", "totals"];
 const NAV_ELEMENT = "navigation";
 const ACCOUNT_TABLE_ELEMENT = "account-table";
 const CATEGORY_TABLE_ELEMENT = "category-table";
+const CATEGORY_NAMES_ELEMENT = "category-names-container";
+const CATEGORY_NAME_ELEMENT = "category-name-input";
 
 const WITHOUT_INPUT_NAV_LINKS = ["home", "input-transactions", "faq"];
 const WITH_INPUT_NAV_LINKS = [
@@ -24,6 +26,7 @@ const WITH_INPUT_NAV_LINKS = [
 ];
 
 const LOCALSTORAGE_PARAMETER_KEY = "parameters";
+
 let transactionData = null;
 let transactionFileName = null;
 let parameters = null;
@@ -151,22 +154,59 @@ function addAccount(
 }
 
 /**
+ * Adds a new category to the list of category names.
+ *
+ * @param {string} name - Category name.
+ */
+function addCategoryName(name) {
+  const containerElement = document.getElementById(CATEGORY_NAMES_ELEMENT);
+  const categoryButton = document.createElement("button");
+  categoryButton.classList.add("button", "large-button", "category-button");
+  categoryButton.innerHTML = name;
+  categoryButton.addEventListener("click", onEditCategoryButtonClicked);
+  containerElement.insertBefore(
+    categoryButton,
+    containerElement.lastElementChild
+  );
+}
+
+/**
+ * Checks whether the given category already exists in the list of category names.
+ *
+ * @param {string} name - Category name.
+ * @return {boolean} Whether the category name already exists.
+ */
+function categoryNameExists(name) {
+  const containerElement = document.getElementById(CATEGORY_NAMES_ELEMENT);
+  return Array.from(containerElement.children).some(
+    (child) => child.textContent == name
+  );
+}
+
+/**
+ * Returns the name of the currently selected category.
+ *
+ * @return {string} The name of the currently selected category.
+ */
+function getCurrentCategory() {
+  const categoryNameElement = document.getElementById(CATEGORY_NAME_ELEMENT);
+  return categoryNameElement.value;
+}
+
+/**
  * Adds a new category to the categories table.
  *
  * @param {string} name - Category name.
  * @param {string} descriptionPattern - Description pattern to match.
  * @param {string} counterAccountPattern - Counter account pattern to match.
  */
-function addCategory(
+function addCategoryRow(
   name,
   descriptionPattern = "",
   counterAccountPattern = ""
 ) {
   const tableElement = document.getElementById(CATEGORY_TABLE_ELEMENT);
   const row = tableElement.children[1].insertRow(-1);
-  const nameInput = row.insertCell(-1);
-  nameInput.innerHTML = '<input type="text" value=""></input>';
-  nameInput.firstChild.value = name;
   const descriptionPatternInput = row.insertCell(-1);
   descriptionPatternInput.innerHTML = '<input type="text" value=""></input>';
   descriptionPatternInput.firstChild.value = descriptionPattern;
@@ -177,6 +217,13 @@ function addCategory(
   removeButton.innerHTML =
     '<button class="button button-small remove-row-button">Remove</button>';
   removeButton.firstChild.addEventListener("click", onRemoveRowButtonClicked);
+  const nameInput = row.insertCell(-1);
+  nameInput.textContent = name;
+  nameInput.classList.add("disabled");
+
+  if (!categoryNameExists(name)) {
+    addCategoryName(name);
+  }
 }
 
 /**
@@ -247,9 +294,9 @@ function readParameters() {
   const categoryTableElement = document.getElementById("category-table");
   for (const row of categoryTableElement.children[1].children) {
     categories.push({
-      name: row.children[0].children[0].value,
-      descriptionPattern: row.children[1].children[0].value,
-      counterAccountPattern: row.children[2].children[0].value,
+      descriptionPattern: row.children[0].children[0].value,
+      counterAccountPattern: row.children[1].children[0].value,
+      name: row.children[row.children.length - 1].textContent,
     });
   }
 
@@ -273,6 +320,10 @@ function clearParameters() {
   const categoryTableElement = document.getElementById("category-table");
   accountTableElement.children[1].innerHTML = "";
   categoryTableElement.children[1].innerHTML = "";
+  const categoryNamesElement = document.getElementById(CATEGORY_NAMES_ELEMENT);
+  while (categoryNamesElement.children.length > 1) {
+    categoryNamesElement.removeChild(categoryNamesElement.children[0]);
+  }
 }
 
 /**
@@ -313,7 +364,7 @@ function importParameters(exportStr) {
     firstAccount = false;
   }
   for (const category of parameters.categories) {
-    addCategory(
+    addCategoryRow(
       category.name,
       category.descriptionPattern,
       category.counterAccountPattern
@@ -390,8 +441,20 @@ export function init() {
     .getElementById("add-account-button")
     .addEventListener("click", onAddAccountButtonClicked);
   document
-    .getElementById("add-category-button")
-    .addEventListener("click", onAddCategoryButtonClicked);
+    .getElementById("add-category-name-button")
+    .addEventListener("click", onAddCategoryNameButtonClicked);
+  document
+    .getElementById("add-category-row-button")
+    .addEventListener("click", onAddCategoryRowButtonClicked);
+  document
+    .getElementById("delete-category-button")
+    .addEventListener("click", onDeleteCategoryButtonClicked);
+  document
+    .getElementById("category-overview-button")
+    .addEventListener("click", () => setActivePage("input-categories"));
+  document
+    .getElementById("category-name-input")
+    .addEventListener("change", onCategoryNameChanged);
   document
     .getElementById("export-parameters-button")
     .addEventListener("click", exportParameters);
@@ -464,17 +527,109 @@ function onRemoveRowButtonClicked() {
  *
  * @param {Event} event - DOM event.
  */
-function onAddAccountButtonClicked(event) {
+function onAddAccountButtonClicked() {
   addAccount("New Account");
 }
 
 /**
- * Callback for "add category" button.
- *
- * @param {Event} event - DOM event.
+ * Callback for "add category name" button.
  */
-function onAddCategoryButtonClicked(event) {
-  addCategory("New Category");
+function onAddCategoryNameButtonClicked() {
+  addCategoryName("New Category");
+}
+
+/**
+ * Callback for "add category row" button.
+ */
+function onAddCategoryRowButtonClicked() {
+  addCategoryRow(getCurrentCategory());
+}
+
+/**
+ * Callback for "edit <...> category" button.
+ */
+function onEditCategoryButtonClicked() {
+  const categoryName = this.textContent; // eslint-disable-line no-invalid-this
+  const categoryNameElement = document.getElementById(CATEGORY_NAME_ELEMENT);
+  categoryNameElement.value = categoryName;
+  categoryNameElement.dataset.currentName = categoryName;
+
+  const categoryTableElement = document.getElementById("category-table");
+  for (const row of categoryTableElement.children[1].children) {
+    if (row.children[row.children.length - 1].textContent == categoryName) {
+      row.classList.remove("disabled");
+    } else {
+      row.classList.add("disabled");
+    }
+  }
+
+  setActivePage("input-category-edit");
+}
+
+/**
+ * Callback for "delete category" button.
+ */
+function onDeleteCategoryButtonClicked() {
+  const categoryNameElement = document.getElementById(CATEGORY_NAME_ELEMENT);
+  const categoryName = categoryNameElement.value;
+
+  const categoryTableElement = document.getElementById("category-table");
+  let i = 0;
+
+  // Delete category row
+  while (i < categoryTableElement.children[1].children.length) {
+    const row = categoryTableElement.children[1].children[i];
+    if (row.children[row.children.length - 1].textContent == categoryName) {
+      categoryTableElement.children[1].removeChild(row);
+    } else {
+      i++;
+    }
+  }
+
+  // Delete category name
+  const categoryNamesElement = document.getElementById(CATEGORY_NAMES_ELEMENT);
+  i = 0;
+  while (i < categoryNamesElement.children.length) {
+    const categoryButtonElement = categoryNamesElement.children[i];
+    if (categoryButtonElement.textContent == categoryName) {
+      categoryNamesElement.removeChild(categoryButtonElement);
+    } else {
+      i++;
+    }
+  }
+
+  setActivePage("input-categories");
+}
+
+/**
+ * Callback for when the user has finished typing in the "category name" input field.
+ */
+function onCategoryNameChanged() {
+  const categoryNameElement = document.getElementById(CATEGORY_NAME_ELEMENT);
+  const oldName = categoryNameElement.dataset.currentName;
+  const newName = categoryNameElement.value;
+
+  if (oldName === newName) {
+    showStatusMessage('Category with name "' + newName + '" already exists.');
+  } else {
+    const categoryTableElement = document.getElementById("category-table");
+    for (const row of categoryTableElement.children[1].children) {
+      if (row.children[row.children.length - 1].textContent == oldName) {
+        row.children[row.children.length - 1].textContent = newName;
+      }
+    }
+
+    const categoryNamesElement = document.getElementById(
+      CATEGORY_NAMES_ELEMENT
+    );
+    for (const categoryButtonElement of categoryNamesElement.children) {
+      if (categoryButtonElement.textContent == oldName) {
+        categoryButtonElement.textContent = newName;
+      }
+    }
+
+    categoryNameElement.dataset.currentName = newName;
+  }
 }
 
 /**
