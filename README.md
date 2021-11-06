@@ -48,6 +48,9 @@ CashPlot is a static website with a bundled JavaScript frontend. After making
 a change, re-create the bundle with:  
 `npm run build`
 
+To re-create the bundle automatically every time a source file is changed:
+`npm run watch build`
+
 To run the unit tests:  
 `npm run test`
 

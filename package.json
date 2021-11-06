@@ -1,12 +1,16 @@
 {
   "name": "cashplot",
   "private": true,
+  "watch": {
+    "build": "src/js/**/*.js"
+  },
   "scripts": {
     "dev": "webpack && xdg-open ./src/index.html",
     "build": "webpack",
     "test": "node ./tests/index.js",
     "lint": "eslint ./src/js/lib/ ./src/js/frontend/ ./tests/ --fix",
-    "doc": "jsdoc ./src/js/lib/ ./src/js/frontend/ -R ./README.md -d ./doc/"
+    "doc": "jsdoc ./src/js/lib/ ./src/js/frontend/ -R ./README.md -d ./doc/",
+    "watch": "npm-watch"
   },
   "dependencies": {
     "fast-deep-equal": "^3.1.0",
@@ -24,6 +28,7 @@
     "jsdoc": "^3.6.7",
     "prettier-eslint": "^12.0.0",
     "webpack": "^5.38.1",
-    "webpack-cli": "^4.7.0"
+    "webpack-cli": "^4.7.0",
+    "npm-watch": "^0.11.0"
   }
 }
