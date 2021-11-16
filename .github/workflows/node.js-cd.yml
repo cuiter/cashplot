@@ -1,11 +1,11 @@
 name: Node.js CD
+
 on:
   push:
     branches: [master]
-jobs:
 
-  publish:
-    name: Publish to website
+jobs:
+  publish-to-website:
     runs-on: ubuntu-latest
     steps:
     - name: SSH into server, fetch changes and build
@@ -13,11 +13,12 @@ jobs:
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
-        password: ${{ secrets.SSH_KEY }}
+        key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script_stop: true
         script: |
           cd /var/www/cuiter.me-cashplot
-          git pull
-          npm i
+          git fetch origin master
+          git reset --hard origin/master
+          npm ci
           npm run build
