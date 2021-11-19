@@ -8,7 +8,7 @@
     "dev": "webpack && xdg-open ./src/index.html",
     "build": "webpack",
     "test": "node ./tests/index.js",
-    "lint": "eslint ./src/js/lib/ ./src/js/frontend/ ./tests/ --fix",
+    "lint": "eslint ./src/js/lib/ ./src/js/frontend/ ./src/sw.js ./tests/ --fix",
     "doc": "jsdoc ./src/js/lib/ ./src/js/frontend/ -R ./README.md -d ./doc/",
     "watch": "npm-watch"
   },

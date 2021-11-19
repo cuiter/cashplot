@@ -1,0 +1,29 @@
+{
+    "lang": "en-us",
+    "name": "CashPlot",
+    "short_name": "CashPlot",
+    "description": "A tool for tracking your finances.",
+    "start_url": ".",
+    "background_color": "#2a2c2b",
+    "theme_color": "#fa5b0f",
+    "orientation": "any",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "assets/img/favicon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "./assets/img/favicon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "./assets/img/favicon-180x180.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        }
+    ]
+}
+

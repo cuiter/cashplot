@@ -6,6 +6,7 @@
     <meta name="description" content="CashPlot">
     <meta name="keywords" content="finance graph charts">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="manifest.json">
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="icon" sizes="192x192" href="assets/img/favicon-192x192.png">
     <link rel="icon" sizes="512x512" href="assets/img/favicon-512x512.png">
@@ -210,6 +211,19 @@
         </p>
       </section>
     </main>
+    <script>
+      // Check to make sure the browser supports service workers
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register('sw.js', { scope: '.' })
+          .then(() => {
+            console.log('Service worker registered');
+          })
+          .catch(err => {
+            console.log('Service worker registration failed: ' + err);
+          });
+      }
+    </script>
     <script src="js/deps/plotly-1.58.4.min.js"></script>
     <script src="js/main.js"></script>
   </body>
