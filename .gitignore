@@ -1,10 +1,10 @@
 # Node.JS
 /node_modules/
 # Compiled output
-/src/js/main.js
+/src/frontend/js/bundle.js
 # Generated documentation
 /doc/
 
 # Misc
-/TODO.md
 /README.pdf
+/design/

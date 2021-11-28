@@ -1,14 +1,23 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/js/frontend/index.js',
-  mode: 'development',
+  entry: './src/ui.ts',
+  mode: "production",
+  devtool: "source-map",
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+    ],
+  },
   resolve: {
-    fallback: { "path": require.resolve("path-browserify") }
+    extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
-    filename: 'main.js',
-
-    path: path.resolve(__dirname, './src/js'),
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'src/frontend/js'),
   },
 };

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "./build/",
+    "allowJs": false,
+    "target": "es5",
+    "module": "es6",
+    "moduleResolution": "node",
+    "sourceMap": true
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["./src/frontend"]
+}
