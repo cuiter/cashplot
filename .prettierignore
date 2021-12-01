@@ -1,0 +1,5 @@
+node_modules/
+src/frontend/css/deps
+src/frontend/js/
+src/frontend/index.html
+package_lock.json

@@ -1,16 +1,14 @@
-import { createInjector } from 'typed-inject';
+import { createInjector } from "typed-inject";
 import { StateImpl } from "../src/state";
 
-describe('StateImpl', () => {
-  const injector = createInjector()
-    .provideClass('state', StateImpl)
+describe("StateImpl", () => {
+    const injector = createInjector().provideClass("state", StateImpl);
 
+    test("calculates the current state", () => {
+        const state = injector.injectClass(StateImpl);
 
-  test('calculates the current state', () => {
-    const state = injector.injectClass(StateImpl);
+        const expected = 3;
 
-    const expected = 3;
-
-    expect(state.getState()).toBe(expected);
-  })
-})
+        expect(state.getState()).toBe(expected);
+    });
+});

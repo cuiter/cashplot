@@ -1,25 +1,27 @@
 {
-  "name": "cashplot",
-  "private": true,
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node"
-  },
-  "scripts": {
-    "dev": "webpack && xdg-open ./src/frontend/index.html",
-    "build": "webpack",
-    "test": "jest"
-  },
-  "dependencies": {
-    "typed-inject": "^3.0.1"
-  },
-  "devDependencies": {
-    "@types/jest": "^27.0.3",
-    "jest": "^27.4.3",
-    "ts-jest": "^27.0.7",
-    "ts-loader": "^9.2.6",
-    "typescript": "^4.5.2",
-    "webpack": "^5.64.4",
-    "webpack-cli": "^4.9.1"
-  }
+    "name": "cashplot",
+    "private": true,
+    "jest": {
+        "preset": "ts-jest",
+        "testEnvironment": "node"
+    },
+    "scripts": {
+        "dev": "webpack && xdg-open ./src/frontend/index.html",
+        "build": "webpack",
+        "test": "jest",
+        "lint": "prettier --write ."
+    },
+    "dependencies": {
+        "typed-inject": "^3.0.1"
+    },
+    "devDependencies": {
+        "@types/jest": "^27.0.3",
+        "jest": "^27.4.3",
+        "prettier": "^2.5.0",
+        "ts-jest": "^27.0.7",
+        "ts-loader": "^9.2.6",
+        "typescript": "^4.5.2",
+        "webpack": "^5.64.4",
+        "webpack-cli": "^4.9.1"
+    }
 }

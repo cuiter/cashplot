@@ -3,7 +3,7 @@
 [Website](https://cuiter.me/cashplot)
 
 ![](./src/assets/img/readme-home.png)  
-![](./src/assets/img/readme-graphs.png)  
+![](./src/assets/img/readme-graphs.png)
 
 CashPlot is a web application that helps in getting a grip on your financials.
 It does so by showing your net worth over time and where your money is going
@@ -21,11 +21,11 @@ down below). I'd like to add support for as many banks as possible.
 
 Go to the website linked above, or:
 
-- Install [Node.JS](https://nodejs.org)
-- Clone this repository
-- `npm install`
-- `npm run build`
-- Open `./src/index.html` in your favorite browser
+-   Install [Node.JS](https://nodejs.org)
+-   Clone this repository
+-   `npm install`
+-   `npm run build`
+-   Open `./src/index.html` in your favorite browser
 
 The user interface is quite self-explanatory.
 

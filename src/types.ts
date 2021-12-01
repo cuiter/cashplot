@@ -1,7 +1,7 @@
 export interface UI {
-    init(): void
+    init(): void;
 }
 
 export interface State {
-    getState(): number
+    getState(): number;
 }
