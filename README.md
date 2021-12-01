@@ -44,15 +44,17 @@ negative balance on the graph when it did not happen in actuality.
 
 ## Development
 
-CashPlot is a static website with a bundled JavaScript frontend. After making
+CashPlot is a static website with a bundled TypeScript frontend. After making
 a change, re-create the bundle with:  
 `npm run build`
 
 To re-create the bundle automatically every time a source file is changed:
-`npm run watch build`
+`npm run build -- --watch`
 
 To run the unit tests:  
-`npm run test`
+`npm run test`  
+To automatically re-run the tests when a source file is changed:
+`npm run test -- --watch`
 
 To lint and auto-format the source code:  
 `npm run lint`
