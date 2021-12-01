@@ -1,1 +1,0 @@
-{"version":3,"file":"bundle.js","mappings":"mBAEIA,QAAQC,ICED,M","sources":["webpack://cashplot/./src/state.ts","webpack://cashplot/./src/ui.ts"],"sourcesContent":["export function logMessage(message: string)\n{\n    console.log(message);\n}","import { logMessage } from \"./state\";\n\nconst x: number = 1;\n\nlogMessage(\"\" + x);"],"names":["console","log"],"sourceRoot":""}

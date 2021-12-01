@@ -1,5 +1,11 @@
-import { logMessage } from "./state";
+import { State, UI } from "./types";
 
-const x: number = 1;
+export class UIImpl implements UI {
+    public static inject = ["state"] as const;
 
-logMessage("" + x);
+    constructor(private state: State) { }
+
+    public init(): void {
+        console.log("Hello, world! " + this.state.getState());
+    }
+}

@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/ui.ts',
+  entry: './src/main.ts',
   mode: "production",
   devtool: "source-map",
   module: {
