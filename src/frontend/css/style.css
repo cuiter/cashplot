@@ -1,7 +1,7 @@
 /* Customize style */
 
 :root {
-    --color-background: #2a2c2b;
+    --color-background: #1f1f1f;
     --color-background-light: #484a49;
     --color-background-light-hover: #646665;
     --color-primary: #dee4e8;
@@ -34,6 +34,7 @@ button.button-outline {
 }
 
 /* Custom classes */
+
 
 .margin-top-10 {
     margin-top: 10rem;
