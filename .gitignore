@@ -1,7 +1,7 @@
 # Node.JS
 /node_modules/
 # Compiled output
-/src/frontend/js/bundle.js*
+/public/js/bundle.js*
 # Generated documentation
 /doc/
 
