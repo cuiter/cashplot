@@ -8,6 +8,10 @@ jobs:
     publish-to-website:
         runs-on: ubuntu-latest
         steps:
+            - name: Determine source branch
+              id: vars
+              run: echo ::set-output name=branch::${GITHUB_REF#refs/*/}
+
             - name: SSH into server, fetch changes and build
               uses: appleboy/ssh-action@v0.1.4
               with:
@@ -17,8 +21,8 @@ jobs:
                   port: ${{ secrets.SSH_PORT }}
                   script_stop: true
                   script: |
-                      cd /var/www/cuiter.me-cashplot-${GITHUB_REF##*/}
-                      git fetch origin/${GITHUB_REF##*/}
-                      git reset --hard origin/${GITHUB_REF##*/}
+                      cd /var/www/cuiter.me-cashplot-${{ steps.vars.outputs.branch }}
+                      git fetch origin ${{ steps.vars.outputs.branch }}
+                      git reset --hard origin/${{ steps.vars.outputs.branch }}
                       npm ci
                       npm run build

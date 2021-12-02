@@ -7,7 +7,7 @@ describe("StateImpl", () => {
     test("calculates the current state", () => {
         const state = injector.injectClass(StateImpl);
 
-        const expected = 3;
+        const expected = 4;
 
         expect(state.getState()).toBe(expected);
     });
