@@ -3,6 +3,8 @@ import Vue from "vue";
 import AppComponent from "./components/app.vue";
 import PageComponent from "./components/page.vue";
 import NavComponent from "./components/nav.vue";
+import HomeViewComponent from "./components/home-view.vue";
+import DataViewComponent from "./components/data-view.vue";
 
 export class UIImpl implements UI {
     public static inject = ["state"] as const;
@@ -16,6 +18,9 @@ export class UIImpl implements UI {
         Vue.component("app-component", AppComponent);
         Vue.component("page-component", PageComponent);
         Vue.component("nav-component", NavComponent);
+        Vue.component("home-view", HomeViewComponent);
+        Vue.component("data-view", DataViewComponent);
+
         let v = new Vue({
             el: "#app",
         });

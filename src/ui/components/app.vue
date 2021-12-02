@@ -1,17 +1,18 @@
 <template>
   <div class="app full-size">
-    <page-component />
-    <nav-component />
+    <page-component ref="page" />
+    <nav-component ref="nav" />
   </div>
 </template>
 
 <script lang="ts">
-console.log("Hello");
 export default {
-    data(): any {
-        return {
-            fullName: "Hello world!"
-        }
-    },
+  provide: {
+    currentView: "home",
+    openView: function(view: string) {
+      (this as any).currentView = view;
+      (this as any).$refs.page.forceUpdate();
+    }
+  }
 }
 </script>
