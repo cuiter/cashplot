@@ -9,8 +9,8 @@ const urlsToCache = [
     ".",
     "index.html", // Main HTML file
     "manifest.json", // Progressive Web App manifest
-    "js/main.js", // Main JS bundle file
-    "js/deps/plotly-1.58.4.min.js", // Plotly JS dependency
+    "js/bundle.js", // JS bundle file
+    "js/bundle.js.map", // JS source mapping file
     "css/style.css", // Main CSS file
     "css/deps/milligram-1.4.1.css", // Milligram CSS dependency
     "css/deps/normalize-8.0.1.css", // Normalize CSS dependency

@@ -2,8 +2,11 @@
 
 :root {
     --color-background: #1f1f1f;
+    --color-background-nav: #222222;
     --color-background-light: #484a49;
     --color-background-light-hover: #646665;
+    --color-border-nav: #2a2a2a;
+    --color-fill-icon: #a6a6a6;
     --color-primary: #dee4e8;
     --color-theme: #fa5b0f;
     --color-theme-light: #ff7729;
@@ -46,19 +49,52 @@ button.button-outline {
 
 .page {
     flex: 1 1 auto;
-    background-color: var(--color-theme);
+    background-color: var(--color-background);
 }
 
 .nav {
-    flex: 0 1 5rem;
-    background-color: var(--color-background-light);
+    flex: 0 1 6rem;
+    background-color: var(--color-background-nav);
+    box-shadow: 0 0rem 0.2rem black;
+    border-top: 0.1rem solid var(--color-border-nav);
+
+    display: flex;
+    justify-content: center;
+}
+
+.nav .nav-button {
+    width: 7rem;
+    height: 100%;
+    margin: 0 0.7rem;
+    position: relative;
+    cursor: pointer;
+}
+
+.nav .nav-button span {
+    position: absolute;
+    left: 0;
+    top: 3.3rem;
+    width: 100%;
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.nav .nav-button svg {
+    position: absolute;
+    left: 1.75rem;
+    top: 0.5rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    fill: var(--color-fill-icon);
 }
 
 /* Custom classes */
 
 #app {
     width: 100vw;
-    height: 100vh;
+    height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+    height: calc(var(--vh, 1vh) * 100);
 }
 
 .full-size {
