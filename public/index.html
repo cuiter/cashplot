@@ -31,6 +31,12 @@
             console.log('Service worker registration failed: ' + err);
           });
       }
+      // If ran from a local file, attempt to load the live reload script
+      if (window.location.protocol === 'file:') {
+        var script = document.createElement('script');
+        script.src = 'http://localhost:35729/livereload.js';
+        document.body.appendChild(script);
+      }
     </script>
     <script src="js/bundle.js"></script>
   </body>
