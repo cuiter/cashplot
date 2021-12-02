@@ -2,7 +2,7 @@ name: Node.js CD
 
 on:
     push:
-        branches: [master]
+        branches: [master, next]
 
 jobs:
     publish-to-website:
@@ -17,8 +17,8 @@ jobs:
                   port: ${{ secrets.SSH_PORT }}
                   script_stop: true
                   script: |
-                      cd /var/www/cuiter.me-cashplot
-                      git fetch origin master
-                      git reset --hard origin/master
+                      cd /var/www/cuiter.me-cashplot-${GITHUB_REF##*/}
+                      git fetch origin/${GITHUB_REF##*/}
+                      git reset --hard origin/${GITHUB_REF##*/}
                       npm ci
                       npm run build
