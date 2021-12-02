@@ -1,11 +1,13 @@
 <template>
-  <p>Hello, {{ fullName }}</p>
+  <div class="app full-size">
+    <page-component />
+    <nav-component />
+  </div>
 </template>
 
 <script lang="ts">
 console.log("Hello");
 export default {
-    name: 'Page',
     data(): any {
         return {
             fullName: "Hello world!"

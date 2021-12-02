@@ -1,6 +1,8 @@
 import { State, UI } from "../types";
 import Vue from "vue";
-import PageComponent from "./components/Page.vue";
+import AppComponent from "./components/app.vue";
+import PageComponent from "./components/page.vue";
+import NavComponent from "./components/nav.vue";
 
 export class UIImpl implements UI {
     public static inject = ["state"] as const;
@@ -8,15 +10,15 @@ export class UIImpl implements UI {
     constructor(private state: State) {}
 
     public init(): void {
-        console.log("Hello, world! " + this.state.getState());
+        Vue.config.errorHandler = function(err, vm, info) {
+            console.log('Error: ', err, '\nInfo:', info);
+        }
+        Vue.component("app-component", AppComponent);
+        Vue.component("page-component", PageComponent);
+        Vue.component("nav-component", NavComponent);
 
         let v = new Vue({
-            el: "#page",
-            components: {
-                PageComponent
-            }
+            el: "#app",
         });
-
-        console.log("Hello, world! " + this.state.getState());
     }
 }

@@ -1,12 +1,14 @@
 const path = require("path");
 const { VueLoaderPlugin } = require('vue-loader')
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 module.exports = {
     entry: "./src/main.ts",
     mode: "production",
     devtool: "source-map",
     plugins: [
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new LiveReloadPlugin()
     ],
     module: {
         rules: [
