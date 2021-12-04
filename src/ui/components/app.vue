@@ -1,18 +1,16 @@
 <template>
   <div class="app full-size">
-    <page-component ref="page" />
-    <nav-component ref="nav" />
+    <page-component v-bind:currentView="currentView" />
+    <nav-component v-model="currentView" />
   </div>
 </template>
 
 <script lang="ts">
 export default {
-  provide: {
-    currentView: "home",
-    openView: function(view: string) {
-      (this as any).currentView = view;
-      (this as any).$refs.page.forceUpdate();
-    }
+  data: function() {
+    return {
+      currentView: "home"
+    };
   }
 }
 </script>

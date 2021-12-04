@@ -6,6 +6,6 @@
 </template>
 <script lang="ts">
 export default {
-    inject: ["currentView"]
+    props: ["currentView"]
 }
 </script>
