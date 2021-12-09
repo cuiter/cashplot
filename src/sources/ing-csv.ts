@@ -1,5 +1,5 @@
 import { Source, SourceTransaction, DECIMAL } from "../types";
-import Papa = require("papaparse");
+import * as Papa from "papaparse";
 
 /** Parser for ING Bank's official CSV format. Supports both the English and Dutch variant. */
 export class INGBankCSVSource implements Source {
