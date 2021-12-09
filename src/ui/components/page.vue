@@ -1,11 +1,11 @@
 <template>
     <div class="page">
         <home-view v-if="currentView == 'data'" />
-        <p>{{currentView}}</p>
+        <p>{{ currentView }}</p>
     </div>
 </template>
 <script lang="ts">
 export default {
-    props: ["currentView"]
-}
+    props: ["currentView"],
+};
 </script>

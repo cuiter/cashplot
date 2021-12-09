@@ -68,7 +68,9 @@ describe("INGSource", () => {
         ];
 
         for (const example of invalidTransactionDataExamples) {
-            expect(() => new INGBankCSVSource().parseTransactions(example)).toThrow("Errors while parsing transaction data");
+            expect(() =>
+                new INGBankCSVSource().parseTransactions(example),
+            ).toThrow("Errors while parsing transaction data");
         }
     });
 });

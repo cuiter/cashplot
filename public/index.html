@@ -1,43 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>CashPlot</title>
-    <meta charset="utf-8">
-    <meta name="description" content="CashPlot">
-    <meta name="keywords" content="finance graph charts">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="manifest" href="manifest.json">
-    <link rel="shortcut icon" href="favicon.ico">
-    <link rel="icon" sizes="192x192" href="assets/img/favicon-192x192.png">
-    <link rel="icon" sizes="512x512" href="assets/img/favicon-512x512.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon-180x180.png">
-    <link rel="stylesheet" href="css/deps/normalize-8.0.1.css">
-    <link rel="stylesheet" href="css/deps/milligram-1.4.1.css">
-    <link rel="stylesheet" href="css/style.css">
-  </head>
-  <body>
-    <div id="app">
-      <app-component></app-component>
-    </div>
-    <script>
-      // Check to make sure the browser supports service workers
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker
-          .register('sw.js', { scope: '.' })
-          .then(() => {
-            console.log('Service worker registered');
-          })
-          .catch(err => {
-            console.log('Service worker registration failed: ' + err);
-          });
-      }
-      // If ran from a local file, attempt to load the live reload script
-      if (window.location.protocol === 'file:') {
-        var script = document.createElement('script');
-        script.src = 'http://localhost:35729/livereload.js';
-        document.body.appendChild(script);
-      }
-    </script>
-    <script src="js/bundle.js"></script>
-  </body>
+    <head>
+        <title>CashPlot</title>
+        <meta charset="utf-8" />
+        <meta name="description" content="CashPlot" />
+        <meta name="keywords" content="finance graph charts" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="manifest" href="manifest.json" />
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link
+            rel="icon"
+            sizes="192x192"
+            href="assets/img/favicon-192x192.png"
+        />
+        <link
+            rel="icon"
+            sizes="512x512"
+            href="assets/img/favicon-512x512.png"
+        />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="assets/img/favicon-180x180.png"
+        />
+        <link rel="stylesheet" href="css/deps/normalize-8.0.1.css" />
+        <link rel="stylesheet" href="css/deps/milligram-1.4.1.css" />
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body>
+        <div id="app">
+            <app-component></app-component>
+        </div>
+        <script>
+            // Check to make sure the browser supports service workers
+            if ("serviceWorker" in navigator) {
+                navigator.serviceWorker
+                    .register("sw.js", { scope: "." })
+                    .then(() => {
+                        console.log("Service worker registered");
+                    })
+                    .catch((err) => {
+                        console.log(
+                            "Service worker registration failed: " + err,
+                        );
+                    });
+            }
+            // If ran from a local file, attempt to load the live reload script
+            if (window.location.protocol === "file:") {
+                var script = document.createElement("script");
+                script.src = "http://localhost:35729/livereload.js";
+                document.body.appendChild(script);
+            }
+        </script>
+        <script src="js/bundle.js"></script>
+    </body>
 </html>

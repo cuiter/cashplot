@@ -1,20 +1,17 @@
 const path = require("path");
-const { VueLoaderPlugin } = require('vue-loader')
-const LiveReloadPlugin = require('webpack-livereload-plugin');
+const { VueLoaderPlugin } = require("vue-loader");
+const LiveReloadPlugin = require("webpack-livereload-plugin");
 
 module.exports = {
     entry: "./src/main.ts",
     mode: "production",
     devtool: "source-map",
-    plugins: [
-        new VueLoaderPlugin(),
-        new LiveReloadPlugin()
-    ],
+    plugins: [new VueLoaderPlugin(), new LiveReloadPlugin()],
     module: {
         rules: [
             {
                 test: /\.vue$/,
-                loader: 'vue-loader'
+                loader: "vue-loader",
             },
             {
                 test: /\.tsx?$/,
@@ -22,17 +19,17 @@ module.exports = {
                 exclude: /node_modules/,
                 options: {
                     appendTsSuffixTo: [/\.vue$/],
-                }
+                },
             },
             {
                 test: /\.(html|css)$/i,
-                use: 'raw-loader',
+                use: "raw-loader",
             },
         ],
     },
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
-        alias: { 'vue$': 'vue/dist/vue.esm.js' }
+        alias: { vue$: "vue/dist/vue.esm.js" },
     },
     output: {
         filename: "bundle.js",
