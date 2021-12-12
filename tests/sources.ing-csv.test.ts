@@ -64,7 +64,9 @@ describe("INGSource", () => {
         const invalidTransactionDataExamples = [
             "",
             "{}",
-            '"Date","Name / Description","Account","Counterparty","Code","Debit/credit","Amount (EUR)","Transaction type","Notifications', // Notice missing semicolon
+            '""',
+            '"Date"\n"2021-11-25"',
+            '"Date","Name / Description","Account","Counterparty","Code","Debit/credit","Amount (EUR)","Transaction type","Notifications', // Notice missing quotes
         ];
 
         for (const example of invalidTransactionDataExamples) {
@@ -72,5 +74,29 @@ describe("INGSource", () => {
                 new INGBankCSVSource().parseTransactions(example),
             ).toThrow("Errors while parsing transaction data");
         }
+
+        expect(() =>
+            new INGBankCSVSource().parseTransactions(
+                '"Date","Name / Description","Account","Counterparty","Code","Debit/credit","Amount (EUR)","Transaction type","Notifications"\n,bol.com b.v.,NL00MAIN1234567890,NL27INGB0000026500,ID,Debit,50,iDEAL,Name: bol.com b.v. Description: 90340932902 2492049402',
+            ),
+        ).toThrow(
+            "Invalid transaction data on line 2: Could not determine date (empty column)",
+        );
+
+        expect(() =>
+            new INGBankCSVSource().parseTransactions(
+                '"Date","Name / Description","Account","Counterparty","Code","Debit/credit","Amount (EUR)","Transaction type","Notifications"\nabcd,bol.com b.v.,NL00MAIN1234567890,NL27INGB0000026500,ID,Debit,50,iDEAL,Name: bol.com b.v. Description: 90340932902 2492049402',
+            ),
+        ).toThrow(
+            'Invalid transaction data on line 2: Could not determine date from value: "abcd"',
+        );
+
+        expect(() =>
+            new INGBankCSVSource().parseTransactions(
+                '"Date","Name / Description","Account","Counterparty","Code","Debit/credit","Amount (EUR)","Transaction type","Notifications"\n20210923,bol.com b.v.,NL00MAIN1234567890,NL27INGB0000026500,ID,Deit,50,iDEAL,Name: bol.com b.v. Description: 90340932902 2492049402',
+            ),
+        ).toThrow(
+            'Invalid transaction data on line 2: Could not determine direction from value: "Deit"',
+        );
     });
 });
