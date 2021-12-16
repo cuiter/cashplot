@@ -6,8 +6,12 @@ export interface State {
     getState(): number;
 }
 
+export interface Sources {
+    parseTransactions(transactionData: string): Array<SourceTransaction>;
+}
+
 export interface Source {
-    isValidData(transactionData: string): boolean;
+    hasValidHeader(transactionData: string): boolean;
     parseTransactions(transactionData: string): Array<SourceTransaction>;
 }
 

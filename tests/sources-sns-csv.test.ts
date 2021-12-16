@@ -50,6 +50,35 @@ function areParsedTransactionsValid(transactions: SourceTransaction[]) {
 }
 
 describe("INGSource", () => {
+    test('should recognize valid "headers" of a CSV export', () => {
+        const transactionData = testTransactionsCsvFormat;
+
+        expect(new SNSBankCSVSource().hasValidHeader(transactionData)).toBe(
+            true,
+        );
+    });
+
+    test('should recognize valid "headers" of a CSV2004 export', () => {
+        const transactionData = testTransactionsCsv2004Format;
+
+        expect(new SNSBankCSVSource().hasValidHeader(transactionData)).toBe(
+            true,
+        );
+    });
+
+    test('should recognize invalid "headers" of a CSV export', () => {
+        const invalidTransactionDataExamples = [
+            "",
+            "{}",
+            '""',
+            `"28-06-2021";"NL00SNSB1234567890";"NL01WORK0987654321";"Company Inc.";"";"";"";"EUR";"0.00";"EUR";"4000.00";"28-06-2021";"28-06-2021";"6305";"IOS";"5976384";""`,
+        ];
+
+        for (const example of invalidTransactionDataExamples) {
+            expect(new SNSBankCSVSource().hasValidHeader(example)).toBe(false);
+        }
+    });
+
     test("should load transactions from a CSV export", () => {
         const transactionData = testTransactionsCsvFormat;
 

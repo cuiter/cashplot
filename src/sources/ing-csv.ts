@@ -2,13 +2,49 @@ import { Source, SourceTransaction, DECIMAL } from "../types";
 import { assert } from "../utils";
 import * as Papa from "papaparse";
 
+const nlHeaders = [
+    "Datum",
+    "Naam / Omschrijving",
+    "Rekening",
+    "Tegenrekening",
+    "Af Bij",
+    "Bedrag (EUR)",
+    "Mededelingen",
+];
+const enHeaders = [
+    "Date",
+    "Name / Description",
+    "Account",
+    "Counterparty",
+    "Debit/credit",
+    "Amount (EUR)",
+    "Notifications",
+];
+
 /** Parser for ING Bank's official CSV format. Supports both the English and Dutch variant. */
 export class INGBankCSVSource implements Source {
     // For more info on the format itself, see
     // https://www.ing.nl/media/ING_CSV_Mijn_ING_Augustus2020_tcm162-201483.pdf
 
-    public isValidData(transactionData: string): boolean {
-        return false;
+    public hasValidHeader(transactionData: string): boolean {
+        var firstLine = transactionData.split("\n", 1)[0];
+
+        const parsedCsv = Papa.parse(firstLine, {
+            header: true,
+        });
+
+        if (parsedCsv.errors.length !== 0) {
+            return false;
+        } else {
+            const csvHeaders = parsedCsv.meta.fields ?? [];
+
+            return (
+                !nlHeaders.some(
+                    (header) => csvHeaders.indexOf(header) === -1,
+                ) ||
+                !enHeaders.some((header) => csvHeaders.indexOf(header) === -1)
+            );
+        }
     }
 
     private transactionFromRow(

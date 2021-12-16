@@ -4,8 +4,19 @@ import { assert } from "../utils";
 
 /** Parser for SNS Bank's official CSV formats. Supports both the "CSV" and "CSV2004" variant. */
 export class SNSBankCSVSource implements Source {
-    public isValidData(transactionData: string): boolean {
-        return false;
+    public hasValidHeader(transactionData: string): boolean {
+        var firstLine = transactionData.split("\n", 1)[0];
+
+        const parsedCsv = Papa.parse(firstLine, {
+            header: false,
+        });
+
+        if (parsedCsv.errors.length !== 0) {
+            return false;
+        } else {
+            // The parsed CSV should contain the description column.
+            return (parsedCsv.data[0] as any).length > 17;
+        }
     }
 
     private transactionFromRow(
