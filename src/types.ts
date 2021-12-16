@@ -11,6 +11,12 @@ export interface Source {
     parseTransactions(transactionData: string): Array<SourceTransaction>;
 }
 
+export interface Transactions {
+    combineSources(
+        transactions: Array<Array<SourceTransaction>>,
+    ): Array<SourceTransaction>;
+}
+
 export class SourceTransaction {
     constructor(
         public date: Date,
