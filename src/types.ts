@@ -22,8 +22,8 @@ export class SourceTransaction {
         public date: Date,
         public amount: number,
         public account: string,
-        public contraAccount: string,
-        public contraAccountName: string,
+        public contraAccount: string | null,
+        public contraAccountName: string | null,
         public description: string,
     ) {}
 }
