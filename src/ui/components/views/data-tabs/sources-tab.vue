@@ -38,7 +38,7 @@
                 <span class="float-left select-name">{{ sourceProperties[selectedSource].name }}</span>
                 <span class="float-right select-tick">▲</span>
             </button>
-            <button class="button" @click="onOpenButtonPressed">Open</button>
+            <button class="sources-entry-open-button button" @click="onOpenButtonPressed">Open</button>
             <button class="button">Voeg toe</button>
         </div>
     </div>

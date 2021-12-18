@@ -276,7 +276,7 @@ a {
 }
 
 .sources-entry button {
-    margin: 0rem 0.8rem;
+    margin-bottom: 0rem;
     max-width: 15rem;
     position: relative;
     font-size: 1.6rem;
@@ -301,6 +301,11 @@ a {
     text-overflow: ellipsis;
     overflow: hidden;
     text-align: left;
+}
+
+.sources-entry-open-button {
+    margin-left: 1.2rem;
+    margin-right: 1.2rem;
 }
 
 .sources-selection {
