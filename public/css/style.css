@@ -8,6 +8,8 @@
     --color-border-nav: #2a2a2a;
     --color-fill-icon: #a6a6a6;
     --color-primary: #dee4e8;
+    --color-primary-selected: #ffffff;
+    --color-primary-deselected: #aaaaaa;
     --color-theme: #fa5b0f;
     --color-theme-light: #ff7729;
 }
@@ -47,7 +49,7 @@ button.button-outline {
     flex-flow: column;
 }
 
-.page {
+.view {
     flex: 1 1 auto;
     min-width: 32rem;
     width: 85%;
@@ -82,6 +84,7 @@ button.button-outline {
     font-size: 1.5rem;
     text-align: center;
     user-select: none;
+    color: var(--color-primary-deselected);
 }
 
 .nav .nav-button svg {
@@ -93,9 +96,36 @@ button.button-outline {
     fill: var(--color-fill-icon);
 }
 
-.nav .nav-button.selected {
+.nav .nav-button.selected svg {
     filter: brightness(150%);
     transition: filter 0.2s;
+}
+
+.nav .nav-button.selected span {
+    color: var(--color-primary-selected);
+    transition: color 0.2s;
+}
+
+.tab-nav {
+    flex: 0 1 5rem;
+    background-color: var(--color-background-nav);
+    box-shadow: 0 0rem 0.2rem black;
+    border-bottom: 0.1rem solid var(--color-border-nav);
+
+    display: flex;
+    justify-content: center;
+}
+
+.tab-nav .tab-nav-button {
+    margin: 0.7rem 1.05rem 0rem;
+    font-size: 2.2rem;
+    user-select: none;
+    cursor: pointer;
+    color: var(--color-primary-deselected);
+}
+
+.tab-nav .tab-nav-button.selected {
+    color: var(--color-primary-selected);
 }
 
 /* Custom classes */

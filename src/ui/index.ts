@@ -1,10 +1,12 @@
 import { State, UI } from "../types";
 import Vue from "vue";
 import AppComponent from "./components/app.vue";
-import PageComponent from "./components/page.vue";
+import ViewComponent from "./components/view.vue";
 import NavComponent from "./components/nav.vue";
-import HomeViewComponent from "./components/home-view.vue";
-import DataViewComponent from "./components/data-view.vue";
+import TabNavComponent from "./components/tab-nav.vue";
+import HomeViewComponent from "./components/views/home-view.vue";
+import DataViewComponent from "./components/views/data-view.vue";
+import SourcesTabComponent from "./components/views/data-tabs/sources-tab.vue";
 
 export class UIImpl implements UI {
     public static inject = ["state"] as const;
@@ -15,11 +17,14 @@ export class UIImpl implements UI {
         Vue.config.errorHandler = function (err, vm, info) {
             console.log("Error: ", err, "\nInfo:", info);
         };
+
         Vue.component("app-component", AppComponent);
-        Vue.component("page-component", PageComponent);
+        Vue.component("view-component", ViewComponent);
         Vue.component("nav-component", NavComponent);
-        Vue.component("home-view", HomeViewComponent);
-        Vue.component("data-view", DataViewComponent);
+        Vue.component("tab-nav-component", TabNavComponent);
+        Vue.component("home-view-component", HomeViewComponent);
+        Vue.component("data-view-component", DataViewComponent);
+        Vue.component("sources-tab-component", SourcesTabComponent);
 
         let v = new Vue({
             el: "#app",
