@@ -8,6 +8,18 @@ import HomeViewComponent from "./components/views/home-view.vue";
 import DataViewComponent from "./components/views/data-view.vue";
 import SourcesTabComponent from "./components/views/data-tabs/sources-tab.vue";
 
+declare global {
+    interface NodeRequire {
+        // Binding for Webpack's require.context method.
+        // Not-invented-here to avoid @types/webpack-env dependency.
+        context: (
+            directory: string,
+            useSubdirectories: boolean,
+            filter: RegExp,
+        ) => { (key: string): { default: any }; keys(): string[] };
+    }
+}
+
 export class UIImpl implements UI {
     public static inject = ["state"] as const;
 
@@ -18,13 +30,13 @@ export class UIImpl implements UI {
             console.log("Error: ", err, "\nInfo:", info);
         };
 
-        Vue.component("app-component", AppComponent);
-        Vue.component("view-component", ViewComponent);
-        Vue.component("nav-component", NavComponent);
-        Vue.component("tab-nav-component", TabNavComponent);
-        Vue.component("home-view-component", HomeViewComponent);
-        Vue.component("data-view-component", DataViewComponent);
-        Vue.component("sources-tab-component", SourcesTabComponent);
+        // Load every Vue component from the components directory.
+        const req = require.context("./components/", true, /\.(vue)$/i);
+        for (const key of req.keys()) {
+            const name = key.match(/.*\/(.*)\.vue/)![1];
+            var component = req(key).default;
+            Vue.component(name + "-component", component);
+        }
 
         let v = new Vue({
             el: "#app",
