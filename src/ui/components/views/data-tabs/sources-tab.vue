@@ -30,18 +30,15 @@
         <div class="sources-entry flex-center">
             <button class="button flex-item-full"
                     @click="toggleSourceSelectionOpen()">
-                <div class="sources-selection"
-                     v-bind:class="{ disabled: sourceSelectionOpen === false }">
-                    <span>SNS Bank</span>
-                    <span>Rabobank</span>
-                    <span>Triodos</span>
-                    <span>ABN Amro</span>
-                    <span>Bunq</span>
+                <div class="sources-selection" v-bind:class="{ disabled: sourceSelectionOpen === false }">
+                    <span v-for="name of getSourceSelectionNames()" @click="onSourceItemSelected">
+                      {{ name }}
+                    </span>
                 </div>
-                <span class="float-left">ING</span>
+                <span class="float-left">{{ sourceProperties[selectedSource].name }}</span>
                 <span class="float-right select-tick">▲</span>
             </button>
-            <button class="button">Open</button>
+            <button class="button" @click="onOpenButtonPressed">Open</button>
             <button class="button">Voeg toe</button>
         </div>
     </div>
@@ -53,6 +50,33 @@ export default {
     data: function () {
         return {
             sourceSelectionOpen: false,
+            selectedSource: "ing",
+            sourceProperties: {
+                "ing": {
+                    name: "ING",
+                    url: "https://mijn.ing.nl/"
+                },
+                "sns": {
+                    name: "SNS Bank",
+                    url: "https://www.snsbank.nl/online/web/mijnsns/"
+                },
+                "rabobank": {
+                    name: "Rabobank",
+                    url: "https://bankieren.rabobank.nl/klanten"
+                },
+                "triodos": {
+                    name: "Triodos",
+                    url: "https://bankieren.triodos.nl/"
+                },
+                "abn-amro": {
+                    name: "ABN Amro",
+                    url: "https://www.abnamro.nl/portal/mijn-abnamro/authenticatie/inloggen/index.html"
+                },
+                "bunq": {
+                    name: "Bunq",
+                    url: "https://bunq.app/"
+                }
+            }
         }
     },
     methods: {
@@ -63,6 +87,33 @@ export default {
                 (this as any).$data.sourceSelectionOpen = open;
             }
         },
+
+        getSourceSelectionNames() : string[] {
+            const selectedSource = (this as any).$data.selectedSource;
+            const sourceProperties = (this as any).$data.sourceProperties;
+
+            return Object.keys(sourceProperties)
+                .filter(source => source !== selectedSource)
+                .map(source => sourceProperties[source].name);
+        },
+
+        onSourceItemSelected(event: any) {
+            var name = event.target.textContent;
+            var sourceProperties = (this as any).$data.sourceProperties;
+
+            for (const source of Object.keys(sourceProperties)) {
+                if (sourceProperties[source].name === name) {
+                    (this as any).$data.selectedSource = source;
+                }
+            }
+        },
+
+        onOpenButtonPressed() {
+            const selectedSource = (this as any).$data.selectedSource;
+            const sourceProperties = (this as any).$data.sourceProperties;
+
+            window.open(sourceProperties[selectedSource].url, "_blank");
+        }
     },
 };
 </script>
