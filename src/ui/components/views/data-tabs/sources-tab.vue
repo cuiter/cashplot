@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="sources-list">
-            <div class="sources-item" v-for="a of [1, 2, 3]">
+            <div class="sources-item" v-for="a of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
                 <span class="sources-item-name">Alle_Rekeningen_01-01-2014_11-23-2021.csv</span>
                 <!--NOTE: If the viewport gets really small, change the date format-->
                 <span class="sources-item-date">28 augustus 2021 - 30 september 2021</span>
@@ -30,7 +30,7 @@
         <div class="sources-entry flex-center">
             <button class="button flex-item-full"
                     @click="toggleSourceSelectionOpen()">
-                <div class="sources-options"
+                <div class="sources-selection"
                      v-bind:class="{ disabled: sourceSelectionOpen === false }">
                     <span>SNS Bank</span>
                     <span>Rabobank</span>
