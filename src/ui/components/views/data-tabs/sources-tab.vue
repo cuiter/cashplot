@@ -30,12 +30,12 @@
         <div class="sources-entry flex-center">
             <button class="button flex-item-full"
                     @click="toggleSourceSelectionOpen()">
-                <div class="sources-selection" v-bind:class="{ disabled: sourceSelectionOpen === false }">
-                    <span v-for="name of getSourceSelectionNames()" @click="onSourceItemSelected">
-                      {{ name }}
-                    </span>
+                <div class="sources-selection"
+                     v-bind:class="{ disabled: sourceSelectionOpen === false }">
+                    <span v-for="name of getSourceSelectionNames()"
+                          v-on:click="onSourceItemSelected">{{ name }}</span>
                 </div>
-                <span class="float-left">{{ sourceProperties[selectedSource].name }}</span>
+                <span class="float-left select-name">{{ sourceProperties[selectedSource].name }}</span>
                 <span class="float-right select-tick">▲</span>
             </button>
             <button class="button" @click="onOpenButtonPressed">Open</button>
@@ -65,7 +65,7 @@ export default {
                     url: "https://bankieren.rabobank.nl/klanten"
                 },
                 "triodos": {
-                    name: "Triodos",
+                    name: "Triodos Bank",
                     url: "https://bankieren.triodos.nl/"
                 },
                 "abn-amro": {

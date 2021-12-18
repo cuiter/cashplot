@@ -279,11 +279,32 @@ a {
     margin: 0rem 0.8rem;
     max-width: 15rem;
     position: relative;
+    font-size: 1.6rem;
+    white-space: nowrap;
+}
+
+.sources-entry .select-tick {
+    position: absolute;
+    bottom: 50%;
+    right: 0.3rem;
+    font-size: 1.4rem;
+    line-height: 0.3rem;
+    color: var(--color-primary-deselected);
+}
+
+.sources-entry .select-name {
+    position: absolute;
+    left: 1rem;
+    right: 1.5rem;
+    top: 1rem;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-align: left;
 }
 
 .sources-selection {
     position: absolute;
-    max-width: 100%;
     bottom: 3.5rem;
     padding-top: 0rem;
     padding-bottom: 0.7rem;
@@ -298,10 +319,12 @@ a {
 
 .sources-selection span {
     display: block;
-    width: calc(100% - 1rem);
-    padding: 0.5rem 0rem 0.5rem 1rem;
+    width: calc(100% - 1.7rem);
+    padding: 0.5rem 0.7rem 0.5rem 1rem;
     line-height: 2rem;
     text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
     color: var(--color-primary-deselected);
 }
 
