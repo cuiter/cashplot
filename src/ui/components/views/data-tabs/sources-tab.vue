@@ -14,37 +14,81 @@
                 <span class="sources-summary-label">Transacties</span>
             </div>
         </div>
-        <div class="sources-list">
-            <div class="sources-item" v-for="a of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
-                <span class="sources-item-name">Alle_Rekeningen_01-01-2014_11-23-2021.csv</span>
+        <div class="source-data-list">
+            <div class="source-data-item" v-for="info of getAllSourceDataInfo">
+                <span class="source-data-name">{{ info.name }}</span>
                 <!--NOTE: If the viewport gets really small, change the date format-->
-                <span class="sources-item-date">28 augustus 2021 - 30 september 2021</span>
-                <span class="sources-item-accounts">4</span>
-                <svg class="sources-item-accounts-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M2 22a8 8 0 1 1 16 0H2zm8-9c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6zm7.363 2.233A7.505 7.505 0 0 1 22.983 22H20c0-2.61-1-4.986-2.637-6.767zm-2.023-2.276A7.98 7.98 0 0 0 18 7a7.964 7.964 0 0 0-1.015-3.903A5 5 0 0 1 21 8a4.999 4.999 0 0 1-5.66 4.957z"/></svg>
+                <span class="source-data-date">{{ getInfoDisplayDate(info) }}</span>
+                <span class="source-data-accounts">{{ info.nAccounts}}</span>
+                <svg class="source-data-accounts-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M2 22a8 8 0 1 1 16 0H2zm8-9c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6zm7.363 2.233A7.505 7.505 0 0 1 22.983 22H20c0-2.61-1-4.986-2.637-6.767zm-2.023-2.276A7.98 7.98 0 0 0 18 7a7.964 7.964 0 0 0-1.015-3.903A5 5 0 0 1 21 8a4.999 4.999 0 0 1-5.66 4.957z"/></svg>
                 <!--NOTE: Change the number format if the #items gets above 5 digits-->
-                <span class="sources-item-transactions">5432</span>
-                <svg class="sources-item-transactions-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M19.375 15.103A8.001 8.001 0 0 0 8.03 5.053l-.992-1.737A9.996 9.996 0 0 1 17 3.34c4.49 2.592 6.21 8.142 4.117 12.77l1.342.774-4.165 2.214-.165-4.714 1.246.719zM4.625 8.897a8.001 8.001 0 0 0 11.345 10.05l.992 1.737A9.996 9.996 0 0 1 7 20.66C2.51 18.068.79 12.518 2.883 7.89L1.54 7.117l4.165-2.214.165 4.714-1.246-.719zm8.79 5.931L10.584 12l-2.828 2.828-1.414-1.414 4.243-4.242L13.414 12l2.829-2.828 1.414 1.414-4.243 4.242z"/></svg>
-                <svg class="sources-item-remove-button clickable float-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M4 8h16v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8zm3-3V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v2h5v2H2V5h5zm2-1v1h6V4H9zm0 8v6h2v-6H9zm4 0v6h2v-6h-2z"/></svg>
+                <span class="source-data-transactions">{{ info.nTransactions}}</span>
+                <svg class="source-data-transactions-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M19.375 15.103A8.001 8.001 0 0 0 8.03 5.053l-.992-1.737A9.996 9.996 0 0 1 17 3.34c4.49 2.592 6.21 8.142 4.117 12.77l1.342.774-4.165 2.214-.165-4.714 1.246.719zM4.625 8.897a8.001 8.001 0 0 0 11.345 10.05l.992 1.737A9.996 9.996 0 0 1 7 20.66C2.51 18.068.79 12.518 2.883 7.89L1.54 7.117l4.165-2.214.165 4.714-1.246-.719zm8.79 5.931L10.584 12l-2.828 2.828-1.414-1.414 4.243-4.242L13.414 12l2.829-2.828 1.414 1.414-4.243 4.242z"/></svg>
+                <svg class="source-data-remove-button clickable float-right" @click="onRemoveSourceDataPressed(info.name)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M4 8h16v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8zm3-3V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v2h5v2H2V5h5zm2-1v1h6V4H9zm0 8v6h2v-6H9zm4 0v6h2v-6h-2z"/></svg>
+            </div>
+            <div class="no-source-data-message" v-if="getAllSourceDataInfo.length === 0">
+                <br>
+                <span>Er zijn nog geen bronnen toegevoegd.</span>
+                <br><br>
+                <ul>
+                    <li>Selecteer een bank en druk op de "Open"-knop om naar de bankomgeving te navigeren</li>
+                    <li>Exporteer je transacties in CSV-formaat.</li>
+                    <li>Druk vervolgens op de "Voeg Toe"-knop om dit CSV-bestand te gebruiken.</li>
+                </ul>
             </div>
         </div>
         <div class="sources-entry flex-center">
             <button class="button flex-item-full"
-                    @click="toggleSourceSelectionOpen()">
+                    @click="toggleSourceSelectionOpen()"
+                    @blur="sourceSelectionOpen = false">
                 <div class="sources-selection"
                      v-bind:class="{ disabled: sourceSelectionOpen === false }">
-                    <span v-for="name of getSourceSelectionNames()"
+                    <span v-for="name of getSourceSelectionNames"
                           v-on:click="onSourceItemSelected">{{ name }}</span>
                 </div>
                 <span class="float-left select-name">{{ sourceProperties[selectedSource].name }}</span>
                 <span class="float-right select-tick">▲</span>
             </button>
             <button class="sources-entry-open-button button" @click="onOpenButtonPressed">Open</button>
-            <button class="button">Voeg toe</button>
+            <label class="button" for="source-data-upload">Voeg toe</label>
+            <input type="file" v-on:change="onSourceDataUpload" class="disabled" id="source-data-upload" />
+
         </div>
     </div>
 </template>
 
 <script lang="ts">
+import * as dayjs from "dayjs";
+import { SourceDataInfo } from '../../../../types';
+
+const infoDateWidthThresholdRem = 40;
+const longInfoDateFormat = "D MMMM YYYY";
+const shortInfoDateFormat = "D MMM YYYY";
+
+/**
+ * Wraps and debounces an event handler, making sure it only gets called once every <wait> milliseconds.
+ * Note: Also calls the handler <wait> milliseconds after the last trigger.
+*/
+function debounce(func: any, wait: number) {
+	var timeout: NodeJS.Timeout | null;
+    var lastCalled: number | null;
+	return function(this: any) {
+        var context = this, args = arguments;
+
+        var callIfBouncePeriodOver = () => {
+            if (!lastCalled || Date.now() - lastCalled >= wait) {
+                func.apply(context, args);
+                lastCalled = Date.now();
+            }
+
+            clearTimeout(timeout!);
+        };
+
+        callIfBouncePeriodOver();
+        timeout = setTimeout(callIfBouncePeriodOver, wait);
+	};
+};
+
 export default {
     props: ["currentTab"],
     data: function () {
@@ -76,18 +120,22 @@ export default {
                     name: "Bunq",
                     url: "https://bunq.app/"
                 }
-            }
+            },
+            allSourceDataInfo: [],
+            infoDateFormat: longInfoDateFormat,
+            resizeEventHandler: null
         }
     },
-    methods: {
-        toggleSourceSelectionOpen(open: boolean | null = null) {
-            if (open === null) {
-                (this as any).$data.sourceSelectionOpen = !(this as any).$data.sourceSelectionOpen;
-            } else {
-                (this as any).$data.sourceSelectionOpen = open;
-            }
-        },
 
+    mounted: function () {
+        (this as any).$data.resizeEventHandler = debounce((this as any).updateInfoDateFormat, 50);
+        window.addEventListener('resize', (this as any).$data.resizeEventHandler);
+    },
+    beforeDestroy: function () {
+        window.removeEventListener('resize', (this as any).resizeEventHandler)
+    },
+
+    computed: {
         getSourceSelectionNames() : string[] {
             const selectedSource = (this as any).$data.selectedSource;
             const sourceProperties = (this as any).$data.sourceProperties;
@@ -95,6 +143,20 @@ export default {
             return Object.keys(sourceProperties)
                 .filter(source => source !== selectedSource)
                 .map(source => sourceProperties[source].name);
+        },
+
+        getAllSourceDataInfo() {
+            return (this as any).$root.$data.state.allSourceDataInfo();
+        }
+    },
+
+    methods: {
+        toggleSourceSelectionOpen(open: boolean | null = null) {
+            if (open === null) {
+                (this as any).$data.sourceSelectionOpen = !(this as any).$data.sourceSelectionOpen;
+            } else {
+                (this as any).$data.sourceSelectionOpen = open;
+            }
         },
 
         onSourceItemSelected(event: any) {
@@ -113,6 +175,39 @@ export default {
             const sourceProperties = (this as any).$data.sourceProperties;
 
             window.open(sourceProperties[selectedSource].url, "_blank");
+        },
+
+        onSourceDataUpload(event: any) {
+            const fileList = event.target.files; // eslint-disable-line no-invalid-this
+            if (fileList.length > 0) {
+                const file = fileList[0];
+                const reader = new FileReader();
+                reader.addEventListener("loadend", (event) => {
+                    const result = event.target?.result;
+
+                    (this as any).$root.$data.state.addSourceData(file.name, result);
+                });
+                reader.readAsText(file);
+            }
+        },
+
+        updateInfoDateFormat() {
+            const widthThresholdPx = infoDateWidthThresholdRem * parseFloat(getComputedStyle(document.documentElement).fontSize);
+            if (window.innerWidth >= widthThresholdPx) {
+                (this as any).$data.infoDateFormat = longInfoDateFormat;
+            } else {
+                (this as any).$data.infoDateFormat = shortInfoDateFormat;
+            }
+        },
+
+        getInfoDisplayDate(info: SourceDataInfo): string {
+            const dateFormat: string = (this as any).$data.infoDateFormat;
+
+            return dayjs(info.startDate).format(longInfoDateFormat) + " - " + dayjs(info.endDate).format(dateFormat);
+        },
+
+        onRemoveSourceDataPressed(name: string) {
+            return (this as any).$root.$data.state.removeSourceData(name);
         }
     },
 };

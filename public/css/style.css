@@ -122,7 +122,7 @@ a {
 
 .tab-nav .tab-nav-button {
     margin: 0.7rem 1.05rem 0.5rem;
-    font-size: 2.2rem;
+    font-size: 2.1rem;
     user-select: none;
     cursor: pointer;
     color: var(--color-primary-deselected);
@@ -130,6 +130,7 @@ a {
 
 .tab-nav .tab-nav-button.selected {
     color: var(--color-primary-selected);
+    transition: color 0.2s;
 }
 
 /* Home view */
@@ -152,18 +153,22 @@ a {
     flex-flow: column;
 }
 
+.sources-tab span {
+    user-select: none;
+}
+
 .sources-summary {
     display: flex;
     width: 100%;
-    height: 10rem;
-    margin-top: 1.5rem;
+    height: 8.5rem;
+    margin-top: 1rem;
     justify-content: center;
 }
 
 .sources-summary-icon {
     fill: var(--color-fill-icon);
-    width: 8rem;
-    height: 8rem;
+    width: 6.5rem;
+    height: 6.5rem;
     vertical-align: bottom;
 }
 
@@ -173,7 +178,7 @@ a {
 
 .sources-summary-stat {
     font-size: 3.5rem;
-    line-height: 8rem;
+    line-height: 6.5rem;
 }
 
 .sources-summary-stat-wide {
@@ -188,21 +193,41 @@ a {
     font-size: 1.5rem;
     line-height: 0.5rem;
     width: 8rem;
+    margin-right: -0.8rem;
     text-align: center;
 }
 
-.sources-list {
+.source-data-list {
     flex: auto;
     overflow-y: auto;
     margin: 1rem 0rem;
     padding: -1rem 0rem 0rem;
 }
 
-.sources-list > :last-of-type {
+.source-data-list > :last-of-type {
     margin: 0.5rem 0rem 0.3rem;
 }
 
-.sources-item {
+.no-source-data-message {
+    display: block;
+    color: var(--color-primary-deselected);
+}
+
+.no-source-data-message span {
+    margin-left: 1.7rem;
+}
+
+.no-source-data-message ul {
+    list-style-type: disc;
+}
+
+.no-source-data-message li {
+    margin-left: 1.7rem;
+    text-indent: -1.7rem;
+    user-select: none;
+}
+
+.source-data-item {
     position: relative;
     width: 100%;
     height: 6.25rem;
@@ -210,13 +235,13 @@ a {
     border: 0.2rem solid var(--color-primary-deselected);
 }
 
-.sources-item * {
+.source-data-item * {
     position: absolute;
 
     font-size: 1.3rem;
 }
 
-.sources-item-remove-button {
+.source-data-remove-button {
     right: 0.25rem;
     bottom: 1rem;
     width: 4.2rem;
@@ -225,7 +250,7 @@ a {
     fill: var(--color-fill-icon);
 }
 
-.sources-item-name {
+.source-data-name {
     position: absolute;
     left: 1rem;
     top: 0.4rem;
@@ -236,33 +261,33 @@ a {
     text-overflow: ellipsis;
 }
 
-.sources-item-date {
+.source-data-date {
     position: absolute;
     left: 0.9rem;
     bottom: 0.7rem;
     font-size: 1.2rem;
 }
 
-.sources-item-accounts {
-    right: 11.7rem;
+.source-data-accounts {
+    right: 11.4rem;
     bottom: 0.6rem;
 }
 
-.sources-item-accounts-icon {
+.source-data-accounts-icon {
     position: absolute;
-    right: 10rem;
+    right: 9.7rem;
     width: 1.7rem;
     height: 1.7rem;
     bottom: 0.8rem;
     fill: var(--color-fill-icon);
 }
 
-.sources-item-transactions {
-    right: 6rem;
+.source-data-transactions {
+    right: 5.9rem;
     bottom: 0.6rem;
 }
 
-.sources-item-transactions-icon {
+.source-data-transactions-icon {
     position: absolute;
     right: 4.1rem;
     width: 1.8rem;
@@ -275,12 +300,18 @@ a {
     margin-bottom: 1.2rem;
 }
 
-.sources-entry button {
+.sources-entry .button {
     margin-bottom: 0rem;
     max-width: 15rem;
     position: relative;
-    font-size: 1.6rem;
+    font-size: 1.7rem;
+    padding-bottom: 0.2rem;
     white-space: nowrap;
+}
+
+.sources-entry label {
+    line-height: 3.5rem;
+    user-select: none;
 }
 
 .sources-entry .select-tick {

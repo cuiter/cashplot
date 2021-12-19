@@ -40,6 +40,9 @@ export class UIImpl implements UI {
 
         let v = new Vue({
             el: "#app",
+            data: {
+                state: this.state,
+            },
         });
 
         this.onResize();
