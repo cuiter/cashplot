@@ -2,9 +2,9 @@ import { SourceTransaction, DECIMAL } from "../src/types";
 import { INGBankCSVSource } from "../src/sources/ing-csv";
 
 const testTransactionsNlNewFormat = `"Datum";"Naam / Omschrijving";"Rekening";"Tegenrekening";"Code";"Af Bij";"Bedrag (EUR)";"Mutatiesoort";"Mededelingen";"Saldo na mutatie";"Tag"
-20210712;bol.com b.v.;NL00MAIN1234567890;NL27INGB0000026500;ID;Af;50;iDEAL;Name: bol.com b.v. Description: 90340932902 2492049402;2950;
-20210629;Mr. G;NL00MAIN1234567890;NL00MAIN1234567890;GT;Af;1000;Online bankieren;To Orange Savings Account ABC123456;3000;
-20210628;Company Inc.;NL00MAIN1234567890;NL01WORK0987654321;OV;Bij;4000;Overschrijving;Salary for June 2020;4000;`;
+"20210712";"bol.com b.v.";"NL00MAIN1234567890";"NL27INGB0000026500";"ID";"Af";"50";"iDEAL";"Name: bol.com b.v. Description: 90340932902 2492049402";"2950";""
+"20210629";"Mr. G";"NL00MAIN1234567890";"NL00MAIN1234567890";"GT";"Af";"1000";"Online bankieren";"To Orange Savings Account ABC123456";"3000";""
+"20210628";"Company Inc.";"NL00MAIN1234567890";"NL01WORK0987654321";"OV";"Bij";"4000";"Overschrijving";"Salary for June 2020";"4000";""`;
 
 const testTransactionsEnOldFormat = `"Date","Name / Description","Account","Counterparty","Code","Debit/credit","Amount (EUR)","Transaction type","Notifications"
 20210712,bol.com b.v.,NL00MAIN1234567890,NL27INGB0000026500,ID,Debit,50,iDEAL,Name: bol.com b.v. Description: 90340932902 2492049402

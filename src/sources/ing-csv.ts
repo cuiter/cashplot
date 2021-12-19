@@ -21,6 +21,12 @@ const enHeaders = [
     "Notifications",
 ];
 
+const csvConfig: Papa.ParseConfig = {
+    header: true,
+    skipEmptyLines: true,
+    delimitersToGuess: [",", ";"],
+};
+
 /** Parser for ING Bank's official CSV format. Supports both the English and Dutch variant. */
 export class INGBankCSVSource implements Source {
     // For more info on the format itself, see
@@ -29,9 +35,7 @@ export class INGBankCSVSource implements Source {
     public hasValidHeader(transactionData: string): boolean {
         var firstLine = transactionData.split("\n", 1)[0];
 
-        const parsedCsv = Papa.parse(firstLine, {
-            header: true,
-        });
+        const parsedCsv = Papa.parse(firstLine, csvConfig);
 
         if (parsedCsv.errors.length !== 0) {
             return false;
@@ -55,7 +59,11 @@ export class INGBankCSVSource implements Source {
             line !== null ? ` on line ${line}` : ""
         }: `;
 
-        function useColumn(description: string, columnNames: string[]): string {
+        function useColumn(
+            description: string,
+            columnNames: string[],
+            required: boolean = true,
+        ): string | null {
             const values = columnNames
                 .map((name) => row[name])
                 .filter(
@@ -64,10 +72,12 @@ export class INGBankCSVSource implements Source {
 
             if (values.length > 0) {
                 return values[0];
-            } else {
+            } else if (required) {
                 throw new Error(
                     `${errorPrefix}Could not determine ${description} (empty column)`,
                 );
+            } else {
+                return null;
             }
         }
 
@@ -77,10 +87,11 @@ export class INGBankCSVSource implements Source {
             "Naam / Omschrijving",
         ]);
         const account = useColumn("account", ["Account", "Rekening"]);
-        const contraAccount = useColumn("contra-account", [
-            "Counterparty",
-            "Tegenrekening",
-        ]);
+        const contraAccount = useColumn(
+            "contra-account",
+            ["Counterparty", "Tegenrekening"],
+            false,
+        );
         const rawDirection = useColumn("direction", ["Debit/credit", "Af Bij"]);
         const rawAmount = useColumn("amount", ["Amount (EUR)", "Bedrag (EUR)"]);
         const description = useColumn("description", [
@@ -89,11 +100,11 @@ export class INGBankCSVSource implements Source {
         ]);
 
         const date = new Date(
-            rawDate.substr(0, 4) +
+            rawDate!.substr(0, 4) +
                 "-" +
-                rawDate.substr(4, 2) +
+                rawDate!.substr(4, 2) +
                 "-" +
-                rawDate.substr(6, 2),
+                rawDate!.substr(6, 2),
         );
         assert(
             date instanceof Date && !isNaN(date.valueOf()),
@@ -110,24 +121,21 @@ export class INGBankCSVSource implements Source {
             `${errorPrefix}Could not determine direction from value: "${rawDirection}"`,
         );
         const amount =
-            Number(rawAmount.replace(",", ".")) *
+            Number(rawAmount!.replace(",", ".")) *
             (direction ? DECIMAL : -DECIMAL);
 
         return new SourceTransaction(
             date,
             amount,
-            account,
+            account!,
             contraAccount,
             contraAccountName,
-            description,
+            description!,
         );
     }
 
     public parseTransactions(transactionData: string): SourceTransaction[] {
-        const parsedCsv = Papa.parse(transactionData, {
-            header: true,
-            skipEmptyLines: true,
-        });
+        const parsedCsv = Papa.parse(transactionData, csvConfig);
 
         if (parsedCsv.errors.length !== 0) {
             const errorsJoined = parsedCsv.errors
