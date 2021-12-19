@@ -15,7 +15,17 @@ export class SourcesImpl implements Sources {
 
         for (var source of sources) {
             if (source.hasValidHeader(transactionsData)) {
-                return source.parseTransactions(transactionsData);
+                var transactions = source.parseTransactions(transactionsData);
+
+                if (transactions.length === 0) {
+                    throw new Error(
+                        "No transactions were present in the given data",
+                    );
+                } else {
+                    return transactions.sort(
+                        (a, b) => a.date.getTime() - b.date.getTime(),
+                    );
+                }
             }
         }
 

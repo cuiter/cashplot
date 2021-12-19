@@ -4,8 +4,6 @@ import { TransactionsImpl } from "../src/transactions";
 import { DECIMAL, SourceTransaction } from "../src/types";
 
 describe("TransactionsImpl", () => {
-    const injector = createInjector().provideClass("state", StateImpl);
-
     test("should combine multiple lists of source transactions into one", () => {
         const sourceTransactions = [
             [
