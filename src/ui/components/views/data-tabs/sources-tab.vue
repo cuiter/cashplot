@@ -62,7 +62,7 @@ import { SourceDataInfo } from '../../../../types';
 
 const infoDateWidthThresholdRem = 40;
 const longInfoDateFormat = "D MMMM YYYY";
-const shortInfoDateFormat = "D MMM YYYY";
+const shortInfoDateFormat = "D MMM. YYYY";
 
 /**
  * Wraps and debounces an event handler, making sure it only gets called once every <wait> milliseconds.
@@ -128,6 +128,7 @@ export default {
     mounted: function () {
         (this as any).$data.resizeEventHandler = debounce((this as any).updateInfoDateFormat, 50);
         window.addEventListener('resize', (this as any).$data.resizeEventHandler);
+        (this as any).updateInfoDateFormat();
     },
     beforeDestroy: function () {
         window.removeEventListener('resize', (this as any).resizeEventHandler)
@@ -192,16 +193,24 @@ export default {
         },
 
         onSourceDataUpload(event: any) {
-            const fileList = event.target.files; // eslint-disable-line no-invalid-this
-            if (fileList.length > 0) {
-                const file = fileList[0];
-                const reader = new FileReader();
-                reader.addEventListener("loadend", (event) => {
-                    const result = event.target?.result;
+            try {
+                const fileList = event.target.files; // eslint-disable-line no-invalid-this
+                if (fileList.length > 0) {
+                    const file = fileList[0];
+                    const reader = new FileReader();
+                    reader.addEventListener("loadend", (event) => {
+                        try {
+                            const result = event.target?.result;
 
-                    (this as any).$root.$data.state.addSourceData(file.name, result);
-                });
-                reader.readAsText(file);
+                            (this as any).$root.$data.state.addSourceData(file.name, result);
+                        } catch (err) {
+                            alert(err);
+                        }
+                    });
+                    reader.readAsText(file);
+                }
+            } catch (err) {
+                alert(err);
             }
         },
 
