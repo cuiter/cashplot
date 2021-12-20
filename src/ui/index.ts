@@ -26,8 +26,22 @@ export class UIImpl implements UI {
     constructor(private state: State) {}
 
     public init(): void {
+        // Global error handler
+        const handleError = (err: Error, ...args: any[]) => {
+            // For debugging purposes, show every error as an alert message.
+            // Note: an alternative should be considered when moving to production.
+
+            alert(err);
+            console.error(err, ...args);
+        };
+
+        // Install global error handler
         Vue.config.errorHandler = function (err, vm, info) {
-            console.log("Error: ", err, "\nInfo:", info);
+            handleError(err, "\nInfo:", info);
+        };
+        window.onerror = function (msg, url, lineNo, columnNo, err) {
+            handleError(err!);
+            return false;
         };
 
         // Load every Vue component from the components directory.
@@ -42,6 +56,9 @@ export class UIImpl implements UI {
             el: "#app",
             data: {
                 state: this.state,
+            },
+            methods: {
+                handleError: handleError,
             },
         });
 

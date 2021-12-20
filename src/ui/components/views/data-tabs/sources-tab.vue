@@ -50,7 +50,7 @@
             </button>
             <button class="sources-entry-open-button button" @click="onOpenButtonPressed">Open</button>
             <label class="button" for="source-data-upload">Voeg toe</label>
-            <input type="file" v-on:change="onSourceDataUpload" class="disabled" id="source-data-upload" />
+            <input type="file" v-on:change="onSourceDataUpload" class="disabled" id="source-data-upload" ref="sourceDataUpload" />
 
         </div>
     </div>
@@ -193,24 +193,22 @@ export default {
         },
 
         onSourceDataUpload(event: any) {
-            try {
-                const fileList = event.target.files; // eslint-disable-line no-invalid-this
-                if (fileList.length > 0) {
-                    const file = fileList[0];
-                    const reader = new FileReader();
-                    reader.addEventListener("loadend", (event) => {
-                        try {
-                            const result = event.target?.result;
-
-                            (this as any).$root.$data.state.addSourceData(file.name, result);
-                        } catch (err) {
-                            alert(err);
-                        }
-                    });
-                    reader.readAsText(file);
-                }
-            } catch (err) {
-                alert(err);
+            const fileList = event.target.files; // eslint-disable-line no-invalid-this
+            if (fileList.length > 0) {
+                const file = fileList[0];
+                const reader = new FileReader();
+                reader.addEventListener("loadend", (event) => {
+                    try {
+                        const result = event.target?.result;
+                        (this as any).$root.$data.state.addSourceData(file.name, result);
+                    } catch (err) {
+                        (this as any).$root.handleError(err);
+                    } finally {
+                        // Reset input to allow user to select any file again.
+                        (this as any).$refs.sourceDataUpload.value = "";
+                    }
+                });
+                reader.readAsText(file);
             }
         },
 
