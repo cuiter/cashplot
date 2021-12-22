@@ -1,4 +1,9 @@
-import { SourceDataInfo, SourceTransaction } from "./types";
+import {
+    Preferences,
+    Settings,
+    SourceDataInfo,
+    SourceTransaction,
+} from "./types";
 
 export interface UI {
     init(): void;
@@ -45,4 +50,27 @@ export interface Transactions {
     combineSources(
         transactions: Array<Array<SourceTransaction>>,
     ): Array<SourceTransaction>;
+}
+
+export interface Persistence {
+    loadSettings(): Settings;
+    storeSettings(settings: Settings): void;
+
+    loadPreferences(): Preferences;
+    storePreferences(preferences: Preferences): void;
+
+    loadAllSourceTransactionData(): { name: string; transactionData: string }[];
+    storeSourceTransactionData(name: string, transactionData: string): void;
+    removeSourceTransactionData(name: string): void;
+}
+
+export interface PersistenceDriver {
+    loadObject(section: string): object | null;
+    storeObject(section: string, object: object): void;
+
+    loadHugeText(section: string): string | null;
+    storeHugeText(section: string, text: string): void;
+
+    listSections(): string[];
+    removeSection(section: string): void;
 }
