@@ -1,6 +1,7 @@
 import { createInjector } from "typed-inject";
 import { StateImpl } from "../src/state";
-import { DECIMAL, Sources, SourceTransaction } from "../src/types";
+import { DECIMAL, SourceTransaction } from "../src/types";
+import { Sources } from "../src/interfaces";
 
 class SourcesMock implements Sources {
     public parseTransactions(transactionData: string): SourceTransaction[] {

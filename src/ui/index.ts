@@ -1,4 +1,4 @@
-import { State, UI } from "../types";
+import { State, UI } from "../interfaces";
 import Vue from "vue";
 import AppComponent from "./components/app.vue";
 import ViewComponent from "./components/view.vue";

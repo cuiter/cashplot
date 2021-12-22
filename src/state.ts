@@ -1,10 +1,5 @@
-import {
-    Source,
-    SourceDataInfo,
-    Sources,
-    SourceTransaction,
-    State,
-} from "./types";
+import { SourceDataInfo, SourceTransaction } from "./types";
+import { Sources, State } from "./interfaces";
 
 class SourceData {
     constructor(
