@@ -52,6 +52,14 @@ export class WildcardFilter {
 
 export class SourceDataInfo {
     constructor(
+        public totalAccounts: number = 0,
+        public totalTransactions: number = 0,
+        public items: SourceDataInfoItem[] = [],
+    ) {}
+}
+
+export class SourceDataInfoItem {
+    constructor(
         public name: string,
         public startDate: Date,
         public endDate: Date,

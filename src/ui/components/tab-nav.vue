@@ -8,15 +8,15 @@
         </span>
         <span
             class="tab-nav-button"
-            @click="openTab('accounts')"
-            v-bind:class="{ selected: value === 'accounts' }">
-            Accounts
-        </span>
-        <span
-            class="tab-nav-button"
             @click="openTab('categories')"
             v-bind:class="{ selected: value === 'categories' }">
             Categorieën
+        </span>
+        <span
+            class="tab-nav-button"
+            @click="openTab('accounts')"
+            v-bind:class="{ selected: value === 'accounts' }">
+            Accounts
         </span>
     </div>
 </template>

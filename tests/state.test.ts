@@ -1,7 +1,7 @@
 import { createInjector } from "typed-inject";
 import { StateImpl } from "../src/state";
 import { DECIMAL, SourceTransaction } from "../src/types";
-import { Sources } from "../src/interfaces";
+import { Source, Sources, Transactions } from "../src/interfaces";
 
 class SourcesMock implements Sources {
     public parseTransactions(transactionData: string): SourceTransaction[] {
@@ -47,8 +47,43 @@ class SourcesMock implements Sources {
     }
 }
 
+class TransactionsMock implements Transactions {
+    public combineSources(
+        transactions: SourceTransaction[][],
+    ): SourceTransaction[] {
+        return [
+            new SourceTransaction(
+                new Date("2021-11-02"),
+                -20 * DECIMAL,
+                "NL00MAIN1234567890",
+                "NL98INGB2152156592",
+                "Mr. John",
+                "Lunch",
+            ),
+            new SourceTransaction(
+                new Date("2021-11-13"),
+                430 * DECIMAL,
+                "NL00MAIN1234567890",
+                "NL23ABNA9349042743",
+                "Mike's Tire Repairs",
+                "13th of November tire sale, 4x sports tires",
+            ),
+            new SourceTransaction(
+                new Date("2021-11-16"),
+                200 * DECIMAL,
+                "NL00SCND0987654321",
+                "NL23ABNA9349042743",
+                "Robot Computer Shop",
+                "Invoice 934830293, laptop model VT94",
+            ),
+        ];
+    }
+}
+
 describe("StateImpl", () => {
-    const injector = createInjector().provideClass("sources", SourcesMock);
+    const injector = createInjector()
+        .provideClass("sources", SourcesMock)
+        .provideClass("transactions", TransactionsMock);
 
     test("should add source data (including transactions) to its collection", () => {
         const state = injector.injectClass(StateImpl);
@@ -106,17 +141,20 @@ describe("StateImpl", () => {
 
         const info = state.allSourceDataInfo();
 
-        expect(info.length).toBe(2);
-        expect(info[0].name).toBe("data1.csv");
-        expect(info[0].startDate).toEqual(new Date("2021-11-02"));
-        expect(info[0].endDate).toEqual(new Date("2021-11-16"));
-        expect(info[0].nAccounts).toBe(2);
-        expect(info[0].nTransactions).toBe(3);
+        expect(info.totalAccounts).toBe(3);
+        expect(info.totalTransactions).toBe(3);
 
-        expect(info[1].name).toBe("data2.csv");
-        expect(info[1].startDate).toEqual(new Date("2021-11-03"));
-        expect(info[1].endDate).toEqual(new Date("2021-11-03"));
-        expect(info[1].nAccounts).toBe(1);
-        expect(info[1].nTransactions).toBe(1);
+        expect(info.items.length).toBe(2);
+        expect(info.items[0].name).toBe("data1.csv");
+        expect(info.items[0].startDate).toEqual(new Date("2021-11-02"));
+        expect(info.items[0].endDate).toEqual(new Date("2021-11-16"));
+        expect(info.items[0].nAccounts).toBe(2);
+        expect(info.items[0].nTransactions).toBe(3);
+
+        expect(info.items[1].name).toBe("data2.csv");
+        expect(info.items[1].startDate).toEqual(new Date("2021-11-03"));
+        expect(info.items[1].endDate).toEqual(new Date("2021-11-03"));
+        expect(info.items[1].nAccounts).toBe(1);
+        expect(info.items[1].nTransactions).toBe(1);
     });
 });

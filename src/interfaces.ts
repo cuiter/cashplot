@@ -22,7 +22,7 @@ export interface State {
      */
     removeSourceData(name: string): void;
     /** Returns information about the loaded source data items. */
-    allSourceDataInfo(): SourceDataInfo[];
+    allSourceDataInfo(): SourceDataInfo;
 }
 
 export interface Sources {
