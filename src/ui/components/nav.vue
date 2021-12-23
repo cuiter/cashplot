@@ -38,8 +38,8 @@
         </div>
         <div
             class="nav-button"
-            @click="openView('budget')"
-            v-bind:class="{ selected: value === 'budget' }"
+            @click="isDataAvailable && openView('budget')"
+            v-bind:class="{ selected: value === 'budget', faded: !isDataAvailable }"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -56,8 +56,8 @@
         </div>
         <div
             class="nav-button"
-            @click="openView('balance')"
-            v-bind:class="{ selected: value === 'balance' }"
+            @click="isDataAvailable && openView('balance')"
+            v-bind:class="{ selected: value === 'balance', faded: !isDataAvailable }"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -78,6 +78,11 @@
 <script lang="ts">
 export default {
     props: ["value"],
+    computed: {
+        isDataAvailable() : boolean {
+            return (this as any).$root.$data.state.allSourceDataInfo().length !== 0;
+        },
+    },
     methods: {
         openView(view: string) {
             (this as any).$props.value = view;

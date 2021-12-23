@@ -416,7 +416,7 @@ a {
 }
 
 .faded {
-    color: #b6c1ca;
+    filter: brightness(55%);
     pointer-events: none;
 }
 
