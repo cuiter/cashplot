@@ -12,6 +12,8 @@ export class StateImpl implements State {
     public static inject = ["sources"] as const;
 
     private sourceDatas: SourceData[] = [];
+    // Note: re-generated whenever sourceDatas changes.
+    private sourceDataInfos: SourceDataInfo[] = [];
 
     constructor(private sources: Sources) {}
 
@@ -29,16 +31,18 @@ export class StateImpl implements State {
         const newName = this.findNewName(name);
         const transactions = this.sources.parseTransactions(transactionData);
         this.sourceDatas.push(new SourceData(newName, transactions));
+        this.updateSourceDataInfos();
     }
 
     public removeSourceData(name: string): void {
         this.sourceDatas = this.sourceDatas.filter(
             (sourceData) => sourceData.name !== name,
         );
+        this.updateSourceDataInfos();
     }
 
-    public allSourceDataInfo(): SourceDataInfo[] {
-        return this.sourceDatas.map((sourceData) => {
+    private updateSourceDataInfos(): void {
+        const newSourceDataInfos = this.sourceDatas.map((sourceData) => {
             return new SourceDataInfo(
                 sourceData.name,
                 sourceData.transactions[0].date,
@@ -54,5 +58,16 @@ export class StateImpl implements State {
                 sourceData.transactions.length,
             );
         });
+
+        // Modify the contents, but keep the array reference the same.
+        // May allow for future performance optimizations.
+        this.sourceDataInfos.splice(0, this.sourceDataInfos.length);
+        for (const sourceDataInfo of newSourceDataInfos) {
+            this.sourceDataInfos.push(sourceDataInfo);
+        }
+    }
+
+    public allSourceDataInfo(): SourceDataInfo[] {
+        return this.sourceDataInfos;
     }
 }
