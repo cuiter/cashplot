@@ -1,3 +1,5 @@
+import { hash } from "./utils";
+
 const DECIMAL: number = 100;
 export { DECIMAL };
 
@@ -69,12 +71,20 @@ export class SourceDataInfoItem {
 }
 
 export class SourceTransaction {
+    public readonly hash: number;
+
     constructor(
-        public date: Date,
-        public amount: number,
-        public account: string,
-        public contraAccount: string | null,
-        public contraAccountName: string | null,
-        public description: string,
-    ) {}
+        public readonly date: Date,
+        public readonly amount: number,
+        public readonly account: string,
+        public readonly contraAccount: string | null,
+        public readonly contraAccountName: string | null,
+        public readonly description: string,
+    ) {
+        this.hash = hash(JSON.stringify(this));
+    }
+
+    public equals(other: SourceTransaction) {
+        return JSON.stringify(this) === JSON.stringify(other);
+    }
 }

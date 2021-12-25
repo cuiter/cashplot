@@ -17,7 +17,7 @@ class SourcesMock implements Sources {
                 ),
                 new SourceTransaction(
                     new Date("2021-11-13"),
-                    430 * DECIMAL,
+                    -430 * DECIMAL,
                     "NL00MAIN1234567890",
                     "NL23ABNA9349042743",
                     "Mike's Tire Repairs",
@@ -25,7 +25,7 @@ class SourcesMock implements Sources {
                 ),
                 new SourceTransaction(
                     new Date("2021-11-16"),
-                    200 * DECIMAL,
+                    -200 * DECIMAL,
                     "NL00SCND0987654321",
                     "NL23ABNA9349042743",
                     "Robot Computer Shop",
@@ -62,7 +62,7 @@ class TransactionsMock implements Transactions {
             ),
             new SourceTransaction(
                 new Date("2021-11-13"),
-                430 * DECIMAL,
+                -430 * DECIMAL,
                 "NL00MAIN1234567890",
                 "NL23ABNA9349042743",
                 "Mike's Tire Repairs",
@@ -70,7 +70,7 @@ class TransactionsMock implements Transactions {
             ),
             new SourceTransaction(
                 new Date("2021-11-16"),
-                200 * DECIMAL,
+                -200 * DECIMAL,
                 "NL00SCND0987654321",
                 "NL23ABNA9349042743",
                 "Robot Computer Shop",
