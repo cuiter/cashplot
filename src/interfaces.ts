@@ -53,15 +53,15 @@ export interface Transactions {
 }
 
 export interface Persistence {
-    loadSettings(): Settings;
+    loadSettings(): Settings | null;
     storeSettings(settings: Settings): void;
 
-    loadPreferences(): Preferences;
+    loadPreferences(): Preferences | null;
     storePreferences(preferences: Preferences): void;
 
-    loadAllSourceTransactionData(): { name: string; transactionData: string }[];
-    storeSourceTransactionData(name: string, transactionData: string): void;
-    removeSourceTransactionData(name: string): void;
+    loadAllSourceData(): { name: string; transactionData: string }[];
+    storeSourceData(name: string, transactionData: string): void;
+    removeSourceData(name: string): void;
 }
 
 export interface PersistenceDriver {

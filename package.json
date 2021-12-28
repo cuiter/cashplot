@@ -12,8 +12,10 @@
         "lint": "prettier --write ."
     },
     "dependencies": {
+        "class-transformer": "^0.5.1",
         "dayjs": "^1.10.7",
         "papaparse": "^5.3.1",
+        "reflect-metadata": "^0.1.13",
         "typed-inject": "^3.0.1",
         "vue": "^2.6.11"
     },
