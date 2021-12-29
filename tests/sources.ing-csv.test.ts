@@ -1,5 +1,5 @@
 import { SourceTransaction, DECIMAL } from "../src/types";
-import { INGBankCSVSource } from "../src/sources/ing-csv";
+import { INGBankCSVSource } from "../src/components/sources/ing-csv";
 
 const testTransactionsNlNewFormat = `"Datum";"Naam / Omschrijving";"Rekening";"Tegenrekening";"Code";"Af Bij";"Bedrag (EUR)";"Mutatiesoort";"Mededelingen";"Saldo na mutatie";"Tag"
 "20210712";"bol.com b.v.";"NL00MAIN1234567890";"NL27INGB0000026500";"ID";"Af";"50";"iDEAL";"Name: bol.com b.v. Description: 90340932902 2492049402";"2950";""

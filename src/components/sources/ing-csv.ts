@@ -1,6 +1,6 @@
-import { SourceTransaction, DECIMAL } from "../types";
-import { Source } from "../interfaces";
-import { assert } from "../utils";
+import { SourceTransaction, DECIMAL } from "../../types";
+import { Source } from "../../interfaces";
+import { assert } from "../../utils";
 import * as Papa from "papaparse";
 
 const nlHeaders = [

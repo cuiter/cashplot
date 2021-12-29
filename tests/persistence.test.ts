@@ -1,6 +1,6 @@
 import { createInjector } from "typed-inject";
 import { PersistenceDriver } from "../src/interfaces";
-import { PersistenceImpl } from "../src/persistence";
+import { PersistenceImpl } from "../src/components/persistence";
 import {
     Account,
     Category,

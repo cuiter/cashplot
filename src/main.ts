@@ -1,16 +1,12 @@
 import "reflect-metadata";
 
 import { createInjector } from "typed-inject";
-import { SourcesImpl } from "./sources";
-import { TransactionsImpl } from "./transactions";
-import { PersistenceImpl } from "./persistence";
-import { StateImpl } from "./state";
-import { UIImpl } from "./ui";
-import { LocalStorageDriver } from "./persistence/localstorage-driver";
-
-// Enable live reload for these files.
-require("../public/index.html");
-require("../public/css/style.css");
+import { SourcesImpl } from "./components/sources";
+import { TransactionsImpl } from "./components/transactions";
+import { PersistenceImpl } from "./components/persistence";
+import { LocalStorageDriver } from "./components/persistence/localstorage-driver";
+import { StateImpl } from "./components/state";
+import { UIImpl } from "./components/ui";
 
 const appInjector = createInjector()
     .provideClass("sources", SourcesImpl)

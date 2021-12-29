@@ -1,5 +1,5 @@
 import { createInjector } from "typed-inject";
-import { StateImpl } from "../src/state";
+import { StateImpl } from "../src/components/state";
 import {
     DECIMAL,
     Preferences,

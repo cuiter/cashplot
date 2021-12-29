@@ -1,6 +1,6 @@
 import { createInjector } from "typed-inject";
-import { StateImpl } from "../src/state";
-import { TransactionsImpl } from "../src/transactions";
+import { StateImpl } from "../src/components/state";
+import { TransactionsImpl } from "../src/components/transactions";
 import { DECIMAL, SourceTransaction } from "../src/types";
 
 describe("TransactionsImpl", () => {

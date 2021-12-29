@@ -1,5 +1,5 @@
-import { SourceTransaction } from "./types";
-import { Transactions } from "./interfaces";
+import { SourceTransaction } from "../types";
+import { Transactions } from "../interfaces";
 
 export class TransactionsImpl implements Transactions {
     constructor() {}

@@ -1,5 +1,9 @@
-import { SourceDataInfo, SourceDataInfoItem, SourceTransaction } from "./types";
-import { Persistence, Sources, State, Transactions } from "./interfaces";
+import {
+    SourceDataInfo,
+    SourceDataInfoItem,
+    SourceTransaction,
+} from "../types";
+import { Persistence, Sources, State, Transactions } from "../interfaces";
 
 class SourceData {
     constructor(

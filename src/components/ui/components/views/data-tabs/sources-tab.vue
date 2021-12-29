@@ -58,7 +58,7 @@
 
 <script lang="ts">
 import * as dayjs from "dayjs";
-import { SourceDataInfo, SourceDataInfoItem } from '../../../../types';
+import { SourceDataInfo, SourceDataInfoItem } from '../../../../../types';
 
 const infoDateWidthThresholdRem = 40;
 const longInfoDateFormat = "D MMMM YYYY";

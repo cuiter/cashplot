@@ -1,0 +1,41 @@
+@startuml
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/v2.3.0/C4_Context.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/v2.3.0/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/v2.3.0/C4_Component.puml
+
+
+Container_Boundary(c1, "CashPlot") {
+    Component(ui_component, "UI", "HTML+CSS page and TypeScript/Vue modules", "Provides a user interface and handles UI events")
+    Component(state_component, "State", "TypeScript module", "Manages user actions and application state.")
+    Component(uistate_component, "UIState", "TypeScript module", "Manages state and preferences specific to the HTML+CSS User Interface")
+    Component(persistence_component, "Persistence", "TypeScript module", "Stores and loads settings and preferences persistently")
+    Component(balance_component, "Balance", "TypeScript module", "Calculates account balances and provides Plotly data for balance graphs")
+    Component(queries_component, "Queries", "TypeScript module", "Filters and optionally sorts or sums up transactions by category, filter and/or a specific time period")
+    Component(transactions_component, "Transactions", "TypeScript module", "Assigns categories and accounts to raw transactions")
+    Component(sources_component, "Sources", "TypeScript modules", "Parses raw transactions from user-provided data")
+    Component(data_component, "Data", "TypeScript module", "Data definitions for module interfaces, preferences, transactions, categories, filters and accounts")
+
+    Rel(ui_component, state_component, "Uses")
+    Rel(ui_component, uistate_component, "Uses")
+    Rel(uistate_component, persistence_component, "Uses")
+    Rel(state_component, persistence_component, "Uses")
+    Rel(state_component, balance_component, "Uses")
+    Rel(state_component, queries_component, "Uses")
+    Rel(state_component, transactions_component, "Uses")
+    Rel(state_component, sources_component, "Uses")
+    Rel(state_component, data_component, "Uses")
+    Rel(balance_component, data_component, "Uses")
+    Rel(queries_component, data_component, "Uses")
+    Rel(transactions_component, data_component, "Uses")
+    Rel(sources_component, data_component, "Uses")
+}
+
+System_Ext(browser_dom, "Browser DOM")
+System_Ext(browser_localstorage, "Browser LocalStorage")
+
+Rel(ui_component, browser_dom, "Interacts with")
+Rel(persistence_component, browser_localstorage, "Reads from and writes to")
+
+
+@enduml
