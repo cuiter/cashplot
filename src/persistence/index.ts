@@ -1,4 +1,9 @@
-import { classToPlain, plainToClass } from "class-transformer";
+import {
+    classToPlain,
+    instanceToInstance,
+    instanceToPlain,
+    plainToClass,
+} from "class-transformer";
 import { Persistence, PersistenceDriver } from "../interfaces";
 import { Preferences, Settings } from "../types";
 import { assert } from "../utils";
@@ -31,13 +36,16 @@ export class PersistenceImpl implements Persistence {
             settingsVersion === 0,
             `Could not load settings object: unsupported version ${settingsVersion}`,
         );
+        delete (settingsObj as any).version;
         return settingsObj === null
             ? null
             : plainToClass(Settings, settingsObj);
     }
 
     public storeSettings(settings: Settings) {
-        this.persistenceDriver.storeObject(settingsKey, classToPlain(settings));
+        var settingsObj = instanceToPlain(settings);
+        settingsObj.version = settingsVersion;
+        this.persistenceDriver.storeObject(settingsKey, settingsObj);
     }
 
     public loadPreferences(): Preferences | null {
@@ -48,55 +56,57 @@ export class PersistenceImpl implements Persistence {
             preferencesVersion === 0,
             `Could not load preferences object: unsupported version ${preferencesVersion}`,
         );
+        delete (preferencesObj as any).version;
         return preferencesObj === null
             ? null
             : plainToClass(Preferences, preferencesObj);
     }
 
     public storePreferences(preferences: Preferences) {
-        this.persistenceDriver.storeObject(
-            preferencesKey,
-            classToPlain(preferences),
-        );
+        var preferencesObj = instanceToPlain(preferences);
+        preferencesObj.version = 0;
+        this.persistenceDriver.storeObject(preferencesKey, preferencesObj);
     }
 
-    public loadAllSourceData(): {
-        name: string;
-        transactionData: string;
-    }[] {
+    public listSourceDataNames(): string[] {
         return this.persistenceDriver
             .listSections()
             .filter((section) => section.startsWith(sourceDataPrefix))
-            .map((section) => {
-                const sectionData =
-                    this.persistenceDriver.loadHugeText(section)!;
-                const version = Number(
-                    sectionData.substr(0, hugeTextVersionPrefixLength),
-                );
-                assert(
-                    version === 0,
-                    `Could not load source data: unsupported version ${version}`,
-                );
+            .map((section) => section.substr(sourceDataPrefix.length));
+    }
 
-                return {
-                    name: section.substr(sourceDataPrefix.length),
-                    // Note: Assumes the contents have not been removed since
-                    //       the this.persistenceDriver.listSections() call.
-                    transactionData: sectionData.substr(
-                        hugeTextVersionPrefixLength,
-                    ),
-                };
-            });
+    public loadSourceData(name: string): {
+        transactionData: string;
+    } {
+        const section = sourceDataPrefix + name;
+        const sectionData = this.persistenceDriver.loadHugeText(section)!;
+        const version = Number(
+            sectionData.substr(0, hugeTextVersionPrefixLength),
+        );
+        assert(
+            version === 0,
+            `Could not load source data: unsupported version ${version}`,
+        );
+
+        return {
+            // Note: Assumes the contents have not been removed since
+            //       the this.persistenceDriver.listSections() call.
+            transactionData: sectionData.substr(hugeTextVersionPrefixLength),
+        };
     }
 
     public storeSourceData(name: string, transactionData: string) {
+        const versionPrefix = sourceDataVersion.toLocaleString("en-US", {
+            minimumIntegerDigits: hugeTextVersionPrefixLength,
+            useGrouping: false,
+        });
         this.persistenceDriver.storeHugeText(
             sourceDataPrefix + name,
-            transactionData,
+            versionPrefix + transactionData,
         );
     }
 
     public removeSourceData(name: string) {
-        this.persistenceDriver.removeSection(name);
+        this.persistenceDriver.removeSection(sourceDataPrefix + name);
     }
 }

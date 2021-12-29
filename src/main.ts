@@ -6,6 +6,7 @@ import { TransactionsImpl } from "./transactions";
 import { PersistenceImpl } from "./persistence";
 import { StateImpl } from "./state";
 import { UIImpl } from "./ui";
+import { LocalStorageDriver } from "./persistence/localstorage-driver";
 
 // Enable live reload for these files.
 require("../public/index.html");
@@ -14,6 +15,7 @@ require("../public/css/style.css");
 const appInjector = createInjector()
     .provideClass("sources", SourcesImpl)
     .provideClass("transactions", TransactionsImpl)
+    .provideClass("persistenceDriver", LocalStorageDriver)
     .provideClass("persistence", PersistenceImpl)
     .provideClass("state", StateImpl);
 

@@ -59,8 +59,9 @@ export interface Persistence {
     loadPreferences(): Preferences | null;
     storePreferences(preferences: Preferences): void;
 
-    loadAllSourceData(): { name: string; transactionData: string }[];
+    listSourceDataNames(): string[];
     storeSourceData(name: string, transactionData: string): void;
+    loadSourceData(name: string): { transactionData: string };
     removeSourceData(name: string): void;
 }
 
