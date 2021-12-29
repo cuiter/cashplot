@@ -3,7 +3,16 @@
     "private": true,
     "jest": {
         "preset": "ts-jest",
-        "testEnvironment": "node"
+        "testEnvironment": "node",
+        "globals": {
+            "ts-jest": {
+                "diagnostics": {
+                    "ignoreCodes": [
+                        "TS151001"
+                    ]
+                }
+            }
+        }
     },
     "scripts": {
         "dev": "webpack && xdg-open ./src/frontend/index.html",
