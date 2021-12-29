@@ -174,6 +174,15 @@ describe("PersistenceImpl", () => {
         );
     });
 
+    test("should signal an error when requested source data isn't available in persistent storage", () => {
+        const persistenceDriver = new PersistenceDriverMock();
+        const persistence = new PersistenceImpl(persistenceDriver);
+
+        expect(() => persistence.loadSourceData("transactions1.csv")).toThrow(
+            'Could not load source data from persistent storage with name "transactions1.csv"',
+        );
+    });
+
     test("can remove source data from persistent storage", () => {
         const persistenceDriver = new PersistenceDriverMock();
         const persistence = new PersistenceImpl(persistenceDriver);

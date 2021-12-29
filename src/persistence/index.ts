@@ -80,6 +80,11 @@ export class PersistenceImpl implements Persistence {
     } {
         const section = sourceDataPrefix + name;
         const sectionData = this.persistenceDriver.loadHugeText(section)!;
+        if (sectionData === null) {
+            throw new Error(
+                `Could not load source data from persistent storage with name \"${name}\"`,
+            );
+        }
         const version = Number(
             sectionData.substr(0, hugeTextVersionPrefixLength),
         );

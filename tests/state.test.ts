@@ -1,7 +1,12 @@
 import { createInjector } from "typed-inject";
 import { StateImpl } from "../src/state";
-import { DECIMAL, SourceTransaction } from "../src/types";
-import { Source, Sources, Transactions } from "../src/interfaces";
+import {
+    DECIMAL,
+    Preferences,
+    Settings,
+    SourceTransaction,
+} from "../src/types";
+import { Persistence, Source, Sources, Transactions } from "../src/interfaces";
 
 class SourcesMock implements Sources {
     public parseTransactions(transactionData: string): SourceTransaction[] {
@@ -80,13 +85,64 @@ class TransactionsMock implements Transactions {
     }
 }
 
+class PersistenceMock implements Persistence {
+    private settings: Settings | null = null;
+    private preferences: Preferences | null = null;
+    private sourceData: { [name: string]: string } = {};
+
+    public loadSettings() {
+        return this.settings;
+    }
+    public storeSettings(settings: Settings) {
+        this.settings = settings;
+    }
+    public loadPreferences() {
+        return this.preferences;
+    }
+    public storePreferences(preferences: Preferences) {
+        this.preferences = preferences;
+    }
+    public listSourceDataNames() {
+        return Object.keys(this.sourceData);
+    }
+    public storeSourceData(name: string, transactionData: string) {
+        this.sourceData[name] = transactionData;
+    }
+    public loadSourceData(name: string) {
+        return { transactionData: this.sourceData[name] };
+    }
+    public removeSourceData(name: string) {
+        delete this.sourceData[name];
+    }
+}
+
 describe("StateImpl", () => {
     const injector = createInjector()
         .provideClass("sources", SourcesMock)
         .provideClass("transactions", TransactionsMock);
 
-    test("should add source data (including transactions) to its collection", () => {
-        const state = injector.injectClass(StateImpl);
+    test("should load previously stored persistent source data to its collection", () => {
+        const persistenceMock = new PersistenceMock();
+        persistenceMock.storeSourceData("data1.csv", "<mock1>");
+        persistenceMock.storeSourceData("data2.csv", "<mock2>");
+        const state = injector
+            .provideValue("persistence", persistenceMock)
+            .injectClass(StateImpl);
+
+        state.init();
+
+        expect((state as any).sourceDatas.length).toBe(2);
+        expect((state as any).sourceDatas[0].name).toBe("data1.csv");
+        expect((state as any).sourceDatas[0].transactions.length).toBe(3);
+        expect((state as any).sourceDatas[1].name).toBe("data2.csv");
+        expect((state as any).sourceDatas[1].transactions.length).toBe(1);
+    });
+
+    test("should add source data (including transactions) to its (persistent) collection", () => {
+        const persistenceMock = new PersistenceMock();
+        const state = injector
+            .provideValue("persistence", persistenceMock)
+            .injectClass(StateImpl);
 
         state.addSourceData("data1.csv", "<mock1>");
         state.addSourceData("data2.csv", "<mock2>");
@@ -96,10 +152,17 @@ describe("StateImpl", () => {
         expect((state as any).sourceDatas[0].transactions.length).toBe(3);
         expect((state as any).sourceDatas[1].name).toBe("data2.csv");
         expect((state as any).sourceDatas[1].transactions.length).toBe(1);
+
+        expect(persistenceMock.listSourceDataNames()).toEqual([
+            "data1.csv",
+            "data2.csv",
+        ]);
     });
 
     test("should select a new name when adding source data if necessary", () => {
-        const state = injector.injectClass(StateImpl);
+        const state = injector
+            .provideClass("persistence", PersistenceMock)
+            .injectClass(StateImpl);
 
         state.addSourceData("data1.csv", "<mock1>");
         state.addSourceData("data1.csv", "<mock1>");
@@ -115,7 +178,10 @@ describe("StateImpl", () => {
     });
 
     test("should remove source source data from its collection", () => {
-        const state = injector.injectClass(StateImpl);
+        const persistenceMock = new PersistenceMock();
+        const state = injector
+            .provideValue("persistence", persistenceMock)
+            .injectClass(StateImpl);
 
         state.addSourceData("data1.csv", "<mock1>");
         state.addSourceData("data2.csv", "<mock2>");
@@ -128,13 +194,16 @@ describe("StateImpl", () => {
         state.removeSourceData("data2.csv");
 
         expect((state as any).sourceDatas.length).toBe(0);
+        expect(persistenceMock.listSourceDataNames().length).toBe(0);
 
         // Note: should not throw if the data has already been removed
         state.removeSourceData("data2.csv");
     });
 
     test("should provide information on the source data in its collection", () => {
-        const state = injector.injectClass(StateImpl);
+        const state = injector
+            .provideClass("persistence", PersistenceMock)
+            .injectClass(StateImpl);
 
         state.addSourceData("data1.csv", "<mock1>");
         state.addSourceData("data2.csv", "<mock2>");

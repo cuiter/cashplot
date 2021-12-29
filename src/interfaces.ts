@@ -10,6 +10,8 @@ export interface UI {
 }
 
 export interface State {
+    /* Initializes and restores state from previous session if available */
+    init(): void;
     /**
      * Loads source data (for example file contents) into the collection of loaded sources.
      * If source data with the given name already exists, stores the data under a new name.

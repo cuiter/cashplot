@@ -64,6 +64,8 @@ export class UIImpl implements UI {
 
         this.onResize();
         window.addEventListener("resize", () => this.onResize());
+
+        this.state.init();
     }
 
     private onResize(): void {

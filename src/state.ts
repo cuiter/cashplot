@@ -1,5 +1,5 @@
 import { SourceDataInfo, SourceDataInfoItem, SourceTransaction } from "./types";
-import { Sources, State, Transactions } from "./interfaces";
+import { Persistence, Sources, State, Transactions } from "./interfaces";
 
 class SourceData {
     constructor(
@@ -9,14 +9,27 @@ class SourceData {
 }
 
 export class StateImpl implements State {
-    public static inject = ["sources", "transactions"] as const;
+    public static inject = ["sources", "transactions", "persistence"] as const;
 
     private sourceDatas: SourceData[] = [];
     // Note: re-generated whenever sourceDatas changes.
     private sourceDataInfo: SourceDataInfo;
 
-    constructor(private sources: Sources, private transactions: Transactions) {
+    constructor(
+        private sources: Sources,
+        private transactions: Transactions,
+        private persistence: Persistence,
+    ) {
         this.sourceDataInfo = new SourceDataInfo();
+    }
+
+    public init() {
+        for (const name of this.persistence.listSourceDataNames()) {
+            this.addSourceData(
+                name,
+                this.persistence.loadSourceData(name).transactionData,
+            );
+        }
     }
 
     private findNewName(name: string) {
@@ -33,6 +46,8 @@ export class StateImpl implements State {
         const newName = this.findNewName(name);
         const transactions = this.sources.parseTransactions(transactionData);
         this.sourceDatas.push(new SourceData(newName, transactions));
+
+        this.persistence.storeSourceData(name, transactionData);
         this.updateSourceDataInfo();
     }
 
@@ -40,6 +55,8 @@ export class StateImpl implements State {
         this.sourceDatas = this.sourceDatas.filter(
             (sourceData) => sourceData.name !== name,
         );
+        this.persistence.removeSourceData(name);
+
         this.updateSourceDataInfo();
     }
 
