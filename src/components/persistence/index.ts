@@ -31,15 +31,14 @@ export class PersistenceImpl implements Persistence {
 
     public loadSettings(): Settings | null {
         const settingsObj = this.persistenceDriver.loadObject(settingsKey);
+        if (settingsObj === null) return null;
         const settingsVersion = (settingsObj as any)["version"];
         assert(
             settingsVersion === 0,
             `Could not load settings object: unsupported version ${settingsVersion}`,
         );
         delete (settingsObj as any).version;
-        return settingsObj === null
-            ? null
-            : plainToClass(Settings, settingsObj);
+        return plainToClass(Settings, settingsObj);
     }
 
     public storeSettings(settings: Settings) {
@@ -51,15 +50,14 @@ export class PersistenceImpl implements Persistence {
     public loadPreferences(): Preferences | null {
         const preferencesObj =
             this.persistenceDriver.loadObject(preferencesKey);
+        if (preferencesObj === null) return null;
         const preferencesVersion = (preferencesObj as any)["version"];
         assert(
             preferencesVersion === 0,
             `Could not load preferences object: unsupported version ${preferencesVersion}`,
         );
         delete (preferencesObj as any).version;
-        return preferencesObj === null
-            ? null
-            : plainToClass(Preferences, preferencesObj);
+        return plainToClass(Preferences, preferencesObj);
     }
 
     public storePreferences(preferences: Preferences) {

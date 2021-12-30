@@ -84,13 +84,11 @@ const testStoredSettings = {
     ],
 };
 const testPreferences = new Preferences({
-    developerMode: true,
     currentView: "home",
     currentTab: null,
 });
 const testStoredPreferences = {
     version: 0,
-    developerMode: true,
     currentView: "home",
     currentTab: null,
 };
@@ -117,6 +115,15 @@ describe("PersistenceImpl", () => {
         expect(settings).toEqual(testSettings);
     });
 
+    test("should return null when no settings are available in persistent storage", () => {
+        const persistenceDriver = new PersistenceDriverMock();
+        const persistence = new PersistenceImpl(persistenceDriver);
+
+        const settings = persistence.loadSettings();
+
+        expect(settings).toBeNull();
+    });
+
     test("should store preferences to persistent storage", () => {
         const persistenceDriver = new PersistenceDriverMock();
         const persistence = new PersistenceImpl(persistenceDriver);
@@ -136,6 +143,15 @@ describe("PersistenceImpl", () => {
         const preferences = persistence.loadPreferences();
 
         expect(preferences).toEqual(testPreferences);
+    });
+
+    test("should return null when no preferences are available in persistent storage", () => {
+        const persistenceDriver = new PersistenceDriverMock();
+        const persistence = new PersistenceImpl(persistenceDriver);
+
+        const preferences = persistence.loadPreferences();
+
+        expect(preferences).toBeNull();
     });
 
     test("should store source data to persistent storage", () => {
