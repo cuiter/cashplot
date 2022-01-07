@@ -7,12 +7,29 @@
 </template>
 
 <script lang="ts">
+const currentViewKey = "debug/currentView";
+const currentViewDefault = "home";
+const currentTabKey = "debug/currentTab";
+const currentTabDefault = "sources";
+
 export default {
     data: function () {
         return {
-            currentView: "home",
-            currentTab: "sources"
+            currentView: window.localStorage.getItem(currentViewKey) ?? currentViewDefault,
+            currentTab: window.localStorage.getItem(currentTabKey) ?? currentTabDefault
         };
     },
+    watch: {
+        currentView: function (value: string) {
+            if ((this as any).$root.isDebugModeEnabled()) {
+                window.localStorage.setItem(currentViewKey, value);
+            }
+        },
+        currentTab: function (value: string) {
+            if ((this as any).$root.isDebugModeEnabled()) {
+                window.localStorage.setItem(currentTabKey, value);
+            }
+        }
+    }
 };
 </script>

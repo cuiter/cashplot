@@ -63,6 +63,7 @@ export class UIImpl implements UI {
             },
             methods: {
                 handleError: handleError,
+                isDebugModeEnabled: () => window.hasOwnProperty("LiveReload"),
             },
         });
 
