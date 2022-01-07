@@ -18,6 +18,7 @@ export class StateImpl implements State {
     private sourceDatas: SourceData[] = [];
     // Note: re-generated whenever sourceDatas changes.
     private sourceDataInfo: SourceDataInfo;
+    private sourceTransactions: SourceTransaction[] = [];
 
     constructor(
         private sources: Sources,
@@ -89,10 +90,10 @@ export class StateImpl implements State {
             this.sourceDataInfo.items.push(sourceDataInfo);
         }
 
-        const combinedTransactions = this.transactions.combineSources(
+        this.sourceTransactions = this.transactions.combineSources(
             this.sourceDatas.map((s) => s.transactions),
         );
-        this.sourceDataInfo.totalTransactions = combinedTransactions.length;
+        this.sourceDataInfo.totalTransactions = this.sourceTransactions.length;
         // this.transactions.combineSources may have combined some transactions
         // containing unique source accounts, hence the use of all source transactions below.
         this.sourceDataInfo.totalAccounts = this.sourceDatas
@@ -107,5 +108,9 @@ export class StateImpl implements State {
 
     public allSourceDataInfo(): SourceDataInfo {
         return this.sourceDataInfo;
+    }
+
+    public allSourceTransactions(): SourceTransaction[] {
+        return this.sourceTransactions;
     }
 }

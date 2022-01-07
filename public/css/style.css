@@ -3,7 +3,7 @@
 :root {
     --color-background: #1f1f1f;
     --color-background-nav: #222222;
-    --color-background-light: #484a49;
+    --color-background-button: #2f2f2f;
     --color-background-light-hover: #646665;
     --color-border-nav: #2a2a2a;
     --color-fill-icon: #a6a6a6;
@@ -12,6 +12,8 @@
     --color-primary-deselected: #aaaaaa;
     --color-theme: #fa5b0f;
     --color-theme-light: #ff7729;
+    --color-theme-positive: #33cc00;
+    --color-theme-negative: #e96a32;
 }
 
 html,
@@ -29,7 +31,7 @@ a {
 }
 
 .button {
-    background-color: var(--color-background-nav);
+    background-color: var(--color-background-button);
     color: var(--color-primary);
     border-color: var(--color-primary-deselected);
     border-radius: 0.05rem;
@@ -143,7 +145,7 @@ a {
 
 /* Sources tab */
 
-.sources-tab {
+.tab-contents {
     position: absolute;
     left: 0rem;
     right: 0rem;
@@ -153,7 +155,7 @@ a {
     flex-flow: column;
 }
 
-.sources-tab span {
+.tab-contents span {
     user-select: none;
 }
 
@@ -197,14 +199,14 @@ a {
     text-align: center;
 }
 
-.source-data-list {
+.collection-list {
     flex: auto;
     overflow-y: auto;
     margin: 1rem 0rem;
     padding: -1rem 0rem 0rem;
 }
 
-.source-data-list > :last-of-type {
+.collection-list > :last-of-type {
     margin: 0.5rem 0rem 0.3rem;
 }
 
@@ -227,15 +229,16 @@ a {
     user-select: none;
 }
 
-.source-data-item {
+.collection-item {
     position: relative;
     width: 100%;
     height: 6.25rem;
     margin: 0.5rem 0rem 1.1rem;
     border: 0.2rem solid var(--color-primary-deselected);
+    background-color: var(--color-background-nav);
 }
 
-.source-data-item * {
+.collection-item * {
     position: absolute;
 
     font-size: 1.3rem;
@@ -367,6 +370,72 @@ a {
 .sources-selection span:hover {
     color: var(--color-primary-selected);
     background: var(--color-background-light-hover);
+}
+
+/* Categories tab */
+
+.transaction-date-splitter {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.transaction-amount {
+    left: 1rem;
+    top: 0.2rem;
+    font-size: 2.5rem;
+    width: 14rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: right;
+}
+
+.transaction-direction-up {
+    left: 15.6rem;
+    top: 1.9rem;
+    width: 0;
+    height: 0;
+    border-left: 0.5rem solid transparent;
+    border-right: 0.5rem solid transparent;
+
+    border-bottom: 0.7rem solid var(--color-theme-positive);
+}
+
+.transaction-direction-down {
+    left: 15.6rem;
+    top: 2.02rem;
+    width: 0;
+    height: 0;
+    border-left: 0.5rem solid transparent;
+    border-right: 0.5rem solid transparent;
+
+    border-top: 0.7rem solid var(--color-theme-negative);
+}
+
+.transaction-title {
+    right: 1.5rem;
+    top: 0.1rem;
+    font-size: 1.7rem;
+    width: calc(100% - 18rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
+}
+
+.transaction-description {
+    right: 1.5rem;
+    bottom: 0.4rem;
+    font-size: 1.2rem;
+    width: calc(100% - 18rem);
+    color: var(--color-primary-deselected);
+    font-weight: 100;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
+}
+
+.transaction-group > .collection-item {
+    height: 5.2rem;
 }
 
 /* Custom classes */
@@ -506,12 +575,6 @@ a {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-}
-
-.category-button {
-    background-color: var(--color-background-light);
-    border: 0.1rem solid var(--color-primary);
-    color: var(--color-primary);
 }
 
 /* Override Milligram defaults */

@@ -25,6 +25,8 @@ export interface State {
     removeSourceData(name: string): void;
     /** Returns information about the loaded source data items. */
     allSourceDataInfo(): SourceDataInfo;
+    /** Returns the list of all transactions, ordered by date ascending. */
+    allSourceTransactions(): SourceTransaction[];
 }
 
 export interface Sources {

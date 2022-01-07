@@ -1,8 +1,7 @@
 <template>
     <div class="full-size">
         <sources-tab-component v-if="currentTab == 'sources'" />
-        <p v-if="currentTab == 'accounts'">Accounts</p>
-        <p v-if="currentTab == 'categories'">Categorieën</p>
+        <categories-tab-component v-if="currentTab == 'categories'" />
     </div>
 </template>
 

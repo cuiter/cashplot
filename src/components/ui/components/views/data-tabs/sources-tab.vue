@@ -1,5 +1,5 @@
 <template>
-    <div class="sources-tab full-size">
+    <div class="tab-contents full-size">
         <div class="sources-summary">
             <div>
                 <span class="sources-summary-stat">{{ allSourceDataInfo.totalAccounts }}</span>
@@ -14,8 +14,8 @@
                 <span class="sources-summary-label">Transacties</span>
             </div>
         </div>
-        <div class="source-data-list">
-            <div class="source-data-item" v-for="item of allSourceDataInfo.items">
+        <div class="collection-list">
+            <div class="collection-item" v-for="item of allSourceDataInfo.items">
                 <span class="source-data-name">{{ item.name }}</span>
                 <!--NOTE: If the viewport gets really small, change the date format-->
                 <span class="source-data-date">{{ getInfoItemDisplayDate(item) }}</span>
