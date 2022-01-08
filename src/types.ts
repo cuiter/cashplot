@@ -17,23 +17,7 @@ export class Settings {
     }
 }
 
-export class Preferences {
-    public developerMode: boolean = false;
-    public currentView: string | null = null;
-    public currentTab: string | null = null;
-
-    constructor(options: {
-        developerMode?: boolean;
-        currentView?: string | null;
-        currentTab?: string | null;
-    }) {
-        if (options !== undefined) {
-            this.developerMode = options.developerMode!;
-            this.currentView = options.currentView!;
-            this.currentTab = options.currentTab!;
-        }
-    }
-}
+export class Preferences {}
 
 export class Account {
     // Note: Accounts may be detected automatically from the source transactions themselves,

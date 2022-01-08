@@ -83,14 +83,9 @@ const testStoredSettings = {
         },
     ],
 };
-const testPreferences = new Preferences({
-    currentView: "home",
-    currentTab: null,
-});
+const testPreferences = new Preferences();
 const testStoredPreferences = {
     version: 0,
-    currentView: "home",
-    currentTab: null,
 };
 
 describe("PersistenceImpl", () => {
