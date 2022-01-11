@@ -8,6 +8,8 @@ import HomeViewComponent from "./components/views/home-view.vue";
 import DataViewComponent from "./components/views/data-view.vue";
 import SourcesTabComponent from "./components/views/data-tabs/sources-tab.vue";
 
+import InfiniteLoading from "vue-infinite-loading";
+
 // Enable live reload for these files.
 require("../../../public/index.html");
 require("../../../public/css/style.css");
@@ -48,6 +50,14 @@ export class UIImpl implements UI {
             return false;
         };
 
+        // Load Vue component dependencies.
+        Vue.use(InfiniteLoading, {
+            slots: {
+                noResults: "No data available",
+                noMore: "-",
+                error: "Error while loading data",
+            },
+        });
         // Load every Vue component from the components directory.
         const req = require.context("./components/", true, /\.(vue)$/i);
         for (const key of req.keys()) {

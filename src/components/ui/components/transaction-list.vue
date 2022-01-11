@@ -10,6 +10,8 @@
                 <span class="transaction-description">{{ transaction.description }}</span>
             </div>
         </div>
+
+        <infinite-loading @infinite="infiniteHandler" />
     </div>
 </template>
 
@@ -18,9 +20,26 @@ import { DECIMAL, SourceTransaction } from '../../../types';
 import * as dayjs from "dayjs";
 
 const transactionDateFormat = "D MMMM YYYY";
+const defaultItemsLoaded = 50;
+const itemIncrement = 20;
 
 export default {
     props: ["transactions"],
+    data: () => {
+        return {
+            itemsLoaded: defaultItemsLoaded,
+        };
+    },
+    methods: {
+        infiniteHandler($state: any) {
+            (this as any).$data.itemsLoaded += itemIncrement;
+            if ((this as any).$data.itemsLoaded < (this as any).transactions.length) {
+                $state.loaded();
+            } else {
+                $state.complete();
+            }
+        }
+    },
     computed: {
         DECIMAL: () => DECIMAL,
         transactionsByDate: function() {
@@ -29,6 +48,7 @@ export default {
             ((this as any).transactions as SourceTransaction[])
                 .map(tr => tr)
                 .reverse()
+                .slice(0, (this as any).$data.itemsLoaded)
                 .forEach(transaction => {
                     var timeStr = transaction.date.getTime().toString();
 
@@ -37,8 +57,6 @@ export default {
                     }
                     transactionsByDate[timeStr].push(transaction);
                 })
-
-            console.log(transactionsByDate);
 
             return Object.keys(transactionsByDate)
                 .map(timeStr => {
