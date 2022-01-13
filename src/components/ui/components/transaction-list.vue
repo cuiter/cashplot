@@ -3,7 +3,7 @@
         <div class="transaction-group" v-for="item of transactionsByDate">
             <span class="transaction-date-splitter">{{ item.date }}</span>
             <div class="collection-item" v-for="transaction of item.transactions">
-                <span class="transaction-amount">€{{ transaction.amount / DECIMAL }}</span>
+                <span class="transaction-amount">€{{ Math.abs(transaction.amount / DECIMAL).toFixed(2).replace('.', ',') }}</span>
                 <div class="transaction-direction-down" v-if="transaction.amount < 0"></div>
                 <div class="transaction-direction-up" v-if="transaction.amount >= 0"></div>
                 <span class="transaction-title">{{ transaction.contraAccountName || transaction.contraAccount }}</span>
