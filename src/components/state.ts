@@ -1,4 +1,6 @@
 import {
+    Category,
+    Settings,
     SourceDataInfo,
     SourceDataInfoItem,
     SourceTransaction,
@@ -20,12 +22,15 @@ export class StateImpl implements State {
     private sourceDataInfo: SourceDataInfo;
     private sourceTransactions: SourceTransaction[] = [];
 
+    private settings: Settings;
+
     constructor(
         private sources: Sources,
         private transactions: Transactions,
         private persistence: Persistence,
     ) {
         this.sourceDataInfo = new SourceDataInfo();
+        this.settings = new Settings();
     }
 
     public init() {
@@ -112,5 +117,13 @@ export class StateImpl implements State {
 
     public allSourceTransactions(): SourceTransaction[] {
         return this.sourceTransactions;
+    }
+
+    public addCategory(name: string) {
+        this.settings.categories.push(new Category(name));
+    }
+
+    public allCategories(): Category[] {
+        return this.settings.categories;
     }
 }

@@ -1,0 +1,26 @@
+<template>
+    <div class="collection-grid">
+        <div class="grid-item button button-dark" v-for="category of categories">
+            <span class="transaction-amount">{{ category.name }}</span>
+        </div>
+        <div class="grid-item button button-light" @click="addCategory">Nieuw</div>
+    </div>
+</template>
+
+<script lang="ts">
+import { DECIMAL, SourceTransaction } from '../../../types';
+import * as dayjs from "dayjs";
+
+const transactionDateFormat = "D MMMM YYYY";
+const defaultItemsLoaded = 50;
+const itemIncrement = 20;
+
+export default {
+    props: ["categories"],
+    methods: {
+        addCategory() {
+            (this as any).$root.$data.state.addCategory();
+        }
+    },
+};
+</script>

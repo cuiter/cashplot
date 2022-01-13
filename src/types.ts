@@ -11,7 +11,7 @@ export class Settings {
     @Type(() => Category)
     public categories: Category[];
     // ...
-    constructor(accounts: Account[], categories: Category[]) {
+    constructor(accounts: Account[] = [], categories: Category[] = []) {
         this.accounts = accounts;
         this.categories = categories;
     }
@@ -39,8 +39,8 @@ export class Category {
 
     constructor(
         public name: string,
-        public monthlyBudget: number | null,
-        filters: WildcardFilter[],
+        public monthlyBudget: number | null = null,
+        filters: WildcardFilter[] = [],
     ) {
         this.filters = filters;
     }

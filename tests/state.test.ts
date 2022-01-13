@@ -226,4 +226,20 @@ describe("StateImpl", () => {
         expect(info.items[1].nAccounts).toBe(1);
         expect(info.items[1].nTransactions).toBe(1);
     });
+
+    test("should add a category to its collection", () => {
+        const state = injector
+            .provideClass("persistence", PersistenceMock)
+            .injectClass(StateImpl);
+
+        expect(state.allCategories()).toEqual([]);
+
+        state.addCategory("groceries");
+        state.addCategory("rent");
+
+        const categories = state.allCategories();
+        expect(categories.length).toBe(2);
+        expect(categories[0].name).toBe("groceries");
+        expect(categories[1].name).toBe("rent");
+    });
 });
