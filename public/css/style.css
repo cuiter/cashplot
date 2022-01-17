@@ -146,13 +146,15 @@ a {
 }
 
 .tab-splitter {
+    flex: 0 0 0.3rem;
+    margin-top: -1rem;
     margin-left: -150rem;
     width: 360rem;
-    height: 3.5rem;
     background-color: var(--color-primary-deselected);
 }
 
 .tab-heading {
+    flex: 0 0 1rem;
     display: block;
     height: 4rem;
     width: 100%;
@@ -462,8 +464,8 @@ a {
 }
 
 .collection-grid {
-    flex: 0 1 400%;
-    max-height: 20rem;
+    flex: 0 0 40%;
+    max-height: 30rem;
     overflow-y: auto;
 
     display: flex;
