@@ -14,8 +14,8 @@ CashPlot computes and stores everything locally in the browser, which means
 that your data stays private.
 
 At the moment, CashPlot only supports ING Bank exported transaction files. If
-you use a bank that's unsupported, please let me know (see the Feedback section
-down below). I'd like to add support for as many banks as possible.
+you use a bank that's unsupported, please let me know. I'd like to add support
+for as many banks as possible.
 
 ## How to use
 
@@ -27,7 +27,7 @@ Go to the website linked above, or:
 - `npm run build`
 - Open `./src/index.html` in your favorite browser
 
-The user interface is quite self-explanatory.
+The user interface should be self-explanatory.
 
 ## Limitations
 
@@ -63,6 +63,6 @@ If you have any issues, questions, or suggestions on how CashPlot can be
 improved, feel free to create an issue on GitHub or send me an email (see my
 GitHub profile). All feedback is appreciated.
 
-For adding support for a bank, please create an issue and attach an example
-transaction file to work against. Of course, you should replace personal
-information with something else.
+For adding support for a bank, please attach an example transaction file to
+work against. Of course, you should replace personal information with something
+else.
