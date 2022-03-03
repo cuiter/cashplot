@@ -21,6 +21,9 @@ const PERIOD_FORMATS = {
   [Period.DAY]: "%b %e, %Y",
 };
 
+const BACKGROUND_COLOR = "#242424";
+const GRID_COLOR = "#484a49";
+
 // Options for the Plotly.JS graphs.
 const BASE_LAYOUT_OPTIONS = {
   margin: {
@@ -32,13 +35,17 @@ const BASE_LAYOUT_OPTIONS = {
   },
   font: { size: 16 },
   paper_bgcolor: "rgba(0, 0, 0, 0)",
-  plot_bgcolor: "rgba(0, 0, 0, 0)",
+  plot_bgcolor: BACKGROUND_COLOR,
   showlegend: true,
   legend: {
     orientation: "h",
     yanchor: "bottom",
     y: 1.09,
   },
+  yaxis: {
+    gridwidth: 1,
+    gridcolor: GRID_COLOR
+  }
 };
 const RANGE_SELECTOR_OPTIONS = {
   buttons: [
@@ -106,6 +113,8 @@ export function generateGraphs(parameters) {
     {
       xaxis: {
         rangeselector: rangeSelectorOptions,
+        gridwidth: 1,
+        gridcolor: GRID_COLOR
       },
     },
     baseLayoutOptions
@@ -125,6 +134,8 @@ export function generateGraphs(parameters) {
             rangeselector: periodName === "YEAR" ? null : rangeSelectorOptions,
             tickmode: "array",
             tickformat: PERIOD_FORMATS[Period[periodName]],
+            gridwidth: 1,
+            gridcolor: GRID_COLOR
           },
         },
         baseLayoutOptions
