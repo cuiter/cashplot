@@ -10,6 +10,15 @@ In particular, it is designed with the following principles in mind:
 
 There are a few techniques key to CashPlot's design:
 
--   Dependency Injection - Separation of component interfaces from their implementation means that components can be constructed without the need to know about the implementation of other components.
--   Behavior-Driven Development - Write specifications and interfaces using the language of the user domain, only describing what it should do, not how it should do it. Automate testing the fulfillment of specifications wherever possible, and build fast feedback loops between the users and developers.
--   Caching - Each component may cache its results internally, provided that the returned object reference stays the same when using a cached result.
+**Dependency Injection**
+
+Separation of component interfaces from their implementation means that components can be constructed without the need to know about the implementation of other components.
+
+**Behavior-driven development**
+
+Write specifications and interfaces using the language of the user domain, only describing what it should do, not how it should do it. Automate testing the fulfillment of specifications wherever possible, and build fast feedback loops between the users and developers.
+
+**Caching**
+
+Each component may cache its results internally, provided that the returned object reference stays the same when using a cached result.  
+All UI components may cache result fetched from other components, provided that the results do not change within the UI component's lifetime.
