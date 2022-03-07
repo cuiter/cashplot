@@ -4,8 +4,14 @@ import {
     SourceDataInfo,
     SourceDataInfoItem,
     SourceTransaction,
-} from "../types";
-import { Persistence, Sources, State, Transactions } from "../interfaces";
+} from "../../types";
+import {
+    Persistence,
+    Sources,
+    SourceDataCollection,
+    Transactions,
+} from "../../interfaces";
+import { findNewName } from "../../utils";
 
 class SourceData {
     constructor(
@@ -14,7 +20,7 @@ class SourceData {
     ) {}
 }
 
-export class StateImpl implements State {
+export class SourceDataCollectionImpl implements SourceDataCollection {
     public static inject = ["sources", "transactions", "persistence"] as const;
 
     private sourceDatas: SourceData[] = [];
@@ -35,42 +41,35 @@ export class StateImpl implements State {
 
     public init() {
         for (const name of this.persistence.listSourceDataNames()) {
-            this.addSourceData(
+            this.add(
                 name,
                 this.persistence.loadSourceData(name).transactionData,
             );
         }
     }
 
-    private findNewName(name: string) {
-        var newName = name;
-        var index = 1;
-        while (this.sourceDatas.map((tr) => tr.name).indexOf(newName) !== -1) {
-            newName = `${name} (${index})`;
-            index++;
-        }
-        return newName;
-    }
-
-    public addSourceData(name: string, transactionData: string): void {
-        const newName = this.findNewName(name);
+    public add(name: string, transactionData: string): void {
+        const newName = findNewName(
+            name,
+            this.sourceDatas.map((sd) => sd.name),
+        );
         const transactions = this.sources.parseTransactions(transactionData);
         this.sourceDatas.push(new SourceData(newName, transactions));
 
         this.persistence.storeSourceData(name, transactionData);
-        this.updateSourceDataInfo();
+        this.updateInfo();
     }
 
-    public removeSourceData(name: string): void {
+    public remove(name: string): void {
         this.sourceDatas = this.sourceDatas.filter(
             (sourceData) => sourceData.name !== name,
         );
         this.persistence.removeSourceData(name);
 
-        this.updateSourceDataInfo();
+        this.updateInfo();
     }
 
-    private updateSourceDataInfo(): void {
+    private updateInfo(): void {
         const newInfoItems = this.sourceDatas.map((sourceData) => {
             return new SourceDataInfoItem(
                 sourceData.name,
@@ -111,19 +110,11 @@ export class StateImpl implements State {
             ).length;
     }
 
-    public allSourceDataInfo(): SourceDataInfo {
+    public allInfo(): SourceDataInfo {
         return this.sourceDataInfo;
     }
 
-    public allSourceTransactions(): SourceTransaction[] {
+    public allTransactions(): SourceTransaction[] {
         return this.sourceTransactions;
-    }
-
-    public addCategory(name: string) {
-        this.settings.categories.push(new Category(name));
-    }
-
-    public allCategories(): Category[] {
-        return this.settings.categories;
     }
 }

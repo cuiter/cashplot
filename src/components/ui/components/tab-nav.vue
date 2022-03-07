@@ -3,13 +3,15 @@
         <span
             class="tab-nav-button"
             @click="openTab('sources')"
-            v-bind:class="{ selected: value === 'sources' }">
+            v-bind:class="{ selected: value === 'sources' }"
+        >
             Bronnen
         </span>
         <span
             class="tab-nav-button"
             @click="openTab('categories')"
-            v-bind:class="{ selected: value === 'categories' }">
+            v-bind:class="{ selected: value === 'categories' }"
+        >
             Categorieën
         </span>
     </div>

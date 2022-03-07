@@ -1,7 +1,7 @@
 <template>
     <div class="full-size tab-contents">
         <span class="tab-heading">Ongecategoriseerd</span>
-        <transaction-list-component v-bind:transactions="allSourceTransactions" />
+        <transaction-list-component v-bind:transactions="allTransactions" />
         <div class="tab-splitter"></div>
         <span class="tab-heading">Categorieën</span>
         <category-list-component v-bind:categories="allCategories" />
@@ -9,16 +9,16 @@
 </template>
 
 <script lang="ts">
-import { SourceDataInfo, SourceDataInfoItem } from '../../../../../types';
+import { SourceDataInfo, SourceDataInfoItem } from "../../../../../types";
 
 export default {
     computed: {
-        allSourceTransactions() {
-            return (this as any).$root.$data.state.allSourceTransactions();
+        allTransactions() {
+            return (this as any).$root.$data.sourceData.allTransactions();
         },
         allCategories() {
-            return (this as any).$root.$data.state.allCategories();
-        }
+            return (this as any).$root.$data.categories.list();
+        },
     },
 };
 </script>

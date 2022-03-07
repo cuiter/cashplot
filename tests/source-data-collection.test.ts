@@ -1,5 +1,5 @@
 import { createInjector } from "typed-inject";
-import { StateImpl } from "../src/components/state";
+import { SourceDataCollectionImpl } from "../src/components/collections/source-data-collection";
 import {
     DECIMAL,
     Preferences,
@@ -116,7 +116,7 @@ class PersistenceMock implements Persistence {
     }
 }
 
-describe("StateImpl", () => {
+describe("SourceDataCollectionImpl", () => {
     const injector = createInjector()
         .provideClass("sources", SourcesMock)
         .provideClass("transactions", TransactionsMock);
@@ -125,33 +125,49 @@ describe("StateImpl", () => {
         const persistenceMock = new PersistenceMock();
         persistenceMock.storeSourceData("data1.csv", "<mock1>");
         persistenceMock.storeSourceData("data2.csv", "<mock2>");
-        const state = injector
+        const sourceDataCollection = injector
             .provideValue("persistence", persistenceMock)
-            .injectClass(StateImpl);
+            .injectClass(SourceDataCollectionImpl);
 
-        state.init();
+        sourceDataCollection.init();
 
-        expect((state as any).sourceDatas.length).toBe(2);
-        expect((state as any).sourceDatas[0].name).toBe("data1.csv");
-        expect((state as any).sourceDatas[0].transactions.length).toBe(3);
-        expect((state as any).sourceDatas[1].name).toBe("data2.csv");
-        expect((state as any).sourceDatas[1].transactions.length).toBe(1);
+        expect((sourceDataCollection as any).sourceDatas.length).toBe(2);
+        expect((sourceDataCollection as any).sourceDatas[0].name).toBe(
+            "data1.csv",
+        );
+        expect(
+            (sourceDataCollection as any).sourceDatas[0].transactions.length,
+        ).toBe(3);
+        expect((sourceDataCollection as any).sourceDatas[1].name).toBe(
+            "data2.csv",
+        );
+        expect(
+            (sourceDataCollection as any).sourceDatas[1].transactions.length,
+        ).toBe(1);
     });
 
     test("should add source data (including transactions) to its (persistent) collection", () => {
         const persistenceMock = new PersistenceMock();
-        const state = injector
+        const sourceDataCollection = injector
             .provideValue("persistence", persistenceMock)
-            .injectClass(StateImpl);
+            .injectClass(SourceDataCollectionImpl);
 
-        state.addSourceData("data1.csv", "<mock1>");
-        state.addSourceData("data2.csv", "<mock2>");
+        sourceDataCollection.add("data1.csv", "<mock1>");
+        sourceDataCollection.add("data2.csv", "<mock2>");
 
-        expect((state as any).sourceDatas.length).toBe(2);
-        expect((state as any).sourceDatas[0].name).toBe("data1.csv");
-        expect((state as any).sourceDatas[0].transactions.length).toBe(3);
-        expect((state as any).sourceDatas[1].name).toBe("data2.csv");
-        expect((state as any).sourceDatas[1].transactions.length).toBe(1);
+        expect((sourceDataCollection as any).sourceDatas.length).toBe(2);
+        expect((sourceDataCollection as any).sourceDatas[0].name).toBe(
+            "data1.csv",
+        );
+        expect(
+            (sourceDataCollection as any).sourceDatas[0].transactions.length,
+        ).toBe(3);
+        expect((sourceDataCollection as any).sourceDatas[1].name).toBe(
+            "data2.csv",
+        );
+        expect(
+            (sourceDataCollection as any).sourceDatas[1].transactions.length,
+        ).toBe(1);
 
         expect(persistenceMock.listSourceDataNames()).toEqual([
             "data1.csv",
@@ -160,55 +176,69 @@ describe("StateImpl", () => {
     });
 
     test("should select a new name when adding source data if necessary", () => {
-        const state = injector
+        const sourceDataCollection = injector
             .provideClass("persistence", PersistenceMock)
-            .injectClass(StateImpl);
+            .injectClass(SourceDataCollectionImpl);
 
-        state.addSourceData("data1.csv", "<mock1>");
-        state.addSourceData("data1.csv", "<mock1>");
-        state.addSourceData("data1.csv", "<mock1>");
+        sourceDataCollection.add("data1.csv", "<mock1>");
+        sourceDataCollection.add("data1.csv", "<mock1>");
+        sourceDataCollection.add("data1.csv", "<mock1>");
 
-        expect((state as any).sourceDatas.length).toBe(3);
-        expect((state as any).sourceDatas[0].name).toBe("data1.csv");
-        expect((state as any).sourceDatas[1].name).toBe("data1.csv (1)");
-        expect((state as any).sourceDatas[2].name).toBe("data1.csv (2)");
-        expect((state as any).sourceDatas[0].transactions.length).toBe(3);
-        expect((state as any).sourceDatas[1].transactions.length).toBe(3);
-        expect((state as any).sourceDatas[2].transactions.length).toBe(3);
+        expect((sourceDataCollection as any).sourceDatas.length).toBe(3);
+        expect((sourceDataCollection as any).sourceDatas[0].name).toBe(
+            "data1.csv",
+        );
+        expect((sourceDataCollection as any).sourceDatas[1].name).toBe(
+            "data1.csv (1)",
+        );
+        expect((sourceDataCollection as any).sourceDatas[2].name).toBe(
+            "data1.csv (2)",
+        );
+        expect(
+            (sourceDataCollection as any).sourceDatas[0].transactions.length,
+        ).toBe(3);
+        expect(
+            (sourceDataCollection as any).sourceDatas[1].transactions.length,
+        ).toBe(3);
+        expect(
+            (sourceDataCollection as any).sourceDatas[2].transactions.length,
+        ).toBe(3);
     });
 
     test("should remove source source data from its collection", () => {
         const persistenceMock = new PersistenceMock();
-        const state = injector
+        const sourceDataCollection = injector
             .provideValue("persistence", persistenceMock)
-            .injectClass(StateImpl);
+            .injectClass(SourceDataCollectionImpl);
 
-        state.addSourceData("data1.csv", "<mock1>");
-        state.addSourceData("data2.csv", "<mock2>");
+        sourceDataCollection.add("data1.csv", "<mock1>");
+        sourceDataCollection.add("data2.csv", "<mock2>");
 
-        state.removeSourceData("data1.csv");
+        sourceDataCollection.remove("data1.csv");
 
-        expect((state as any).sourceDatas.length).toBe(1);
-        expect((state as any).sourceDatas[0].name).toBe("data2.csv");
+        expect((sourceDataCollection as any).sourceDatas.length).toBe(1);
+        expect((sourceDataCollection as any).sourceDatas[0].name).toBe(
+            "data2.csv",
+        );
 
-        state.removeSourceData("data2.csv");
+        sourceDataCollection.remove("data2.csv");
 
-        expect((state as any).sourceDatas.length).toBe(0);
+        expect((sourceDataCollection as any).sourceDatas.length).toBe(0);
         expect(persistenceMock.listSourceDataNames().length).toBe(0);
 
         // Note: should not throw if the data has already been removed
-        state.removeSourceData("data2.csv");
+        sourceDataCollection.remove("data2.csv");
     });
 
     test("should provide information on the source data in its collection", () => {
-        const state = injector
+        const sourceDataCollection = injector
             .provideClass("persistence", PersistenceMock)
-            .injectClass(StateImpl);
+            .injectClass(SourceDataCollectionImpl);
 
-        state.addSourceData("data1.csv", "<mock1>");
-        state.addSourceData("data2.csv", "<mock2>");
+        sourceDataCollection.add("data1.csv", "<mock1>");
+        sourceDataCollection.add("data2.csv", "<mock2>");
 
-        const info = state.allSourceDataInfo();
+        const info = sourceDataCollection.allInfo();
 
         expect(info.totalAccounts).toBe(3);
         expect(info.totalTransactions).toBe(3);
@@ -225,21 +255,5 @@ describe("StateImpl", () => {
         expect(info.items[1].endDate).toEqual(new Date("2021-11-03"));
         expect(info.items[1].nAccounts).toBe(1);
         expect(info.items[1].nTransactions).toBe(1);
-    });
-
-    test("should add a category to its collection", () => {
-        const state = injector
-            .provideClass("persistence", PersistenceMock)
-            .injectClass(StateImpl);
-
-        expect(state.allCategories()).toEqual([]);
-
-        state.addCategory("groceries");
-        state.addCategory("rent");
-
-        const categories = state.allCategories();
-        expect(categories.length).toBe(2);
-        expect(categories[0].name).toBe("groceries");
-        expect(categories[1].name).toBe("rent");
     });
 });

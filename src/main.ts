@@ -5,7 +5,8 @@ import { SourcesImpl } from "./components/sources";
 import { TransactionsImpl } from "./components/transactions";
 import { PersistenceImpl } from "./components/persistence";
 import { LocalStorageDriver } from "./components/persistence/localstorage-driver";
-import { StateImpl } from "./components/state";
+import { SourceDataCollectionImpl } from "./components/collections/source-data-collection";
+import { CategoryCollectionImpl } from "./components/collections/category-collection";
 import { UIImpl } from "./components/ui";
 
 const appInjector = createInjector()
@@ -13,7 +14,8 @@ const appInjector = createInjector()
     .provideClass("transactions", TransactionsImpl)
     .provideClass("persistenceDriver", LocalStorageDriver)
     .provideClass("persistence", PersistenceImpl)
-    .provideClass("state", StateImpl);
+    .provideClass("sourceData", SourceDataCollectionImpl)
+    .provideClass("categories", CategoryCollectionImpl);
 
 const ui = appInjector.injectClass(UIImpl);
 

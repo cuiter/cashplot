@@ -9,24 +9,49 @@ export interface UI {
     init(): void;
 }
 
-export interface State {
-    /* Initializes and restores state from previous session if available */
+export interface SourceDataCollection {
+    /** Initializes and restores state from previous session if available */
     init(): void;
     /**
      * Loads source data (for example file contents) into the collection of loaded sources.
      * If source data with the given name already exists, stores the data under a new name.
      * Throws an error if the provided transactions data could not be parsed.
      */
-    addSourceData(name: string, transactionsData: string): void;
+    add(name: string, transactionsData: string): void;
     /**
      * Removes the source data associated with the given name.
      * Note: No-op if the name doesn't exist in the collection.
      */
-    removeSourceData(name: string): void;
+    remove(name: string): void;
     /** Returns information about the loaded source data items. */
-    allSourceDataInfo(): SourceDataInfo;
+    allInfo(): SourceDataInfo;
     /** Returns the list of all transactions, ordered by date ascending. */
-    allSourceTransactions(): SourceTransaction[];
+    allTransactions(): SourceTransaction[];
+}
+
+export interface CategoryCollection {
+    /** Initializes and restores state from previous session if available */
+    init(): void;
+    /**
+     * Adds a new category to the collection. Generates and returns the new name.
+     */
+    add(): string;
+    /**
+     * Removes the category and its associated filters.
+     * Note: Not implemented yet.
+     *
+     * remove(name: string): void;
+     */
+    /** Returns the names of all categories. */
+    list(): string[];
+
+    /*
+      To implement:
+      get(name: string): Category
+      rename(oldName: string, newName: string): void
+      setBudget(name: string, monthlyBudget: number): void
+      setFilters(name: string, filters: WildcardFilter[]): void
+    */
 }
 
 export interface Sources {

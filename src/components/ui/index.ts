@@ -1,4 +1,4 @@
-import { State, UI } from "../../interfaces";
+import { CategoryCollection, SourceDataCollection, UI } from "../../interfaces";
 import Vue from "vue";
 import AppComponent from "./components/app.vue";
 import ViewComponent from "./components/view.vue";
@@ -27,9 +27,12 @@ declare global {
 }
 
 export class UIImpl implements UI {
-    public static inject = ["state"] as const;
+    public static inject = ["sourceData", "categories"] as const;
 
-    constructor(private state: State) {}
+    constructor(
+        private sourceData: SourceDataCollection,
+        private categories: CategoryCollection,
+    ) {}
 
     public init(): void {
         // Global error handler
@@ -69,7 +72,8 @@ export class UIImpl implements UI {
         let v = new Vue({
             el: "#app",
             data: {
-                state: this.state,
+                sourceData: this.sourceData,
+                categories: this.categories,
             },
             methods: {
                 handleError: handleError,
@@ -80,7 +84,8 @@ export class UIImpl implements UI {
         this.onResize();
         window.addEventListener("resize", () => this.onResize());
 
-        this.state.init();
+        this.sourceData.init();
+        this.categories.init();
     }
 
     private onResize(): void {

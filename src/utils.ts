@@ -30,3 +30,19 @@ export function hash(str: string): number {
         Math.imul(h1 ^ (h1 >>> 13), 3266489909);
     return 4294967296 * (2097151 & h2) + (h1 >>> 0);
 }
+
+/**
+ * Given a name, determines a new name that does not conflict with existing names.
+ * For example, if new.txt already exists: new.txt -> new.txt (1)
+ */
+export function findNewName(name: string, existingNames: string[]): string {
+    var newName = name;
+    var index = 1;
+
+    while (existingNames.indexOf(newName) !== -1) {
+        newName = `${name} (${index})`;
+        index++;
+    }
+
+    return newName;
+}

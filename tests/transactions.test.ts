@@ -1,5 +1,4 @@
 import { createInjector } from "typed-inject";
-import { StateImpl } from "../src/components/state";
 import { TransactionsImpl } from "../src/components/transactions";
 import { DECIMAL, SourceTransaction } from "../src/types";
 

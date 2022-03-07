@@ -1,7 +1,14 @@
 <template>
     <div class="app full-size">
-        <tab-nav-component v-if="currentView === 'data'" v-model="currentTab" v-bind:currentView="currentView" />
-        <view-component v-bind:currentView="currentView" v-bind:currentTab="currentTab" />
+        <tab-nav-component
+            v-if="currentView === 'data'"
+            v-model="currentTab"
+            v-bind:currentView="currentView"
+        />
+        <view-component
+            v-bind:currentView="currentView"
+            v-bind:currentTab="currentTab"
+        />
         <nav-component v-model="currentView" />
     </div>
 </template>
@@ -15,8 +22,11 @@ const currentTabDefault = "sources";
 export default {
     data: function () {
         return {
-            currentView: window.localStorage.getItem(currentViewKey) ?? currentViewDefault,
-            currentTab: window.localStorage.getItem(currentTabKey) ?? currentTabDefault
+            currentView:
+                window.localStorage.getItem(currentViewKey) ??
+                currentViewDefault,
+            currentTab:
+                window.localStorage.getItem(currentTabKey) ?? currentTabDefault,
         };
     },
     watch: {
@@ -29,7 +39,7 @@ export default {
             if ((this as any).$root.isDebugModeEnabled()) {
                 window.localStorage.setItem(currentTabKey, value);
             }
-        }
-    }
+        },
+    },
 };
 </script>
