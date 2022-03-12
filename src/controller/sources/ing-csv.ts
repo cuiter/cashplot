@@ -1,5 +1,5 @@
-import { SourceTransaction, DECIMAL } from "../../types";
-import { Source } from "../../interfaces";
+import { SourceTransaction, DECIMAL } from "../../model/types";
+import { Source } from "../interfaces";
 import { assert } from "../../utils";
 import * as Papa from "papaparse";
 

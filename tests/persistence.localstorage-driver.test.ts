@@ -1,7 +1,7 @@
 import { createInjector } from "typed-inject";
-import { PersistenceDriver } from "../src/interfaces";
-import { PersistenceImpl } from "../src/components/persistence";
-import { LocalStorageDriver } from "../src/components/persistence/localstorage-driver";
+import { PersistenceDriver } from "../src/controller/interfaces";
+import { PersistenceImpl } from "../src/model/persistence";
+import { LocalStorageDriver } from "../src/model/persistence/localstorage-driver";
 import {
     Account,
     Category,
@@ -9,7 +9,7 @@ import {
     Preferences,
     Settings,
     WildcardFilter,
-} from "../src/types";
+} from "../src/model/types";
 
 class LocalStorageMock implements Storage {
     private valueStore: any = {};

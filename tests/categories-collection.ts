@@ -1,5 +1,5 @@
 import { createInjector } from "typed-inject";
-import { CategoryCollectionImpl } from "../src/components/collections/category-collection";
+import { CategoryCollectionImpl } from "../src/controller/collections/category-collection";
 
 describe("CategoryCollectionImpl", () => {
     const injector = createInjector();

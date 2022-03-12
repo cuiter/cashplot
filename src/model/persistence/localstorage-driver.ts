@@ -1,4 +1,4 @@
-import { PersistenceDriver } from "../../interfaces";
+import { PersistenceDriver } from "../../controller/interfaces";
 
 export class LocalStorageDriver implements PersistenceDriver {
     public static inject = [] as const;

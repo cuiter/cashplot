@@ -4,8 +4,8 @@ import {
     instanceToPlain,
     plainToClass,
 } from "class-transformer";
-import { Persistence, PersistenceDriver } from "../../interfaces";
-import { Preferences, Settings } from "../../types";
+import { Persistence, PersistenceDriver } from "../../controller/interfaces";
+import { Preferences, Settings } from "../types";
 import { assert } from "../../utils";
 
 // Each stored config section contains a version attribute,

@@ -4,13 +4,13 @@ import {
     SourceDataInfo,
     SourceDataInfoItem,
     SourceTransaction,
-} from "../../types";
+} from "../../model/types";
 import {
     Persistence,
     Sources,
     SourceDataCollection,
     Transactions,
-} from "../../interfaces";
+} from "../interfaces";
 import { findNewName } from "../../utils";
 
 class SourceData {

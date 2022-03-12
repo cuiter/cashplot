@@ -3,7 +3,7 @@ import {
     Settings,
     SourceDataInfo,
     SourceTransaction,
-} from "./types";
+} from "../model/types";
 
 export interface UI {
     init(): void;

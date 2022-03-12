@@ -1,6 +1,6 @@
 import { createInjector } from "typed-inject";
-import { PersistenceDriver } from "../src/interfaces";
-import { PersistenceImpl } from "../src/components/persistence";
+import { PersistenceDriver } from "../src/controller/interfaces";
+import { PersistenceImpl } from "../src/model/persistence";
 import {
     Account,
     Category,
@@ -8,7 +8,7 @@ import {
     Preferences,
     Settings,
     WildcardFilter,
-} from "../src/types";
+} from "../src/model/types";
 
 class PersistenceDriverMock implements PersistenceDriver {
     private valueStore: any = {};

@@ -1,5 +1,5 @@
-import { SourceTransaction } from "../../types";
-import { Source, Sources } from "../../interfaces";
+import { SourceTransaction } from "../../model/types";
+import { Source, Sources } from "../interfaces";
 import { INGBankCSVSource } from "./ing-csv";
 import { SNSBankCSVSource } from "./sns-csv";
 import * as Papa from "papaparse";

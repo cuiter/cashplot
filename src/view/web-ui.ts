@@ -1,4 +1,8 @@
-import { CategoryCollection, SourceDataCollection, UI } from "../../interfaces";
+import {
+    CategoryCollection,
+    SourceDataCollection,
+    UI,
+} from "../controller/interfaces";
 import Vue from "vue";
 import AppComponent from "./components/app.vue";
 import ViewComponent from "./components/view.vue";
@@ -11,8 +15,8 @@ import SourcesTabComponent from "./components/views/data-tabs/sources-tab.vue";
 import InfiniteLoading from "vue-infinite-loading";
 
 // Enable live reload for these files.
-require("../../../public/index.html");
-require("../../../public/css/style.css");
+require("../../public/index.html");
+require("../../public/css/style.css");
 
 declare global {
     interface NodeRequire {
@@ -26,7 +30,7 @@ declare global {
     }
 }
 
-export class UIImpl implements UI {
+export class WebUI implements UI {
     public static inject = ["sourceData", "categories"] as const;
 
     constructor(
@@ -62,7 +66,7 @@ export class UIImpl implements UI {
             },
         });
         // Load every Vue component from the components directory.
-        const req = require.context("./components/", true, /\.(vue)$/i);
+        const req = require.context("./", true, /\.(vue)$/i);
         for (const key of req.keys()) {
             const name = key.match(/.*\/(.*)\.vue/)![1];
             var component = req(key).default;

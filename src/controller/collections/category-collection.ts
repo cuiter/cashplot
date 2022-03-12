@@ -4,14 +4,14 @@ import {
     SourceDataInfo,
     SourceDataInfoItem,
     SourceTransaction,
-} from "../../types";
+} from "../../model/types";
 import {
     Persistence,
     Sources,
     SourceDataCollection,
     Transactions,
     CategoryCollection,
-} from "../../interfaces";
+} from "../interfaces";
 import { findNewName } from "../../utils";
 
 export class CategoryCollectionImpl implements CategoryCollection {

@@ -1,6 +1,6 @@
 import { Type } from "class-transformer";
 import "reflect-metadata";
-import { hash } from "./utils";
+import { hash } from "../utils";
 
 const DECIMAL: number = 100;
 export { DECIMAL };

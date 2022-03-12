@@ -1,12 +1,17 @@
 import { createInjector } from "typed-inject";
-import { SourceDataCollectionImpl } from "../src/components/collections/source-data-collection";
+import { SourceDataCollectionImpl } from "../src/controller/collections/source-data-collection";
 import {
     DECIMAL,
     Preferences,
     Settings,
     SourceTransaction,
-} from "../src/types";
-import { Persistence, Source, Sources, Transactions } from "../src/interfaces";
+} from "../src/model/types";
+import {
+    Persistence,
+    Source,
+    Sources,
+    Transactions,
+} from "../src/controller/interfaces";
 
 class SourcesMock implements Sources {
     public parseTransactions(transactionData: string): SourceTransaction[] {
