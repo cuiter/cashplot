@@ -6,43 +6,64 @@
 
 
 Container_Boundary(cashplot_container, "CashPlot") {
-    Component(ui_component, "UI", "HTML+CSS page and TypeScript/Vue modules", "Provides a user interface and handles UI events")
-    Container_Boundary(collections_container, "Collections") {
-        Component(source_data_collection_component, "SourceDataCollection", "TypeScript module", "Manages a collection of source transaction data.")
-        Component(category_collection_component, "CategoryCollection", "TypeScript module", "Manages a collection of categories and filters.")
-        Component(account_collection_component, "AccountCollection", "TypeScript module", "Manages a collection of (virtual) accounts.")
+    Container_Boundary(view_container, "View") {
+        Component(ui_component, "WebUI", "HTML+CSS page and TypeScript/Vue modules", "Provides a user interface and handles UI events")
+        Component(overview_tab_component, "OverviewTab", "Vue component", "Main page, showing the current balance and income/expenses of the current month")
+        Component(source_data_entry_tab_component, "SourceDataEntryTab", "Vue component", "Allows the user to enter their source transaction files")
+        Component(category_entry_tab_component, "CategoryEntryTab", "Vue component", "Allows the user to specify categories (including filters) and accounts")
+        Component(budget_tab_component, "BudgetTab", "Vue component", "Shows the (total) income/expenses for a given category on a given month, compared to the configured budget")
+        Component(balance_tab_component, "BalanceTab", "Vue component", "Shows the cumulative balance over time, and allows the user to select a time range to inspect balances")
     }
-    Component(cashflow_provider_component, "CashflowProvider", "TypeScript module", "Provides periodical income/expense figures per category.")
-    Component(balance_provider_component, "BalanceProvider", "TypeScript module", "Provides account balances over time and provides Plotly data for balance graphs.")
-    Component(persistence_component, "Persistence", "TypeScript module", "Stores and loads settings and preferences persistently")
-    Component(queries_component, "Queries", "TypeScript module", "Filters and optionally sorts or sums up transactions by category, filter and/or a specific time period")
-    Component(transactions_component, "Transactions", "TypeScript module", "Assigns categories and accounts to raw transactions")
-    Component(sources_component, "Sources", "TypeScript modules", "Parses raw transactions from user-provided data")
-    Component(data_component, "Data", "TypeScript module", "Data definitions for module interfaces, preferences, transactions, categories, filters and accounts")
+    Container_Boundary(controller_container, "Controller") {
+        Container_Boundary(collections_container, "Collections") {
+            Component(source_data_collection_component, "SourceDataCollection", "TypeScript module", "Manages a collection of source transaction data.")
+            Component(category_collection_component, "CategoryCollection", "TypeScript module", "Manages a collection of categories and filters.")
+            Component(account_collection_component, "AccountCollection", "TypeScript module", "Manages a collection of (virtual) accounts.")
+        }
+        Component(balance_calculator_component, "BalanceCalculator", "TypeScript module", "Provides account balances over time and provides Plotly data for balance graphs.")
+        Component(transaction_sorter_component, "TransactionSorter", "TypeScript module", "Filters and optionally sorts or sums up transactions by category, filter and/or a specific time period")
+        Component(transaction_assigner_component, "TransactionAssigner", "TypeScript module", "Assigns categories and accounts to raw transactions")
+        Component(sources_component, "Sources", "TypeScript modules", "Reads raw transactions from user-provided data (for example bank CSV exports)")
+    }
+    Container_Boundary(model_container, "Model") {
+        Component(persistence_component, "Persistence", "TypeScript module", "Stores user data and preferences persistently")
+        Component(types_component, "Types", "TypeScript module", "Data definitions for preferences, transactions, categories, filters and accounts")
+    }
 
-    Rel(ui_component, source_data_collection_component, "Uses")
-    Rel(ui_component, category_collection_component, "Uses")
-    Rel(ui_component, account_collection_component, "Uses")
-    Rel(ui_component, cashflow_provider_component, "Uses")
-    Rel(ui_component, balance_provider_component, "Uses")
-    Rel(ui_component, queries_component, "Uses")
+    Rel(ui_component, overview_tab_component, "Uses")
+    Rel(ui_component, source_data_entry_tab_component, "Uses")
+    Rel(ui_component, category_entry_tab_component, "Uses")
+    Rel(ui_component, budget_tab_component, "Uses")
+    Rel(ui_component, balance_tab_component, "Uses")
+
+
+    Rel(source_data_entry_tab_component, source_data_collection_component, "Uses")
+    Rel(category_entry_tab_component, category_collection_component, "Uses")
+    Rel(category_entry_tab_component, account_collection_component, "Uses")
+    Rel(category_entry_tab_component, transaction_assigner_component, "Uses")
+    Rel(balance_tab_component, balance_calculator_component, "Uses")
+    Rel(budget_tab_component, transaction_sorter_component, "Uses")
+    Rel(overview_tab_component, balance_calculator_component, "Uses")
+    Rel(overview_tab_component, transaction_sorter_component, "Uses")
+
     Rel(source_data_collection_component, persistence_component, "Uses")
     Rel(source_data_collection_component, sources_component, "Uses")
     Rel(category_collection_component, persistence_component, "Uses")
     Rel(account_collection_component, persistence_component, "Uses")
-    Rel(cashflow_provider_component, collections_container, "Uses")
-    Rel(cashflow_provider_component, transactions_component, "Uses")
-    Rel(cashflow_provider_component, queries_component, "Uses")
-    Rel_R(cashflow_provider_component, balance_provider_component, "Uses")
-    Rel(queries_component, data_component, "Uses")
-    Rel(transactions_component, data_component, "Uses")
-    Rel(sources_component, data_component, "Uses")
+    Rel(transaction_sorter_component, transaction_assigner_component, "Uses")
+    Rel(transaction_assigner_component, source_data_collection_component, "Uses")
+    Rel(transaction_assigner_component, category_collection_component, "Uses")
+    Rel(transaction_assigner_component, account_collection_component, "Uses")
+    Rel(balance_calculator_component, transaction_sorter_component, "Uses")
+
+    Rel(collections_container, types_component, "Uses")
+    Rel(sources_component, types_component, "Uses")
 }
 
 System_Ext(browser_dom, "Browser DOM")
 System_Ext(browser_localstorage, "Browser LocalStorage")
 
-Rel(ui_component, browser_dom, "Interacts with")
+Rel(view_container, browser_dom, "Interacts with")
 Rel(persistence_component, browser_localstorage, "Reads from and writes to")
 
 
