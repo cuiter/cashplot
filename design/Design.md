@@ -22,3 +22,38 @@ Write specifications and interfaces using the language of the user domain, only 
 
 Each component may cache its results internally, provided that the returned object reference stays the same when using a cached result.  
 All UI components may cache result fetched from other components, provided that the results do not change within the UI component's lifetime.
+
+## UI design
+
+To promote reuse of UI elements and colors, a number of standard terms and colors are defined.
+By using these terms consistently, the resulting application can be much easier to change.
+
+Concept definitions:
+
+-   Page: home, app, FAQ (also as a dialog within the app)
+
+-   Root: app, nav, top-nav
+
+-   Tab: overview, data, budget, balance
+-   Dialog (full-screen pop-up view): category-entry, filter-entry
+-   Modal (partial-screen pop-up view): error-message, confirmation-request
+
+-   Container: scrollable-list, transaction-list, category-list
+-   Element: button, splitter, transaction, category
+
+Color definitions:
+
+-   background
+-   element-background
+-   light-element-background
+-   input-background
+-   nav-background
+-   nav-background-selected
+-   active-border
+-   inactive-border
+
+-   primary (text and icons)
+-   secondary (darkened text)
+
+-   positive (green)
+-   negative (orange)
