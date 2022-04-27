@@ -57,3 +57,27 @@ Color definitions:
 
 -   positive (green)
 -   negative (orange)
+
+## Tech stack
+
+The main goal of the tech stack is to make CashPlot accessible on a wide variety of devices.
+This section lists the different technologies that are used.
+
+Target platforms:
+
+-   Modern web browsers (Chrome, Firefox, Safari, 2015 and newer)
+-   Android 5.0+
+
+Runtime stack:
+
+-   Frontend language: HTML, CSS, JavaScript (for interop)
+-   Main language: TypeScript
+-   Web framework: Vue
+-   Dependency injection framework: typed-inject
+-   Testing framework: Jest
+
+Development tools:
+
+-   Build system: webpack
+-   Code formatter: prettier
+-   Class diagram generator: tplant
