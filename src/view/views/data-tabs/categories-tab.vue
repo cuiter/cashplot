@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { SourceDataInfo, SourceDataInfoItem } from "../../../model/types";
+import { SourceDataInfo, SourceDataInfoItem } from "../../../model/entities";
 
 export default {
     computed: {

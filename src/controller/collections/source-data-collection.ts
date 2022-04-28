@@ -4,7 +4,7 @@ import {
     SourceDataInfo,
     SourceDataInfoItem,
     SourceTransaction,
-} from "../../model/types";
+} from "../../model/entities";
 import {
     Storage,
     Sources,

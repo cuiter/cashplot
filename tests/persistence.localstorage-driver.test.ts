@@ -9,7 +9,7 @@ import {
     Preferences,
     Settings,
     WildcardFilter,
-} from "../src/model/types";
+} from "../src/model/entities";
 
 class LocalStorageMock implements Storage {
     private valueStore: any = {};

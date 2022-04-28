@@ -1,4 +1,4 @@
-import { SourceTransaction } from "../../model/types";
+import { SourceTransaction } from "../../model/entities";
 import { Source, Sources } from "../../interfaces";
 import { INGBankCSVSource } from "./ing-csv";
 import { SNSBankCSVSource } from "./sns-csv";

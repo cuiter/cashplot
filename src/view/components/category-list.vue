@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { DECIMAL, SourceTransaction } from "../../model/types";
+import { DECIMAL, SourceTransaction } from "../../model/entities";
 import * as dayjs from "dayjs";
 
 const transactionDateFormat = "D MMMM YYYY";

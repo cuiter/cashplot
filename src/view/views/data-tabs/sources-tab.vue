@@ -153,7 +153,7 @@
 
 <script lang="ts">
 import * as dayjs from "dayjs";
-import { SourceDataInfo, SourceDataInfoItem } from "../../../model/types";
+import { SourceDataInfo, SourceDataInfoItem } from "../../../model/entities";
 
 const infoDateWidthThresholdRem = 40;
 const longInfoDateFormat = "D MMMM YYYY";

@@ -5,7 +5,7 @@ import {
     plainToClass,
 } from "class-transformer";
 import { Storage, StorageDriver } from "../../interfaces";
-import { Preferences, Settings } from "../types";
+import { Preferences, Settings } from "../entities";
 import { assert } from "../../utils";
 
 // Each stored config section contains a version attribute,

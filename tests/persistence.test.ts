@@ -8,7 +8,7 @@ import {
     Preferences,
     Settings,
     WildcardFilter,
-} from "../src/model/types";
+} from "../src/model/entities";
 
 class StorageDriverMock implements StorageDriver {
     private valueStore: any = {};

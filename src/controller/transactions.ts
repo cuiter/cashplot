@@ -1,4 +1,4 @@
-import { SourceTransaction } from "../model/types";
+import { SourceTransaction } from "../model/entities";
 import { Transactions } from "../interfaces";
 
 export class TransactionsImpl implements Transactions {

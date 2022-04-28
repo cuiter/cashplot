@@ -5,7 +5,7 @@ import {
     Preferences,
     Settings,
     SourceTransaction,
-} from "../src/model/types";
+} from "../src/model/entities";
 import { Storage, Source, Sources, Transactions } from "../src/interfaces";
 
 class SourcesMock implements Sources {
