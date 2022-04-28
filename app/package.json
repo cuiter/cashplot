@@ -1,0 +1,28 @@
+{
+    "name": "com.cuiter.cashplot",
+    "displayName": "CashPlot",
+    "version": "0.0.1",
+    "description": "Android port of the CashPlot web application",
+    "main": "index.js",
+    "scripts": {
+        "configure": "cordova platform add android",
+        "build-debug": "cordova build android -d"
+    },
+    "keywords": [
+        "ecosystem:cordova"
+    ],
+    "author": "cuiter",
+    "license": "Apache-2.0",
+    "devDependencies": {
+        "cordova-android": "^10.1.1",
+        "cordova-plugin-splashscreen": "^6.0.0"
+    },
+    "cordova": {
+        "platforms": [
+            "android"
+        ],
+        "plugins": {
+            "cordova-plugin-splashscreen": {}
+        }
+    }
+}
