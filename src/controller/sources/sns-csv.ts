@@ -1,6 +1,6 @@
 import * as Papa from "papaparse";
 import { DECIMAL, SourceTransaction } from "../../model/types";
-import { Source } from "../interfaces";
+import { Source } from "../../interfaces";
 import { assert } from "../../utils";
 
 /** Parser for SNS Bank's official CSV formats. Supports both the "CSV" and "CSV2004" variant. */

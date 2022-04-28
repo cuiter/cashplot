@@ -1,5 +1,5 @@
 import { createInjector } from "typed-inject";
-import { StorageDriver } from "../src/controller/interfaces";
+import { StorageDriver } from "../src/interfaces";
 import { StorageImpl } from "../src/model/storage";
 import {
     Account,

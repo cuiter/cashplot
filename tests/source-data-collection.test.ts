@@ -6,12 +6,7 @@ import {
     Settings,
     SourceTransaction,
 } from "../src/model/types";
-import {
-    Storage,
-    Source,
-    Sources,
-    Transactions,
-} from "../src/controller/interfaces";
+import { Storage, Source, Sources, Transactions } from "../src/interfaces";
 
 class SourcesMock implements Sources {
     public parseTransactions(transactionData: string): SourceTransaction[] {

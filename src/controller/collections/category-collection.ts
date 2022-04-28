@@ -11,7 +11,7 @@ import {
     SourceDataCollection,
     Transactions,
     CategoryCollection,
-} from "../interfaces";
+} from "../../interfaces";
 import { findNewName } from "../../utils";
 
 export class CategoryCollectionImpl implements CategoryCollection {

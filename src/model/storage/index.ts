@@ -4,7 +4,7 @@ import {
     instanceToPlain,
     plainToClass,
 } from "class-transformer";
-import { Storage, StorageDriver } from "../../controller/interfaces";
+import { Storage, StorageDriver } from "../../interfaces";
 import { Preferences, Settings } from "../types";
 import { assert } from "../../utils";
 

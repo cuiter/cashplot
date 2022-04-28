@@ -1,4 +1,4 @@
-import { StorageDriver } from "../../controller/interfaces";
+import { StorageDriver } from "../../interfaces";
 
 export class LocalStorageDriver implements StorageDriver {
     public static inject = [] as const;

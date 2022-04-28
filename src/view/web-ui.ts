@@ -1,8 +1,4 @@
-import {
-    CategoryCollection,
-    SourceDataCollection,
-    UI,
-} from "../controller/interfaces";
+import { CategoryCollection, SourceDataCollection, UI } from "../interfaces";
 import Vue from "vue";
 import AppComponent from "./components/app.vue";
 import ViewComponent from "./components/view.vue";
