@@ -1,4 +1,4 @@
-import { DECIMAL, SourceTransaction } from "../src/model/types";
+import { DECIMAL, SourceTransaction } from "../src/model/entities";
 import { SNSBankCSVSource } from "../src/controller/sources/sns-csv";
 
 const testTransactionsCsvFormat = `28-06-2021,NL00SNSB1234567890,NL01WORK0987654321,Company Inc.,,,,EUR,0.00,EUR,4000.00,28-06-2021,28-06-2021,6305,IOS,5976384,,'Salary for June 2020’,1

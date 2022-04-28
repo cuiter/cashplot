@@ -1,6 +1,6 @@
 import { createInjector } from "typed-inject";
 import { TransactionsImpl } from "../src/controller/transactions";
-import { DECIMAL, SourceTransaction } from "../src/model/types";
+import { DECIMAL, SourceTransaction } from "../src/model/entities";
 
 describe("TransactionsImpl", () => {
     test("should combine multiple lists of source transactions into one", () => {

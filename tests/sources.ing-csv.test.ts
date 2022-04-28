@@ -1,4 +1,4 @@
-import { SourceTransaction, DECIMAL } from "../src/model/types";
+import { SourceTransaction, DECIMAL } from "../src/model/entities";
 import { INGBankCSVSource } from "../src/controller/sources/ing-csv";
 
 const testTransactionsNlNewFormat = `"Datum";"Naam / Omschrijving";"Rekening";"Tegenrekening";"Code";"Af Bij";"Bedrag (EUR)";"Mutatiesoort";"Mededelingen";"Saldo na mutatie";"Tag"
