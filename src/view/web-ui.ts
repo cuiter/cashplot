@@ -1,12 +1,5 @@
 import { CategoryCollection, SourceDataCollection, UI } from "../interfaces";
 import Vue from "vue";
-import AppComponent from "./components/app.vue";
-import ViewComponent from "./components/view.vue";
-import NavComponent from "./components/nav.vue";
-import TabNavComponent from "./components/tab-nav.vue";
-import HomeViewComponent from "./components/views/home-view.vue";
-import DataViewComponent from "./components/views/data-view.vue";
-import SourcesTabComponent from "./components/views/data-tabs/sources-tab.vue";
 
 import InfiniteLoading from "vue-infinite-loading";
 

@@ -34,8 +34,8 @@ Concept definitions:
 
 -   Root: app, nav, top-nav
 
--   Tab: overview, source-data-entry, category-entry, budget, balance
--   Dialog (full-screen pop-up view): category-detail-entry, filter-entry
+-   Tab: overview, source-data, category, budget, balance
+-   Dialog (full-screen pop-up view): category-entry, filter-entry
 -   Modal (partial-screen pop-up view): error-message, confirmation-request
 
 -   Container: scrollable-list, transaction-list, category-list
