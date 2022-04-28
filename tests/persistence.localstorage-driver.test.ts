@@ -1,7 +1,7 @@
 import { createInjector } from "typed-inject";
-import { PersistenceDriver } from "../src/controller/interfaces";
-import { PersistenceImpl } from "../src/model/persistence";
-import { LocalStorageDriver } from "../src/model/persistence/localstorage-driver";
+import { StorageDriver } from "../src/controller/interfaces";
+import { StorageImpl } from "../src/model/storage";
+import { LocalStorageDriver } from "../src/model/storage/localstorage-driver";
 import {
     Account,
     Category,

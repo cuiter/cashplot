@@ -7,7 +7,7 @@ import {
     SourceTransaction,
 } from "../src/model/types";
 import {
-    Persistence,
+    Storage,
     Source,
     Sources,
     Transactions,
@@ -90,7 +90,7 @@ class TransactionsMock implements Transactions {
     }
 }
 
-class PersistenceMock implements Persistence {
+class StorageMock implements Storage {
     private settings: Settings | null = null;
     private preferences: Preferences | null = null;
     private sourceData: { [name: string]: string } = {};
@@ -127,11 +127,11 @@ describe("SourceDataCollectionImpl", () => {
         .provideClass("transactions", TransactionsMock);
 
     test("should load previously stored persistent source data to its collection", () => {
-        const persistenceMock = new PersistenceMock();
-        persistenceMock.storeSourceData("data1.csv", "<mock1>");
-        persistenceMock.storeSourceData("data2.csv", "<mock2>");
+        const storageMock = new StorageMock();
+        storageMock.storeSourceData("data1.csv", "<mock1>");
+        storageMock.storeSourceData("data2.csv", "<mock2>");
         const sourceDataCollection = injector
-            .provideValue("persistence", persistenceMock)
+            .provideValue("storage", storageMock)
             .injectClass(SourceDataCollectionImpl);
 
         sourceDataCollection.init();
@@ -152,9 +152,9 @@ describe("SourceDataCollectionImpl", () => {
     });
 
     test("should add source data (including transactions) to its (persistent) collection", () => {
-        const persistenceMock = new PersistenceMock();
+        const storageMock = new StorageMock();
         const sourceDataCollection = injector
-            .provideValue("persistence", persistenceMock)
+            .provideValue("storage", storageMock)
             .injectClass(SourceDataCollectionImpl);
 
         sourceDataCollection.add("data1.csv", "<mock1>");
@@ -174,7 +174,7 @@ describe("SourceDataCollectionImpl", () => {
             (sourceDataCollection as any).sourceDatas[1].transactions.length,
         ).toBe(1);
 
-        expect(persistenceMock.listSourceDataNames()).toEqual([
+        expect(storageMock.listSourceDataNames()).toEqual([
             "data1.csv",
             "data2.csv",
         ]);
@@ -182,7 +182,7 @@ describe("SourceDataCollectionImpl", () => {
 
     test("should select a new name when adding source data if necessary", () => {
         const sourceDataCollection = injector
-            .provideClass("persistence", PersistenceMock)
+            .provideClass("storage", StorageMock)
             .injectClass(SourceDataCollectionImpl);
 
         sourceDataCollection.add("data1.csv", "<mock1>");
@@ -211,9 +211,9 @@ describe("SourceDataCollectionImpl", () => {
     });
 
     test("should remove source source data from its collection", () => {
-        const persistenceMock = new PersistenceMock();
+        const storageMock = new StorageMock();
         const sourceDataCollection = injector
-            .provideValue("persistence", persistenceMock)
+            .provideValue("storage", storageMock)
             .injectClass(SourceDataCollectionImpl);
 
         sourceDataCollection.add("data1.csv", "<mock1>");
@@ -229,7 +229,7 @@ describe("SourceDataCollectionImpl", () => {
         sourceDataCollection.remove("data2.csv");
 
         expect((sourceDataCollection as any).sourceDatas.length).toBe(0);
-        expect(persistenceMock.listSourceDataNames().length).toBe(0);
+        expect(storageMock.listSourceDataNames().length).toBe(0);
 
         // Note: should not throw if the data has already been removed
         sourceDataCollection.remove("data2.csv");
@@ -237,7 +237,7 @@ describe("SourceDataCollectionImpl", () => {
 
     test("should provide information on the source data in its collection", () => {
         const sourceDataCollection = injector
-            .provideClass("persistence", PersistenceMock)
+            .provideClass("storage", StorageMock)
             .injectClass(SourceDataCollectionImpl);
 
         sourceDataCollection.add("data1.csv", "<mock1>");

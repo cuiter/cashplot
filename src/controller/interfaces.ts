@@ -81,7 +81,7 @@ export interface Transactions {
     ): Array<SourceTransaction>;
 }
 
-export interface Persistence {
+export interface Storage {
     loadSettings(): Settings | null;
     storeSettings(settings: Settings): void;
 
@@ -94,7 +94,7 @@ export interface Persistence {
     removeSourceData(name: string): void;
 }
 
-export interface PersistenceDriver {
+export interface StorageDriver {
     loadObject(section: string): object | null;
     storeObject(section: string, object: object): void;
 

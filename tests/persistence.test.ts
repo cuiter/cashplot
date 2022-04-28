@@ -1,6 +1,6 @@
 import { createInjector } from "typed-inject";
-import { PersistenceDriver } from "../src/controller/interfaces";
-import { PersistenceImpl } from "../src/model/persistence";
+import { StorageDriver } from "../src/controller/interfaces";
+import { StorageImpl } from "../src/model/storage";
 import {
     Account,
     Category,
@@ -10,7 +10,7 @@ import {
     WildcardFilter,
 } from "../src/model/types";
 
-class PersistenceDriverMock implements PersistenceDriver {
+class StorageDriverMock implements StorageDriver {
     private valueStore: any = {};
 
     constructor() {}
@@ -88,97 +88,97 @@ const testStoredPreferences = {
     version: 0,
 };
 
-describe("PersistenceImpl", () => {
+describe("StorageImpl", () => {
     test("should store settings to persistent storage", () => {
-        const persistenceDriver = new PersistenceDriverMock();
-        const persistence = new PersistenceImpl(persistenceDriver);
+        const storageDriver = new StorageDriverMock();
+        const storage = new StorageImpl(storageDriver);
 
-        persistence.storeSettings(testSettings);
+        storage.storeSettings(testSettings);
 
-        expect(persistenceDriver.loadObject("settings")).toEqual(
+        expect(storageDriver.loadObject("settings")).toEqual(
             testStoredSettings,
         );
     });
 
     test("should load settings from persistent storage", () => {
-        const persistenceDriver = new PersistenceDriverMock();
-        const persistence = new PersistenceImpl(persistenceDriver);
-        persistenceDriver.storeObject("settings", testStoredSettings);
+        const storageDriver = new StorageDriverMock();
+        const storage = new StorageImpl(storageDriver);
+        storageDriver.storeObject("settings", testStoredSettings);
 
-        const settings = persistence.loadSettings();
+        const settings = storage.loadSettings();
 
         expect(settings).toEqual(testSettings);
     });
 
     test("should return null when no settings are available in persistent storage", () => {
-        const persistenceDriver = new PersistenceDriverMock();
-        const persistence = new PersistenceImpl(persistenceDriver);
+        const storageDriver = new StorageDriverMock();
+        const storage = new StorageImpl(storageDriver);
 
-        const settings = persistence.loadSettings();
+        const settings = storage.loadSettings();
 
         expect(settings).toBeNull();
     });
 
     test("should store preferences to persistent storage", () => {
-        const persistenceDriver = new PersistenceDriverMock();
-        const persistence = new PersistenceImpl(persistenceDriver);
+        const storageDriver = new StorageDriverMock();
+        const storage = new StorageImpl(storageDriver);
 
-        persistence.storePreferences(testPreferences);
+        storage.storePreferences(testPreferences);
 
-        expect(persistenceDriver.loadObject("preferences")).toEqual(
+        expect(storageDriver.loadObject("preferences")).toEqual(
             testStoredPreferences,
         );
     });
 
     test("should load preferences from persistent storage", () => {
-        const persistenceDriver = new PersistenceDriverMock();
-        const persistence = new PersistenceImpl(persistenceDriver);
-        persistenceDriver.storeObject("preferences", testStoredPreferences);
+        const storageDriver = new StorageDriverMock();
+        const storage = new StorageImpl(storageDriver);
+        storageDriver.storeObject("preferences", testStoredPreferences);
 
-        const preferences = persistence.loadPreferences();
+        const preferences = storage.loadPreferences();
 
         expect(preferences).toEqual(testPreferences);
     });
 
     test("should return null when no preferences are available in persistent storage", () => {
-        const persistenceDriver = new PersistenceDriverMock();
-        const persistence = new PersistenceImpl(persistenceDriver);
+        const storageDriver = new StorageDriverMock();
+        const storage = new StorageImpl(storageDriver);
 
-        const preferences = persistence.loadPreferences();
+        const preferences = storage.loadPreferences();
 
         expect(preferences).toBeNull();
     });
 
     test("should store source data to persistent storage", () => {
-        const persistenceDriver = new PersistenceDriverMock();
-        const persistence = new PersistenceImpl(persistenceDriver);
+        const storageDriver = new StorageDriverMock();
+        const storage = new StorageImpl(storageDriver);
 
-        persistence.storeSourceData(
+        storage.storeSourceData(
             "transactions1.csv",
             "test,transactions,data\n1,2,3",
         );
-        persistence.storeSourceData(
+        storage.storeSourceData(
             "transactions2.csv",
             "transactions,data,test\n9,8,7",
         );
 
         expect(
-            persistenceDriver.loadHugeText("source-data/transactions1.csv"),
+            storageDriver.loadHugeText("source-data/transactions1.csv"),
         ).toEqual("0000test,transactions,data\n1,2,3");
         expect(
-            persistenceDriver.loadHugeText("source-data/transactions2.csv"),
+            storageDriver.loadHugeText("source-data/transactions2.csv"),
         ).toEqual("0000transactions,data,test\n9,8,7");
     });
 
     test("should load source data from persistent storage", () => {
-        const persistenceDriver = new PersistenceDriverMock();
-        const persistence = new PersistenceImpl(persistenceDriver);
-        persistenceDriver.storeHugeText(
+        const storageDriver = new StorageDriverMock();
+        const storage = new StorageImpl(storageDriver);
+        storageDriver.storeHugeText(
             "source-data/transactions1.csv",
             "0000test,transactions,data\n1,2,3",
         );
 
-        const sourceData = persistence.loadSourceData("transactions1.csv");
+        const sourceData = storage.loadSourceData("transactions1.csv");
 
         expect(sourceData.transactionData).toEqual(
             "test,transactions,data\n1,2,3",
@@ -186,42 +186,42 @@ describe("PersistenceImpl", () => {
     });
 
     test("should signal an error when requested source data isn't available in persistent storage", () => {
-        const persistenceDriver = new PersistenceDriverMock();
-        const persistence = new PersistenceImpl(persistenceDriver);
+        const storageDriver = new StorageDriverMock();
+        const storage = new StorageImpl(storageDriver);
 
-        expect(() => persistence.loadSourceData("transactions1.csv")).toThrow(
+        expect(() => storage.loadSourceData("transactions1.csv")).toThrow(
             'Could not load source data from persistent storage with name "transactions1.csv"',
         );
     });
 
     test("can remove source data from persistent storage", () => {
-        const persistenceDriver = new PersistenceDriverMock();
-        const persistence = new PersistenceImpl(persistenceDriver);
-        persistenceDriver.storeHugeText(
+        const storageDriver = new StorageDriverMock();
+        const storage = new StorageImpl(storageDriver);
+        storageDriver.storeHugeText(
             "source-data/transactions1.csv",
             "0000test,transactions,data\n1,2,3",
         );
 
-        persistence.removeSourceData("transactions1.csv");
+        storage.removeSourceData("transactions1.csv");
 
         expect(
-            persistenceDriver.loadHugeText("source-data/transactions1.csv"),
+            storageDriver.loadHugeText("source-data/transactions1.csv"),
         ).toBeNull();
     });
 
     test("should list available source data entries from storage", () => {
-        const persistenceDriver = new PersistenceDriverMock();
-        const persistence = new PersistenceImpl(persistenceDriver);
-        persistenceDriver.storeHugeText(
+        const storageDriver = new StorageDriverMock();
+        const storage = new StorageImpl(storageDriver);
+        storageDriver.storeHugeText(
             "source-data/transactions1.csv",
             "0000test,transactions,data\n1,2,3",
         );
-        persistenceDriver.storeHugeText(
+        storageDriver.storeHugeText(
             "source-data/transactions2.csv",
             "0000transactions,data,test\n9,8,7",
         );
 
-        const sourceDataNames = persistence.listSourceDataNames();
+        const sourceDataNames = storage.listSourceDataNames();
 
         expect(sourceDataNames).toEqual([
             "transactions1.csv",

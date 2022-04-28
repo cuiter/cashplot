@@ -6,7 +6,7 @@ import {
     SourceTransaction,
 } from "../../model/types";
 import {
-    Persistence,
+    Storage,
     Sources,
     SourceDataCollection,
     Transactions,
@@ -21,7 +21,7 @@ class SourceData {
 }
 
 export class SourceDataCollectionImpl implements SourceDataCollection {
-    public static inject = ["sources", "transactions", "persistence"] as const;
+    public static inject = ["sources", "transactions", "storage"] as const;
 
     private sourceDatas: SourceData[] = [];
     // Note: re-generated whenever sourceDatas changes.
@@ -33,18 +33,15 @@ export class SourceDataCollectionImpl implements SourceDataCollection {
     constructor(
         private sources: Sources,
         private transactions: Transactions,
-        private persistence: Persistence,
+        private storage: Storage,
     ) {
         this.sourceDataInfo = new SourceDataInfo();
         this.settings = new Settings();
     }
 
     public init() {
-        for (const name of this.persistence.listSourceDataNames()) {
-            this.add(
-                name,
-                this.persistence.loadSourceData(name).transactionData,
-            );
+        for (const name of this.storage.listSourceDataNames()) {
+            this.add(name, this.storage.loadSourceData(name).transactionData);
         }
     }
 
@@ -56,7 +53,7 @@ export class SourceDataCollectionImpl implements SourceDataCollection {
         const transactions = this.sources.parseTransactions(transactionData);
         this.sourceDatas.push(new SourceData(newName, transactions));
 
-        this.persistence.storeSourceData(name, transactionData);
+        this.storage.storeSourceData(name, transactionData);
         this.updateInfo();
     }
 
@@ -64,7 +61,7 @@ export class SourceDataCollectionImpl implements SourceDataCollection {
         this.sourceDatas = this.sourceDatas.filter(
             (sourceData) => sourceData.name !== name,
         );
-        this.persistence.removeSourceData(name);
+        this.storage.removeSourceData(name);
 
         this.updateInfo();
     }

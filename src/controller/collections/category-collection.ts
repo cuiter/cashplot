@@ -6,7 +6,7 @@ import {
     SourceTransaction,
 } from "../../model/types";
 import {
-    Persistence,
+    Storage,
     Sources,
     SourceDataCollection,
     Transactions,

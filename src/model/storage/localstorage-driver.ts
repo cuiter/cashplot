@@ -1,6 +1,6 @@
-import { PersistenceDriver } from "../../controller/interfaces";
+import { StorageDriver } from "../../controller/interfaces";
 
-export class LocalStorageDriver implements PersistenceDriver {
+export class LocalStorageDriver implements StorageDriver {
     public static inject = [] as const;
 
     constructor(private storage: Storage = localStorage) {}

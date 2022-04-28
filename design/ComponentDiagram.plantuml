@@ -26,7 +26,7 @@ Container_Boundary(cashplot_container, "CashPlot") {
         Component(sources_component, "Sources", "TypeScript modules", "Reads raw transactions from user-provided data (for example bank CSV exports)")
     }
     Container_Boundary(model_container, "Model") {
-        Component(persistence_component, "Persistence", "TypeScript module", "Stores user data and preferences persistently")
+        Component(storage_component, "Storage", "TypeScript module", "Stores user data and preferences persistently")
         Component(types_component, "Types", "TypeScript module", "Data definitions for preferences, transactions, categories, filters and accounts")
     }
 
@@ -46,10 +46,10 @@ Container_Boundary(cashplot_container, "CashPlot") {
     Rel(overview_tab_component, balance_calculator_component, "Uses")
     Rel(overview_tab_component, transaction_sorter_component, "Uses")
 
-    Rel(source_data_collection_component, persistence_component, "Uses")
+    Rel(source_data_collection_component, storage_component, "Uses")
     Rel(source_data_collection_component, sources_component, "Uses")
-    Rel(category_collection_component, persistence_component, "Uses")
-    Rel(account_collection_component, persistence_component, "Uses")
+    Rel(category_collection_component, storage_component, "Uses")
+    Rel(account_collection_component, storage_component, "Uses")
     Rel(transaction_sorter_component, transaction_assigner_component, "Uses")
     Rel(transaction_assigner_component, source_data_collection_component, "Uses")
     Rel(transaction_assigner_component, category_collection_component, "Uses")
@@ -64,7 +64,7 @@ System_Ext(browser_dom, "Browser DOM")
 System_Ext(browser_localstorage, "Browser LocalStorage")
 
 Rel(view_container, browser_dom, "Interacts with")
-Rel(persistence_component, browser_localstorage, "Reads from and writes to")
+Rel(storage_component, browser_localstorage, "Reads from and writes to")
 
 
 @enduml

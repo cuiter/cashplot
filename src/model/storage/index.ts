@@ -4,7 +4,7 @@ import {
     instanceToPlain,
     plainToClass,
 } from "class-transformer";
-import { Persistence, PersistenceDriver } from "../../controller/interfaces";
+import { Storage, StorageDriver } from "../../controller/interfaces";
 import { Preferences, Settings } from "../types";
 import { assert } from "../../utils";
 
@@ -24,13 +24,13 @@ const preferencesVersion = 0;
 const sourceDataPrefix = "source-data/";
 const sourceDataVersion = 0;
 
-export class PersistenceImpl implements Persistence {
-    public static inject = ["persistenceDriver"] as const;
+export class StorageImpl implements Storage {
+    public static inject = ["storageDriver"] as const;
 
-    constructor(private persistenceDriver: PersistenceDriver) {}
+    constructor(private storageDriver: StorageDriver) {}
 
     public loadSettings(): Settings | null {
-        const settingsObj = this.persistenceDriver.loadObject(settingsKey);
+        const settingsObj = this.storageDriver.loadObject(settingsKey);
         if (settingsObj === null) return null;
         const settingsVersion = (settingsObj as any)["version"];
         assert(
@@ -44,12 +44,11 @@ export class PersistenceImpl implements Persistence {
     public storeSettings(settings: Settings) {
         var settingsObj = instanceToPlain(settings);
         settingsObj.version = settingsVersion;
-        this.persistenceDriver.storeObject(settingsKey, settingsObj);
+        this.storageDriver.storeObject(settingsKey, settingsObj);
     }
 
     public loadPreferences(): Preferences | null {
-        const preferencesObj =
-            this.persistenceDriver.loadObject(preferencesKey);
+        const preferencesObj = this.storageDriver.loadObject(preferencesKey);
         if (preferencesObj === null) return null;
         const preferencesVersion = (preferencesObj as any)["version"];
         assert(
@@ -63,11 +62,11 @@ export class PersistenceImpl implements Persistence {
     public storePreferences(preferences: Preferences) {
         var preferencesObj = instanceToPlain(preferences);
         preferencesObj.version = 0;
-        this.persistenceDriver.storeObject(preferencesKey, preferencesObj);
+        this.storageDriver.storeObject(preferencesKey, preferencesObj);
     }
 
     public listSourceDataNames(): string[] {
-        return this.persistenceDriver
+        return this.storageDriver
             .listSections()
             .filter((section) => section.startsWith(sourceDataPrefix))
             .map((section) => section.substr(sourceDataPrefix.length));
@@ -77,7 +76,7 @@ export class PersistenceImpl implements Persistence {
         transactionData: string;
     } {
         const section = sourceDataPrefix + name;
-        const sectionData = this.persistenceDriver.loadHugeText(section)!;
+        const sectionData = this.storageDriver.loadHugeText(section)!;
         if (sectionData === null) {
             throw new Error(
                 `Could not load source data from persistent storage with name \"${name}\"`,
@@ -93,7 +92,7 @@ export class PersistenceImpl implements Persistence {
 
         return {
             // Note: Assumes the contents have not been removed since
-            //       the this.persistenceDriver.listSections() call.
+            //       the this.storageDriver.listSections() call.
             transactionData: sectionData.substr(hugeTextVersionPrefixLength),
         };
     }
@@ -103,13 +102,13 @@ export class PersistenceImpl implements Persistence {
             minimumIntegerDigits: hugeTextVersionPrefixLength,
             useGrouping: false,
         });
-        this.persistenceDriver.storeHugeText(
+        this.storageDriver.storeHugeText(
             sourceDataPrefix + name,
             versionPrefix + transactionData,
         );
     }
 
     public removeSourceData(name: string) {
-        this.persistenceDriver.removeSection(sourceDataPrefix + name);
+        this.storageDriver.removeSection(sourceDataPrefix + name);
     }
 }
