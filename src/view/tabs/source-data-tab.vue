@@ -142,6 +142,7 @@
             <label class="button" for="source-data-upload">Voeg toe</label>
             <input
                 type="file"
+                multiple="multiple"
                 v-on:change="onSourceDataUpload"
                 class="disabled"
                 id="source-data-upload"
@@ -282,23 +283,25 @@ export default {
         onSourceDataUpload(event: any) {
             const fileList = event.target.files; // eslint-disable-line no-invalid-this
             if (fileList.length > 0) {
-                const file = fileList[0];
-                const reader = new FileReader();
-                reader.addEventListener("loadend", (event) => {
-                    try {
-                        const result = event.target?.result;
-                        (this as any).$root.$data.sourceData.add(
-                            file.name,
-                            result,
-                        );
-                    } catch (err) {
-                        (this as any).$root.handleError(err);
-                    } finally {
-                        // Reset input to allow user to select any file again.
-                        (this as any).$refs.sourceDataUpload.value = "";
-                    }
-                });
-                reader.readAsText(file);
+                for (var idx = 0; idx < fileList.length; idx++) {
+                    const file = fileList[idx];
+                    const reader = new FileReader();
+                    reader.addEventListener("loadend", (event) => {
+                        try {
+                            const result = event.target?.result;
+                            (this as any).$root.$data.sourceData.add(
+                                file.name,
+                                result,
+                            );
+                        } catch (err) {
+                            (this as any).$root.handleError(err);
+                        } finally {
+                            // Reset input to allow user to select any file again.
+                            (this as any).$refs.sourceDataUpload.value = "";
+                        }
+                    });
+                    reader.readAsText(file);
+                }
             }
         },
 
