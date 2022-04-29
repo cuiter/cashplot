@@ -90,6 +90,7 @@ a {
     margin: 0 0.7rem;
     position: relative;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .nav .nav-button span {
@@ -106,7 +107,7 @@ a {
 .nav .nav-button svg {
     position: absolute;
     left: 1.75rem;
-    top: 0.5rem;
+    top: 0.45rem;
     width: 3.5rem;
     height: 3.5rem;
     fill: var(--color-fill-icon);
@@ -137,6 +138,7 @@ a {
     font-size: 2.1rem;
     user-select: none;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
     color: var(--color-primary-deselected);
 }
 
@@ -600,10 +602,6 @@ a {
 #category-names-container {
     display: flex;
     flex-wrap: wrap;
-}
-
-#category-overview-button {
-    cursor: pointer;
 }
 
 .large-button {
