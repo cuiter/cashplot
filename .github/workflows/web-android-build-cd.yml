@@ -1,15 +1,15 @@
-name: Cordova Android CD
+name: Web/Android Build CD
 
 on:
     push:
         branches: [next]
 
 jobs:
-    build-apk-release:
+    build-apk-and-web:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
-            - name: Build APK using setup-cordova
+            - name: Build APK and web bundle using setup-cordova
               uses: oxr463/setup-cordova@0.0.3
               with:
                   exec: |
