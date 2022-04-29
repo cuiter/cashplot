@@ -22,7 +22,7 @@ jobs:
                       cp "$(find . -name '*.apk')" . && \
                       mv app-debug.apk release/CashPlot.apk && \
                       cd public && \
-                      tar -czf ../release/CashPlot.tar.gz .
+                      tar -czf ../release/CashPlot.tar.gz *
             - name: Upload APK build artifact
               uses: actions/upload-artifact@v3
               with:
@@ -39,3 +39,35 @@ jobs:
               env:
                   GHR_PATH: ./release
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    publish-to-website:
+        runs-on: ubuntu-latest
+        needs: build-apk-and-web
+        steps:
+            - name: Determine source branch
+              id: vars
+              run: echo ::set-output name=branch::${GITHUB_REF#refs/*/}
+
+            - name: Retrieve APK build artifact
+              uses: actions/download-artifact@v2
+              with:
+                  name: android-build
+                  path: .
+            - name: Retrieve web build artifact
+              uses: actions/download-artifact@v2
+              with:
+                  name: web-build
+                  path: .
+
+            - name: Rename build files
+              run: mv CashPlot{,-latest}.apk && mv CashPlot{,-latest}.tar.gz
+
+            - name: Upload builds to server
+              uses: appleboy/scp-action@v0.1.2
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  key: ${{ secrets.SSH_KEY }}
+                  port: ${{ secrets.SSH_PORT }}
+                  source: "CashPlot-latest.apk,CashPlot-latest.tar.gz"
+                  target: "/var/www/cuiter.me-cashplot-${{ steps.vars.outputs.branch }}/public"
