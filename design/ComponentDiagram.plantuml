@@ -16,7 +16,7 @@ Container_Boundary(cashplot_container, "CashPlot") {
     }
     Container_Boundary(controller_container, "Controller") {
         Container_Boundary(collections_container, "Collections") {
-            Component(source_data_collection_component, "SourceDataCollection", "TypeScript module", "Manages a collection of source transaction data.")
+            Component(source_data_collection_component, "SourceDataCollection", "TypeScript module", "Manages a collection of source transaction data. Combines transactions from multiple sources")
             Component(category_collection_component, "CategoryCollection", "TypeScript module", "Manages a collection of categories and filters.")
             Component(account_collection_component, "AccountCollection", "TypeScript module", "Manages a collection of (virtual) accounts.")
         }

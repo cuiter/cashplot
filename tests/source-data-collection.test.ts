@@ -6,7 +6,7 @@ import {
     Settings,
     SourceTransaction,
 } from "../src/model/entities";
-import { Storage, Source, Sources, Transactions } from "../src/interfaces";
+import { Storage, Source, Sources } from "../src/interfaces";
 
 class SourcesMock implements Sources {
     public parseTransactions(transactionData: string): SourceTransaction[] {
@@ -40,7 +40,7 @@ class SourcesMock implements Sources {
         } else {
             return [
                 new SourceTransaction(
-                    new Date("2021-11-03"),
+                    new Date("2021-11-02"),
                     20 * DECIMAL,
                     "NL98INGB2152156592",
                     "NL00MAIN1234567890",
@@ -49,39 +49,6 @@ class SourcesMock implements Sources {
                 ),
             ];
         }
-    }
-}
-
-class TransactionsMock implements Transactions {
-    public combineSources(
-        transactions: SourceTransaction[][],
-    ): SourceTransaction[] {
-        return [
-            new SourceTransaction(
-                new Date("2021-11-02"),
-                -20 * DECIMAL,
-                "NL00MAIN1234567890",
-                "NL98INGB2152156592",
-                "Mr. John",
-                "Lunch",
-            ),
-            new SourceTransaction(
-                new Date("2021-11-13"),
-                -430 * DECIMAL,
-                "NL00MAIN1234567890",
-                "NL23ABNA9349042743",
-                "Mike's Tire Repairs",
-                "13th of November tire sale, 4x sports tires",
-            ),
-            new SourceTransaction(
-                new Date("2021-11-16"),
-                -200 * DECIMAL,
-                "NL00SCND0987654321",
-                "NL23ABNA9349042743",
-                "Robot Computer Shop",
-                "Invoice 934830293, laptop model VT94",
-            ),
-        ];
     }
 }
 
@@ -117,9 +84,7 @@ class StorageMock implements Storage {
 }
 
 describe("SourceDataCollectionImpl", () => {
-    const injector = createInjector()
-        .provideClass("sources", SourcesMock)
-        .provideClass("transactions", TransactionsMock);
+    const injector = createInjector().provideClass("sources", SourcesMock);
 
     test("should load previously stored persistent source data to its collection", () => {
         const storageMock = new StorageMock();
@@ -251,8 +216,8 @@ describe("SourceDataCollectionImpl", () => {
         expect(info.items[0].nTransactions).toBe(3);
 
         expect(info.items[1].name).toBe("data2.csv");
-        expect(info.items[1].startDate).toEqual(new Date("2021-11-03"));
-        expect(info.items[1].endDate).toEqual(new Date("2021-11-03"));
+        expect(info.items[1].startDate).toEqual(new Date("2021-11-02"));
+        expect(info.items[1].endDate).toEqual(new Date("2021-11-02"));
         expect(info.items[1].nAccounts).toBe(1);
         expect(info.items[1].nTransactions).toBe(1);
     });

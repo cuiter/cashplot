@@ -75,12 +75,6 @@ export interface Source {
     parseTransactions(transactionData: string): Array<SourceTransaction>;
 }
 
-export interface Transactions {
-    combineSources(
-        transactions: Array<Array<SourceTransaction>>,
-    ): Array<SourceTransaction>;
-}
-
 export interface Storage {
     loadSettings(): Settings | null;
     storeSettings(settings: Settings): void;

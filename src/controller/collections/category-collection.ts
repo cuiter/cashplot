@@ -5,13 +5,7 @@ import {
     SourceDataInfoItem,
     SourceTransaction,
 } from "../../model/entities";
-import {
-    Storage,
-    Sources,
-    SourceDataCollection,
-    Transactions,
-    CategoryCollection,
-} from "../../interfaces";
+import { CategoryCollection } from "../../interfaces";
 import { findNewName } from "../../utils";
 
 export class CategoryCollectionImpl implements CategoryCollection {

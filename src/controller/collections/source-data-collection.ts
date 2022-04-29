@@ -5,12 +5,7 @@ import {
     SourceDataInfoItem,
     SourceTransaction,
 } from "../../model/entities";
-import {
-    Storage,
-    Sources,
-    SourceDataCollection,
-    Transactions,
-} from "../../interfaces";
+import { Storage, Sources, SourceDataCollection } from "../../interfaces";
 import { findNewName } from "../../utils";
 
 class SourceData {
@@ -21,7 +16,7 @@ class SourceData {
 }
 
 export class SourceDataCollectionImpl implements SourceDataCollection {
-    public static inject = ["sources", "transactions", "storage"] as const;
+    public static inject = ["sources", "storage"] as const;
 
     private sourceDatas: SourceData[] = [];
     // Note: re-generated whenever sourceDatas changes.
@@ -30,11 +25,7 @@ export class SourceDataCollectionImpl implements SourceDataCollection {
 
     private settings: Settings;
 
-    constructor(
-        private sources: Sources,
-        private transactions: Transactions,
-        private storage: Storage,
-    ) {
+    constructor(private sources: Sources, private storage: Storage) {
         this.sourceDataInfo = new SourceDataInfo();
         this.settings = new Settings();
     }
@@ -52,6 +43,7 @@ export class SourceDataCollectionImpl implements SourceDataCollection {
         );
         const transactions = this.sources.parseTransactions(transactionData);
         this.sourceDatas.push(new SourceData(newName, transactions));
+        this.insertTransactions(transactions);
 
         this.storage.storeSourceData(name, transactionData);
         this.updateInfo();
@@ -61,9 +53,102 @@ export class SourceDataCollectionImpl implements SourceDataCollection {
         this.sourceDatas = this.sourceDatas.filter(
             (sourceData) => sourceData.name !== name,
         );
+
+        // Re-build the sourceTransactions array.
+        this.sourceTransactions = [];
+        for (var sourceData of this.sourceDatas) {
+            this.insertTransactions(sourceData.transactions);
+        }
+
         this.storage.removeSourceData(name);
 
         this.updateInfo();
+    }
+
+    /**
+     * Inserts new transactions into the this.sourceTransactions array.
+     * Removes duplicate entries and sorts transactions by date ascending.
+     * Note: Runs in O(nW | n log n) time, where W is the max amount of transactions on any given date.
+     */
+    private insertTransactions(newTransactions: SourceTransaction[]) {
+        newTransactions = newTransactions.sort(
+            (a, b) => a.date.getTime() - b.date.getTime(),
+        );
+
+        // Checks whether two transactions are equal to each other.
+        // Note: Opposite transactions are considered equal.
+        function transactionsAreEqual(
+            transaction: SourceTransaction,
+            other: SourceTransaction,
+        ) {
+            if (transaction.date.getTime() != other.date.getTime())
+                return false;
+
+            if (transaction.account === other.account) {
+                return transaction.amount === other.amount;
+            } else if (transaction.account === other.contraAccount) {
+                return transaction.amount === -other.amount;
+            } else {
+                return false;
+            }
+        }
+
+        // Put combined transactions into a new array instead of splicing into the existing array.
+        var combinedTransactions = [];
+
+        var existingIndex = 0;
+        var newIndex = 0;
+
+        while (newIndex < newTransactions.length) {
+            while (
+                existingIndex < this.sourceTransactions.length &&
+                this.sourceTransactions[existingIndex].date.getTime() <
+                    newTransactions[newIndex].date.getTime()
+            ) {
+                combinedTransactions.push(
+                    this.sourceTransactions[existingIndex],
+                );
+                existingIndex++;
+            }
+
+            if (existingIndex == this.sourceTransactions.length) {
+                combinedTransactions.push(...newTransactions.slice(newIndex));
+                break;
+            } else {
+                var newTransaction = newTransactions[newIndex];
+                var existingSameDateIndex = existingIndex;
+                var foundSameTransaction = false;
+                while (
+                    existingSameDateIndex < this.sourceTransactions.length &&
+                    this.sourceTransactions[
+                        existingSameDateIndex
+                    ].date.getTime() == newTransaction.date.getTime()
+                ) {
+                    if (
+                        transactionsAreEqual(
+                            this.sourceTransactions[existingSameDateIndex],
+                            newTransaction,
+                        )
+                    ) {
+                        foundSameTransaction = true;
+                        break;
+                    }
+                    existingSameDateIndex++;
+                }
+
+                if (!foundSameTransaction) {
+                    combinedTransactions.push(newTransaction);
+                }
+            }
+
+            newIndex++;
+        }
+
+        combinedTransactions.push(
+            ...this.sourceTransactions.slice(existingIndex),
+        );
+
+        this.sourceTransactions = combinedTransactions;
     }
 
     private updateInfo(): void {
@@ -91,9 +176,6 @@ export class SourceDataCollectionImpl implements SourceDataCollection {
             this.sourceDataInfo.items.push(sourceDataInfo);
         }
 
-        this.sourceTransactions = this.transactions.combineSources(
-            this.sourceDatas.map((s) => s.transactions),
-        );
         this.sourceDataInfo.totalTransactions = this.sourceTransactions.length;
         // this.transactions.combineSources may have combined some transactions
         // containing unique source accounts, hence the use of all source transactions below.
