@@ -24,7 +24,8 @@
         "dev": "webpack && xdg-open ./public/index.html",
         "build": "webpack",
         "test": "jest",
-        "lint": "prettier --write .",
+        "lint": "eslint src/ tests/ public/sw.js --ext .ts,.js,.vue",
+        "format": "prettier --write .",
         "diagram": "tplant -A --input src/main.ts --output design/ClassDiagram.svg"
     },
     "dependencies": {
@@ -39,6 +40,11 @@
     "devDependencies": {
         "@types/jest": "^27.0.3",
         "@types/papaparse": "^5.3.1",
+        "@typescript-eslint/eslint-plugin": "^5.21.0",
+        "@typescript-eslint/parser": "^5.21.0",
+        "eslint": "^8.14.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-vue": "^8.7.1",
         "jest": "^27.4.3",
         "prettier": "^2.5.0",
         "raw-loader": "^4.0.2",
