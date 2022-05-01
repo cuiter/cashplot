@@ -95,3 +95,26 @@ export class SourceTransaction {
         return JSON.stringify(this) === JSON.stringify(other);
     }
 }
+
+export class AssignedTransaction extends SourceTransaction {
+    constructor(
+        date: Date,
+        amount: number,
+        account: string,
+        contraAccount: string | null,
+        contraAccountName: string | null,
+        description: string,
+        public readonly assignedCategories: Category[],
+        public readonly assignedAccount: Account,
+        public readonly assignedContraAccount: Account,
+    ) {
+        super(
+            date,
+            amount,
+            account,
+            contraAccount,
+            contraAccountName,
+            description,
+        );
+    }
+}

@@ -1,4 +1,7 @@
 import {
+    Account,
+    AssignedTransaction,
+    Category,
     Preferences,
     Settings,
     SourceDataInfo,
@@ -52,6 +55,17 @@ export interface CategoryCollection {
       setBudget(name: string, monthlyBudget: number): void
       setFilters(name: string, filters: WildcardFilter[]): void
     */
+}
+
+export interface TransactionAssigner {
+    /**
+      Assigns matching accounts and categories to each source transaction.
+    */
+    assignTransactions(
+        transactions: SourceTransaction[],
+        accounts: Account[],
+        categories: Category[],
+    ): AssignedTransaction[];
 }
 
 export interface Sources {
