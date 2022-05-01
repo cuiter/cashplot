@@ -1,16 +1,16 @@
 <template>
-    <div class="tab-nav" v-if="value === 'source-data' || value === 'category'">
+    <div v-if="value === 'source-data' || value === 'category'" class="tab-nav">
         <span
             class="tab-nav-button"
+            :class="{ selected: value === 'source-data' }"
             @click="openTab('source-data')"
-            v-bind:class="{ selected: value === 'source-data' }"
         >
             Bronnen
         </span>
         <span
             class="tab-nav-button"
+            :class="{ selected: value === 'category' }"
             @click="openTab('category')"
-            v-bind:class="{ selected: value === 'category' }"
         >
             Categorieën
         </span>

@@ -6,7 +6,7 @@ import { assert } from "../../utils";
 /** Parser for SNS Bank's official CSV formats. Supports both the "CSV" and "CSV2004" variant. */
 export class SNSBankCSVSource implements Source {
     public hasValidHeader(transactionData: string): boolean {
-        var firstLine = transactionData.split("\n", 1)[0];
+        const firstLine = transactionData.split("\n", 1)[0];
 
         const parsedCsv = Papa.parse(firstLine, {
             header: false,
@@ -16,12 +16,12 @@ export class SNSBankCSVSource implements Source {
             return false;
         } else {
             // The parsed CSV should contain the description column.
-            return (parsedCsv.data[0] as any).length > 17;
+            return (parsedCsv.data[0] as Array<string>).length > 17;
         }
     }
 
     private transactionFromRow(
-        row: any,
+        row: Record<number, string>,
         line: number | null,
     ): SourceTransaction {
         const errorPrefix = `Invalid transaction data${
@@ -31,9 +31,9 @@ export class SNSBankCSVSource implements Source {
         function useColumn(
             description: string,
             columnIndex: number,
-            required: boolean,
-            isNumber: boolean = false,
-        ): string {
+            isNumber = false,
+            required = false,
+        ): string | null {
             const value = row[columnIndex];
 
             if (required) {
@@ -55,12 +55,20 @@ export class SNSBankCSVSource implements Source {
             return value === "" ? null : value;
         }
 
-        var rawDate = useColumn("date", 0, true);
-        var account = useColumn("account", 1, true);
-        var contraAccount = useColumn("contra-account", 2, false);
-        var contraAccountName = useColumn("contra-account name", 3, false);
-        var rawAmount = useColumn("amount", 10, true, true);
-        var rawDescription = useColumn("description", 17, true);
+        function useRequiredColumn(
+            description: string,
+            columnIndex: number,
+            isNumber = false,
+        ): string {
+            return useColumn(description, columnIndex, isNumber, true) ?? "";
+        }
+
+        const rawDate = useRequiredColumn("date", 0);
+        const account = useRequiredColumn("account", 1);
+        const contraAccount = useColumn("contra-account", 2);
+        const contraAccountName = useColumn("contra-account name", 3);
+        const rawAmount = useRequiredColumn("amount", 10, true);
+        const rawDescription = useRequiredColumn("description", 17);
         const date = new Date(
             rawDate.substr(6, 4) +
                 "-" +
@@ -72,8 +80,8 @@ export class SNSBankCSVSource implements Source {
             date instanceof Date && !isNaN(date.valueOf()),
             `${errorPrefix}Could not determine date from value: "${rawDate}"`,
         );
-        var amount = Number(rawAmount) * DECIMAL;
-        var description =
+        const amount = Number(rawAmount) * DECIMAL;
+        const description =
             rawDescription[0] == "'"
                 ? rawDescription.substr(1, rawDescription.length - 2) // Remove surrounding quotes
                 : rawDescription;
@@ -103,7 +111,7 @@ export class SNSBankCSVSource implements Source {
             );
         }
 
-        const rows = parsedCsv.data as any[];
+        const rows = parsedCsv.data as Record<number, string>[];
 
         const transactions = rows.map((row, index) =>
             this.transactionFromRow(row, index + 1),

@@ -1,8 +1,8 @@
 <template>
     <div class="collection-grid">
         <div
-            class="grid-item button button-dark"
             v-for="category of categories"
+            class="grid-item button button-dark"
         >
             <span class="transaction-amount">{{ category }}</span>
         </div>
@@ -13,13 +13,6 @@
 </template>
 
 <script lang="ts">
-import { DECIMAL, SourceTransaction } from "../../model/entities";
-import * as dayjs from "dayjs";
-
-const transactionDateFormat = "D MMMM YYYY";
-const defaultItemsLoaded = 50;
-const itemIncrement = 20;
-
 export default {
     props: ["categories"],
     methods: {

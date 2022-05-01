@@ -2,7 +2,7 @@ import { Type } from "class-transformer";
 import "reflect-metadata";
 import { hash } from "../utils";
 
-const DECIMAL: number = 100;
+const DECIMAL = 100;
 export { DECIMAL };
 
 export class Settings {

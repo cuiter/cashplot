@@ -24,9 +24,16 @@ export class LocalStorageDriver implements StorageDriver {
     }
 
     public listSections(): string[] {
-        var sections = [];
-        for (var i = 0; i < this.storage.length; i++) {
-            sections.push(this.storage.key(i)!);
+        const sections = [];
+        for (let i = 0; i < this.storage.length; i++) {
+            const section = this.storage.key(i);
+            if (section === null) {
+                console.warn(
+                    `Localstorage section ${i} unexpectedly disappeared while querying`,
+                );
+                continue;
+            }
+            sections.push(section);
         }
         return sections;
     }

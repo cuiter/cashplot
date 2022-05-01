@@ -1,10 +1,10 @@
 <template>
     <div class="full-size tab-contents">
         <span class="tab-heading">Ongecategoriseerd</span>
-        <transaction-list-component v-bind:transactions="allTransactions" />
-        <div class="tab-splitter"></div>
+        <transaction-list-component :transactions="allTransactions" />
+        <div class="tab-splitter" />
         <span class="tab-heading">Categorieën</span>
-        <category-list-component v-bind:categories="allCategories" />
+        <category-list-component :categories="allCategories" />
     </div>
 </template>
 

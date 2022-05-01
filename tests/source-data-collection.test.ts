@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createInjector } from "typed-inject";
 import { SourceDataCollectionImpl } from "../src/controller/collections/source-data-collection";
 import {
@@ -6,7 +7,7 @@ import {
     Settings,
     SourceTransaction,
 } from "../src/model/entities";
-import { Storage, Source, Sources } from "../src/interfaces";
+import { Storage, Sources } from "../src/interfaces";
 
 class SourcesMock implements Sources {
     public parseTransactions(transactionData: string): SourceTransaction[] {

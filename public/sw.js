@@ -1,3 +1,5 @@
+/* eslint-env browser */
+
 // Service worker used for enabling offline support.
 // Uses an "offline-first" strategy, which means that the value from the cache is used first.
 // A request for new resources is made in the background.
@@ -36,8 +38,11 @@ self.addEventListener("install", (event) => {
                     urlsToCache.map((url) =>
                         cache
                             .add(url)
-                            .catch((e) =>
-                                console.log("Install: failed to fetch " + url),
+                            .catch((err) =>
+                                console.log(
+                                    "Install: failed to fetch " + url + ": ",
+                                    err,
+                                ),
                             ),
                     ),
                 ),
@@ -92,7 +97,8 @@ self.addEventListener("fetch", function (event) {
                 })
                 .catch((err) => {
                     console.log(
-                        "Failed to fetch " + event.request.url + ": " + err,
+                        "Failed to fetch " + event.request.url + ": ",
+                        err,
                     );
                 });
 

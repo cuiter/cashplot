@@ -22,8 +22,7 @@ export default {
     data: function () {
         return {
             currentTab:
-                window.localStorage.getItem(currentTabKey) ??
-                currentTabDefault,
+                window.localStorage.getItem(currentTabKey) ?? currentTabDefault,
         };
     },
     watch: {

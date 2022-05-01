@@ -1,4 +1,3 @@
-import { createInjector } from "typed-inject";
 import { StorageDriver } from "../src/interfaces";
 import { StorageImpl } from "../src/model/storage";
 import {
@@ -16,7 +15,7 @@ class StorageDriverMock implements StorageDriver {
     constructor() {}
 
     loadObject(section: string): object | null {
-        return this.valueStore.hasOwnProperty(section)
+        return Object.prototype.hasOwnProperty.call(this.valueStore, section)
             ? this.valueStore[section]
             : null;
     }
@@ -24,7 +23,7 @@ class StorageDriverMock implements StorageDriver {
         this.valueStore[section] = object;
     }
     loadHugeText(section: string): string | null {
-        return this.valueStore.hasOwnProperty(section)
+        return Object.prototype.hasOwnProperty.call(this.valueStore, section)
             ? this.valueStore[section]
             : null;
     }

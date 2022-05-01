@@ -2,7 +2,6 @@ import { SourceTransaction } from "../../model/entities";
 import { Source, Sources } from "../../interfaces";
 import { INGBankCSVSource } from "./ing-csv";
 import { SNSBankCSVSource } from "./sns-csv";
-import * as Papa from "papaparse";
 
 export class SourcesImpl implements Sources {
     constructor() {}
@@ -14,9 +13,9 @@ export class SourcesImpl implements Sources {
             new SNSBankCSVSource(),
         ];
 
-        for (var source of sources) {
+        for (const source of sources) {
             if (source.hasValidHeader(transactionsData)) {
-                var transactions = source.parseTransactions(transactionsData);
+                const transactions = source.parseTransactions(transactionsData);
 
                 if (transactions.length === 0) {
                     throw new Error(

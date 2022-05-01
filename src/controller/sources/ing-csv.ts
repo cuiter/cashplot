@@ -34,7 +34,7 @@ export class INGBankCSVSource implements Source {
     // https://www.ing.nl/media/ING_CSV_Mijn_ING_Augustus2020_tcm162-201483.pdf
 
     public hasValidHeader(transactionData: string): boolean {
-        var firstLine = transactionData.split("\n", 1)[0];
+        const firstLine = transactionData.split("\n", 1)[0];
 
         const parsedCsv = Papa.parse(firstLine, csvConfig);
 
@@ -53,7 +53,7 @@ export class INGBankCSVSource implements Source {
     }
 
     private transactionFromRow(
-        row: any,
+        row: Record<string, string>,
         line: number | null,
     ): SourceTransaction {
         const errorPrefix = `Invalid transaction data${
@@ -63,7 +63,7 @@ export class INGBankCSVSource implements Source {
         function useColumn(
             description: string,
             columnNames: string[],
-            required: boolean = true,
+            required = false,
         ): string | null {
             const values = columnNames
                 .map((name) => row[name])
@@ -82,30 +82,40 @@ export class INGBankCSVSource implements Source {
             }
         }
 
-        const rawDate = useColumn("date", ["Date", "Datum"]);
-        const contraAccountName = useColumn("contra-account", [
+        function useRequiredColumn(
+            description: string,
+            columnNames: string[],
+        ): string {
+            return useColumn(description, columnNames, true) ?? "";
+        }
+
+        const rawDate = useRequiredColumn("date", ["Date", "Datum"]) ?? "";
+        const contraAccountName = useRequiredColumn("contra-account", [
             "Name / Description",
             "Naam / Omschrijving",
         ]);
-        const account = useColumn("account", ["Account", "Rekening"]);
-        const contraAccount = useColumn(
-            "contra-account",
-            ["Counterparty", "Tegenrekening"],
-            false,
-        );
-        const rawDirection = useColumn("direction", ["Debit/credit", "Af Bij"]);
-        const rawAmount = useColumn("amount", ["Amount (EUR)", "Bedrag (EUR)"]);
-        const description = useColumn("description", [
-            "Notifications",
-            "Mededelingen",
+        const account = useRequiredColumn("account", ["Account", "Rekening"]);
+        const contraAccount = useColumn("contra-account", [
+            "Counterparty",
+            "Tegenrekening",
         ]);
+        const rawDirection = useRequiredColumn("direction", [
+            "Debit/credit",
+            "Af Bij",
+        ]);
+        const rawAmount = useRequiredColumn("amount", [
+            "Amount (EUR)",
+            "Bedrag (EUR)",
+        ]);
+        const description =
+            useColumn("description", ["Notifications", "Mededelingen"]) ?? "";
 
         const date = new Date(
-            rawDate!.substr(0, 4) +
+            rawDate.substr(0, 4) +
                 "-" +
-                rawDate!.substr(4, 2) +
+                rawDate.substr(4, 2) +
                 "-" +
-                rawDate!.substr(6, 2),
+                rawDate.substr(6, 2),
         );
         assert(
             date instanceof Date && !isNaN(date.valueOf()),
@@ -122,16 +132,16 @@ export class INGBankCSVSource implements Source {
             `${errorPrefix}Could not determine direction from value: "${rawDirection}"`,
         );
         const amount =
-            Number(rawAmount!.replace(",", ".")) *
+            Number(rawAmount.replace(",", ".")) *
             (direction ? DECIMAL : -DECIMAL);
 
         return new SourceTransaction(
             date,
             amount,
-            account!,
+            account,
             contraAccount,
             contraAccountName,
-            description!,
+            description,
         );
     }
 
@@ -147,7 +157,7 @@ export class INGBankCSVSource implements Source {
             );
         }
 
-        const rows = parsedCsv.data as any[];
+        const rows = parsedCsv.data as Record<string, string>[];
 
         const transactions = rows.map((row, index) =>
             this.transactionFromRow(row, index + 2),

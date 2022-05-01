@@ -36,8 +36,8 @@ export function hash(str: string): number {
  * For example, if new.txt already exists: new.txt -> new.txt (1)
  */
 export function findNewName(name: string, existingNames: string[]): string {
-    var newName = name;
-    var index = 1;
+    let newName = name;
+    let index = 1;
 
     while (existingNames.indexOf(newName) !== -1) {
         newName = `${name} (${index})`;

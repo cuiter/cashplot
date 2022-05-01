@@ -1,5 +1,4 @@
 import {
-    Category,
     Settings,
     SourceDataInfo,
     SourceDataInfoItem,
@@ -56,7 +55,7 @@ export class SourceDataCollectionImpl implements SourceDataCollection {
 
         // Re-build the sourceTransactions array.
         this.sourceTransactions = [];
-        for (var sourceData of this.sourceDatas) {
+        for (const sourceData of this.sourceDatas) {
             this.insertTransactions(sourceData.transactions);
         }
 
@@ -94,10 +93,10 @@ export class SourceDataCollectionImpl implements SourceDataCollection {
         }
 
         // Put combined transactions into a new array instead of splicing into the existing array.
-        var combinedTransactions = [];
+        const combinedTransactions = [];
 
-        var existingIndex = 0;
-        var newIndex = 0;
+        let existingIndex = 0;
+        let newIndex = 0;
 
         while (newIndex < newTransactions.length) {
             while (
@@ -115,9 +114,9 @@ export class SourceDataCollectionImpl implements SourceDataCollection {
                 combinedTransactions.push(...newTransactions.slice(newIndex));
                 break;
             } else {
-                var newTransaction = newTransactions[newIndex];
-                var existingSameDateIndex = existingIndex;
-                var foundSameTransaction = false;
+                const newTransaction = newTransactions[newIndex];
+                let existingSameDateIndex = existingIndex;
+                let foundSameTransaction = false;
                 while (
                     existingSameDateIndex < this.sourceTransactions.length &&
                     this.sourceTransactions[

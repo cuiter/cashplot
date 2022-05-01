@@ -15,7 +15,7 @@ declare global {
             directory: string,
             useSubdirectories: boolean,
             filter: RegExp,
-        ) => { (key: string): { default: any }; keys(): string[] };
+        ) => { (key: string): { default: any }; keys(): string[] }; // eslint-disable-line
     }
 }
 
@@ -29,7 +29,9 @@ export class WebUI implements UI {
 
     public init(): void {
         // Global error handler
+        /* eslint-disable */
         const handleError = (err: Error, ...args: any[]) => {
+            /* eslint-enable */
             // For debugging purposes, show every error as an alert message.
             // Note: an alternative should be considered when moving to production.
 
@@ -42,7 +44,7 @@ export class WebUI implements UI {
             handleError(err, "\nInfo:", info);
         };
         window.onerror = function (msg, url, lineNo, columnNo, err) {
-            handleError(err!);
+            handleError(err!); // eslint-disable-line
             return false;
         };
 
@@ -57,12 +59,16 @@ export class WebUI implements UI {
         // Load every Vue component from the components directory.
         const req = require.context("./", true, /\.(vue)$/i);
         for (const key of req.keys()) {
-            const name = key.match(/.*\/(.*)\.vue/)![1];
-            var component = req(key).default;
-            Vue.component(name + "-component", component);
+            const match = key.match(/.*\/(.*)\.vue/);
+
+            if (match !== null) {
+                const name = match[1];
+                const component = req(key).default;
+                Vue.component(name + "-component", component);
+            }
         }
 
-        let v = new Vue({
+        const _v = new Vue({
             el: "#app",
             data: {
                 sourceData: this.sourceData,
@@ -70,7 +76,8 @@ export class WebUI implements UI {
             },
             methods: {
                 handleError: handleError,
-                isDebugModeEnabled: () => window.hasOwnProperty("LiveReload"),
+                isDebugModeEnabled: () =>
+                    Object.prototype.hasOwnProperty.call(window, "LiveReload"),
             },
         });
 
@@ -84,7 +91,7 @@ export class WebUI implements UI {
     private onResize(): void {
         // Set the --vh CSS variable to be relative to the viewport height,
         // _without_ the browser navbar (important for mobile).
-        let vh = window.innerHeight * 0.01;
+        const vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty("--vh", `${vh}px`);
     }
 }

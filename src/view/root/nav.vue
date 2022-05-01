@@ -2,8 +2,8 @@
     <div class="nav">
         <div
             class="nav-button"
+            :class="{ selected: value === 'overview' }"
             @click="openTab('overview')"
-            v-bind:class="{ selected: value === 'overview' }"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -20,8 +20,10 @@
         </div>
         <div
             class="nav-button"
+            :class="{
+                selected: value === 'source-data' || value == 'category',
+            }"
             @click="openTab('source-data')"
-            v-bind:class="{ selected: value === 'source-data' || value == 'category' }"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -38,11 +40,11 @@
         </div>
         <div
             class="nav-button"
-            @click="isDataAvailable && openTab('budget')"
-            v-bind:class="{
+            :class="{
                 selected: value === 'budget',
                 faded: !isDataAvailable,
             }"
+            @click="isDataAvailable && openTab('budget')"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -59,11 +61,11 @@
         </div>
         <div
             class="nav-button"
-            @click="isDataAvailable && openTab('balance')"
-            v-bind:class="{
+            :class="{
                 selected: value === 'balance',
                 faded: !isDataAvailable,
             }"
+            @click="isDataAvailable && openTab('balance')"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"

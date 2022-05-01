@@ -1,10 +1,10 @@
 <template>
     <div class="collection-list">
-        <div class="transaction-group" v-for="item of transactionsByDate">
+        <div v-for="item of transactionsByDate" class="transaction-group">
             <span class="transaction-date-splitter">{{ item.date }}</span>
             <div
-                class="collection-item"
                 v-for="transaction of item.transactions"
+                class="collection-item"
             >
                 <span class="transaction-amount"
                     >€{{
@@ -14,13 +14,13 @@
                     }}</span
                 >
                 <div
-                    class="transaction-direction-down"
                     v-if="transaction.amount < 0"
-                ></div>
+                    class="transaction-direction-down"
+                />
                 <div
-                    class="transaction-direction-up"
                     v-if="transaction.amount >= 0"
-                ></div>
+                    class="transaction-direction-up"
+                />
                 <span class="transaction-title">{{
                     transaction.contraAccountName || transaction.contraAccount
                 }}</span>
@@ -49,19 +49,6 @@ export default {
             itemsLoaded: defaultItemsLoaded,
         };
     },
-    methods: {
-        infiniteHandler($state: any) {
-            (this as any).$data.itemsLoaded += itemIncrement;
-            if (
-                (this as any).$data.itemsLoaded <
-                (this as any).transactions.length
-            ) {
-                $state.loaded();
-            } else {
-                $state.complete();
-            }
-        },
-    },
     computed: {
         DECIMAL: () => DECIMAL,
         transactionsByDate: function () {
@@ -88,6 +75,19 @@ export default {
                     transactions: transactionsByDate[timeStr],
                 };
             });
+        },
+    },
+    methods: {
+        infiniteHandler($state: any) {
+            (this as any).$data.itemsLoaded += itemIncrement;
+            if (
+                (this as any).$data.itemsLoaded <
+                (this as any).transactions.length
+            ) {
+                $state.loaded();
+            } else {
+                $state.complete();
+            }
         },
     },
 };

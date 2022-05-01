@@ -1,10 +1,4 @@
-import {
-    Category,
-    Settings,
-    SourceDataInfo,
-    SourceDataInfoItem,
-    SourceTransaction,
-} from "../../model/entities";
+import { Category, Settings } from "../../model/entities";
 import { CategoryCollection } from "../../interfaces";
 import { findNewName } from "../../utils";
 

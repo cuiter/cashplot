@@ -1,4 +1,4 @@
-import { DECIMAL, SourceTransaction } from "../src/model/entities";
+import { DECIMAL } from "../src/model/entities";
 import { SourcesImpl } from "../src/controller/sources";
 
 const testTransactionsSnsCsvFormat = `28-06-2021,NL00MAIN1234567890,NL01WORK0987654321,Company Inc.,,,,EUR,0.00,EUR,4000.00,28-06-2021,28-06-2021,6305,IOS,5976384,,'Salary for June 2020’,1
@@ -9,11 +9,11 @@ const testTransactionsIngCsvFormat = `"Date","Name / Description","Account","Cou
 
 describe("Sources", () => {
     test("should automatically detect the type of transactions data and load transactions", () => {
-        for (var transactionsData of [
+        for (const transactionsData of [
             testTransactionsIngCsvFormat,
             testTransactionsSnsCsvFormat,
         ]) {
-            var transactions = new SourcesImpl().parseTransactions(
+            const transactions = new SourcesImpl().parseTransactions(
                 transactionsData,
             );
 
@@ -49,7 +49,7 @@ describe("Sources", () => {
     });
 
     test("should signal an error if there were no transactions in the given data", () => {
-        var transactionsData = testTransactionsIngCsvFormat.split("\n")[0];
+        const transactionsData = testTransactionsIngCsvFormat.split("\n")[0];
 
         expect(() =>
             new SourcesImpl().parseTransactions(transactionsData),

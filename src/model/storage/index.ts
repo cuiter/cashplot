@@ -1,9 +1,4 @@
-import {
-    classToPlain,
-    instanceToInstance,
-    instanceToPlain,
-    plainToClass,
-} from "class-transformer";
+import { instanceToPlain, plainToClass } from "class-transformer";
 import { Storage, StorageDriver } from "../../interfaces";
 import { Preferences, Settings } from "../entities";
 import { assert } from "../../utils";
@@ -32,17 +27,17 @@ export class StorageImpl implements Storage {
     public loadSettings(): Settings | null {
         const settingsObj = this.storageDriver.loadObject(settingsKey);
         if (settingsObj === null) return null;
-        const settingsVersion = (settingsObj as any)["version"];
+        const settingsVersion = (settingsObj as any)["version"]; // eslint-disable-line
         assert(
             settingsVersion === 0,
             `Could not load settings object: unsupported version ${settingsVersion}`,
         );
-        delete (settingsObj as any).version;
+        delete (settingsObj as any).version; // eslint-disable-line
         return plainToClass(Settings, settingsObj);
     }
 
     public storeSettings(settings: Settings) {
-        var settingsObj = instanceToPlain(settings);
+        const settingsObj = instanceToPlain(settings);
         settingsObj.version = settingsVersion;
         this.storageDriver.storeObject(settingsKey, settingsObj);
     }
@@ -50,18 +45,18 @@ export class StorageImpl implements Storage {
     public loadPreferences(): Preferences | null {
         const preferencesObj = this.storageDriver.loadObject(preferencesKey);
         if (preferencesObj === null) return null;
-        const preferencesVersion = (preferencesObj as any)["version"];
+        const preferencesVersion = (preferencesObj as any)["version"]; // eslint-disable-line
         assert(
             preferencesVersion === 0,
             `Could not load preferences object: unsupported version ${preferencesVersion}`,
         );
-        delete (preferencesObj as any).version;
+        delete (preferencesObj as any).version; // eslint-disable-line
         return plainToClass(Preferences, preferencesObj);
     }
 
     public storePreferences(preferences: Preferences) {
-        var preferencesObj = instanceToPlain(preferences);
-        preferencesObj.version = 0;
+        const preferencesObj = instanceToPlain(preferences);
+        preferencesObj.version = preferencesVersion;
         this.storageDriver.storeObject(preferencesKey, preferencesObj);
     }
 
@@ -76,10 +71,10 @@ export class StorageImpl implements Storage {
         transactionData: string;
     } {
         const section = sourceDataPrefix + name;
-        const sectionData = this.storageDriver.loadHugeText(section)!;
+        const sectionData = this.storageDriver.loadHugeText(section);
         if (sectionData === null) {
             throw new Error(
-                `Could not load source data from persistent storage with name \"${name}\"`,
+                `Could not load source data from persistent storage with name "${name}"`,
             );
         }
         const version = Number(

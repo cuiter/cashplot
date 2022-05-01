@@ -1,19 +1,8 @@
-import { createInjector } from "typed-inject";
-import { StorageDriver } from "../src/interfaces";
-import { StorageImpl } from "../src/model/storage";
 import { LocalStorageDriver } from "../src/model/storage/localstorage-driver";
-import {
-    Account,
-    Category,
-    DECIMAL,
-    Preferences,
-    Settings,
-    WildcardFilter,
-} from "../src/model/entities";
 
 class LocalStorageMock implements Storage {
     private valueStore: any = {};
-    public length: number = 0;
+    public length = 0;
 
     constructor() {}
 
@@ -30,14 +19,14 @@ class LocalStorageMock implements Storage {
     }
 
     public setItem(key: string, value: string) {
-        if (!this.valueStore.hasOwnProperty(key)) {
+        if (!Object.prototype.hasOwnProperty.call(this.valueStore, key)) {
             this.length++;
         }
         this.valueStore[key] = value;
     }
 
     public removeItem(key: string) {
-        if (this.valueStore.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(this.valueStore, key)) {
             delete this.valueStore[key];
             this.length--;
         }

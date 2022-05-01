@@ -42,8 +42,8 @@
         </div>
         <div class="collection-list">
             <div
-                class="collection-item"
                 v-for="item of allSourceDataInfo.items"
+                class="collection-item"
             >
                 <span class="source-data-name">{{ item.name }}</span>
                 <!--NOTE: If the viewport gets really small, change the date format-->
@@ -81,11 +81,11 @@
                 </svg>
                 <svg
                     class="source-data-remove-button clickable float-right"
-                    @click="onRemoveSourceDataPressed(item.name)"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 22"
                     width="24"
                     height="24"
+                    @click="onRemoveSourceDataPressed(item.name)"
                 >
                     <path fill="none" d="M0 0h24v24H0z" />
                     <path
@@ -94,8 +94,8 @@
                 </svg>
             </div>
             <div
-                class="no-source-data-message"
                 v-if="allSourceDataInfo.length === 0"
+                class="no-source-data-message"
             >
                 <span>Er zijn nog geen bronnen toegevoegd.</span>
                 <br /><br />
@@ -120,11 +120,11 @@
             >
                 <div
                     class="sources-selection"
-                    v-bind:class="{ disabled: sourceSelectionOpen === false }"
+                    :class="{ disabled: sourceSelectionOpen === false }"
                 >
                     <span
                         v-for="name of sourceSelectionNames"
-                        v-on:click="onSourceItemSelected"
+                        @click="onSourceItemSelected"
                         >{{ name }}</span
                     >
                 </div>
@@ -141,12 +141,12 @@
             </button>
             <label class="button" for="source-data-upload">Voeg toe</label>
             <input
-                type="file"
-                multiple="multiple"
-                v-on:change="onSourceDataUpload"
-                class="disabled"
                 id="source-data-upload"
                 ref="sourceDataUpload"
+                type="file"
+                multiple="multiple"
+                class="disabled"
+                @change="onSourceDataUpload"
             />
         </div>
     </div>
@@ -222,21 +222,6 @@ export default {
         };
     },
 
-    mounted: function () {
-        (this as any).$data.resizeEventHandler = debounce(
-            (this as any).updateInfoDateFormat,
-            50,
-        );
-        window.addEventListener(
-            "resize",
-            (this as any).$data.resizeEventHandler,
-        );
-        (this as any).updateInfoDateFormat();
-    },
-    beforeDestroy: function () {
-        window.removeEventListener("resize", (this as any).resizeEventHandler);
-    },
-
     computed: {
         sourceSelectionNames(): string[] {
             const selectedSource = (this as any).$data.selectedSource;
@@ -250,6 +235,21 @@ export default {
         allSourceDataInfo() {
             return (this as any).$root.$data.sourceData.allInfo();
         },
+    },
+
+    mounted: function () {
+        (this as any).$data.resizeEventHandler = debounce(
+            (this as any).updateInfoDateFormat,
+            50,
+        );
+        window.addEventListener(
+            "resize",
+            (this as any).$data.resizeEventHandler,
+        );
+        (this as any).updateInfoDateFormat();
+    },
+    beforeDestroy: function () {
+        window.removeEventListener("resize", (this as any).resizeEventHandler);
     },
 
     methods: {
