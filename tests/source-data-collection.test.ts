@@ -14,22 +14,6 @@ class SourcesMock implements Sources {
         if (transactionData === "<mock1>") {
             return [
                 new SourceTransaction(
-                    new Date("2021-11-02"),
-                    -20 * DECIMAL,
-                    "NL00MAIN1234567890",
-                    "NL98INGB2152156592",
-                    "Mr. John",
-                    "Lunch",
-                ),
-                new SourceTransaction(
-                    new Date("2021-11-13"),
-                    -430 * DECIMAL,
-                    "NL00MAIN1234567890",
-                    "NL23ABNA9349042743",
-                    "Mike's Tire Repairs",
-                    "13th of November tire sale, 4x sports tires",
-                ),
-                new SourceTransaction(
                     new Date("2021-11-16"),
                     -200 * DECIMAL,
                     "NL00SCND0987654321",
@@ -37,11 +21,27 @@ class SourcesMock implements Sources {
                     "Robot Computer Shop",
                     "Invoice 934830293, laptop model VT94",
                 ),
+                new SourceTransaction(
+                    new Date("2021-11-13"),
+                    -20 * DECIMAL,
+                    "NL00MAIN1234567890",
+                    "NL98INGB2152156592",
+                    "Mr. John",
+                    "Lunch",
+                ),
+                new SourceTransaction(
+                    new Date("2021-11-02"),
+                    -430 * DECIMAL,
+                    "NL00MAIN1234567890",
+                    "NL23ABNA9349042743",
+                    "Mike's Tire Repairs",
+                    "13th of November tire sale, 4x sports tires",
+                ),
             ];
         } else {
             return [
                 new SourceTransaction(
-                    new Date("2021-11-02"),
+                    new Date("2021-11-13"),
                     20 * DECIMAL,
                     "NL98INGB2152156592",
                     "NL00MAIN1234567890",
@@ -110,6 +110,41 @@ describe("SourceDataCollectionImpl", () => {
         expect(
             (sourceDataCollection as any).sourceDatas[1].transactions.length,
         ).toBe(1);
+    });
+
+    test("should merge transactions from multiple sources", () => {
+        const storageMock = new StorageMock();
+        const sourceDataCollection = injector
+            .provideValue("storage", storageMock)
+            .injectClass(SourceDataCollectionImpl);
+
+        sourceDataCollection.add("data1.csv", "<mock1>");
+        sourceDataCollection.add("data2.csv", "<mock2>");
+
+        const transactions = sourceDataCollection.allTransactions();
+
+        // Duplicate entries are removed
+        expect(transactions.length).toBe(3);
+        // Transactions are sorted by date ascending
+        expect(transactions[0].date).toEqual(new Date("2021-11-02"));
+        expect(transactions[1].date).toEqual(new Date("2021-11-13"));
+        expect(transactions[2].date).toEqual(new Date("2021-11-16"));
+
+        // The load order should not matter
+        const secondStorageMock = new StorageMock();
+        const secondSourceDataCollection = injector
+            .provideValue("storage", secondStorageMock)
+            .injectClass(SourceDataCollectionImpl);
+
+        secondSourceDataCollection.add("data2.csv", "<mock2>");
+        secondSourceDataCollection.add("data1.csv", "<mock1>");
+
+        const secondTransactions = secondSourceDataCollection.allTransactions();
+
+        expect(secondTransactions.length).toBe(3);
+        expect(secondTransactions[0].date).toEqual(new Date("2021-11-02"));
+        expect(secondTransactions[1].date).toEqual(new Date("2021-11-13"));
+        expect(secondTransactions[2].date).toEqual(new Date("2021-11-16"));
     });
 
     test("should add source data (including transactions) to its (persistent) collection", () => {
@@ -217,8 +252,8 @@ describe("SourceDataCollectionImpl", () => {
         expect(info.items[0].nTransactions).toBe(3);
 
         expect(info.items[1].name).toBe("data2.csv");
-        expect(info.items[1].startDate).toEqual(new Date("2021-11-02"));
-        expect(info.items[1].endDate).toEqual(new Date("2021-11-02"));
+        expect(info.items[1].startDate).toEqual(new Date("2021-11-13"));
+        expect(info.items[1].endDate).toEqual(new Date("2021-11-13"));
         expect(info.items[1].nAccounts).toBe(1);
         expect(info.items[1].nTransactions).toBe(1);
     });
