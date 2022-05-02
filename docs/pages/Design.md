@@ -2,11 +2,11 @@
 
 CashPlot's main objective is to provide a clear view of the user's finances, so that they can make better decisions.
 
-The key design goal is facilitating speedy iteration and development.
+The key design goal is facilitating speedy high-quality iteration and development.
 In particular, it is designed with the following principles in mind:
 
--   Easy to change - It should be easy to add, change or remove functionality by ideally changing one part of the code-base. This means extensive re-use.
--   Robust - Classes, methods, interfaces, functionalities should be designed in a way that , and be tested for correctness by the way of unit tests.
+-   Easy to change - It should be easy to add, change or remove features by changing only one or a few parts of the code-base. This means extensive re-use.
+-   Robust - Classes, methods, interfaces, functionalities should be designed in a way that is easy to test and such that it handles incorrect inputs in a consistent way.
 
 There are a few techniques key to CashPlot's design:
 
@@ -74,10 +74,32 @@ Runtime stack:
 -   Main language: TypeScript
 -   Web framework: Vue
 -   Dependency injection framework: typed-inject
--   Testing framework: Jest
 
 Development tools:
 
+-   Unit testing framework: Jest
+-   UI testing framework: Cypress
 -   Build system: webpack
 -   Code formatter: prettier
+-   Code linter/checker: eslint
 -   Class diagram generator: tplant
+
+## Testing
+
+Testing is divided into two layers: user-level testing and component-level testing.
+
+User-level testing is done via UI-tests. This is done so that it's easier to capture and test user-level requirements, because it also tests the (limited) logic in the UI layer.
+
+Component-level testing is done via unit tests. Dependencies are substituted with mocks, such that only the behavior of the component itself is tested.
+
+Tests are named according to the BDD style: "X Should ...". This ensures that the tests are focused on externally-visible behavior, rather than internal details.
+
+## Components
+
+![](ComponentDiagram.png)
+
+The system is subdivided into components using the MVC pattern.
+
+...transaction processing...
+
+...separation of concerns...

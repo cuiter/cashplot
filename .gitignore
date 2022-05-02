@@ -3,9 +3,7 @@
 # Compiled output
 /public/js/bundle.js*
 # Generated documentation
-/doc/
+/docs/public/
 
 # Misc
 /README.pdf
-/design/UI.epgz
-/design/ClassDiagram.svg

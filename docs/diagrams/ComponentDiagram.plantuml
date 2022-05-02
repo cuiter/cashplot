@@ -20,9 +20,11 @@ Container_Boundary(cashplot_container, "CashPlot") {
             Component(category_collection_component, "CategoryCollection", "TypeScript module", "Manages a collection of categories and filters.")
             Component(account_collection_component, "AccountCollection", "TypeScript module", "Manages a collection of (virtual) accounts.")
         }
-        Component(balance_calculator_component, "BalanceCalculator", "TypeScript module", "Provides account balances over time and provides Plotly data for balance graphs.")
-        Component(transaction_sorter_component, "TransactionSorter", "TypeScript module", "Filters and optionally sorts or sums up transactions by category, filter and/or a specific time period")
-        Component(transaction_assigner_component, "TransactionAssigner", "TypeScript module", "Assigns categories and accounts to raw transactions")
+        Container_Boundary(processing_container, "Processing") {
+            Component(balance_calculator_component, "BalanceCalculator", "TypeScript module", "Provides account balances over time and provides Plotly data for balance graphs.")
+            Component(transaction_sorter_component, "TransactionSorter", "TypeScript module", "Filters and optionally sorts or sums up transactions by category, filter and/or a specific time period")
+            Component(transaction_assigner_component, "TransactionAssigner", "TypeScript module", "Assigns categories and accounts to raw transactions")
+        }
         Component(sources_component, "Sources", "TypeScript modules", "Reads raw transactions from user-provided data (for example bank CSV exports)")
     }
     Container_Boundary(model_container, "Model") {
