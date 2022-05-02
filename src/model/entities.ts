@@ -1,7 +1,8 @@
-import { Type } from "class-transformer";
+import { Exclude, Type } from "class-transformer";
 import "reflect-metadata";
 import { hash } from "../utils";
 
+const MAX_ID = 1_000_000_000_000;
 const DECIMAL = 100;
 export { DECIMAL };
 
@@ -33,30 +34,54 @@ export class Account {
     ) {}
 }
 
+/** A filter is a way of automatically connecting transactions to categories. */
+export class Filter {
+    /** Unique identifier for this filter */
+    public readonly id: number;
+
+    constructor(id: number) {
+        this.id = id;
+    }
+}
+
+/** Matches transactions based on content. Matches case-insensitively, supporting a wildcard character. */
+export class WildcardFilter extends Filter {
+    constructor(
+        id: number,
+        public contraAccount: string,
+        public description: string,
+    ) {
+        super(id);
+    }
+}
+
+/** Matches a single transaction. Used in manual transaction assignments. */
+export class ManualFilter extends Filter {
+    constructor(id: number, public transactionHash: number) {
+        super(id);
+    }
+}
+
 export class Category {
-    @Type(() => WildcardFilter)
-    public filters: WildcardFilter[];
+    @Type(() => Filter, {
+        discriminator: {
+            property: "type",
+            subTypes: [
+                { value: WildcardFilter, name: "wildcard" },
+                { value: ManualFilter, name: "manual" },
+            ],
+        },
+        keepDiscriminatorProperty: true,
+    })
+    public filters: Filter[];
 
     constructor(
         public name: string,
         public monthlyBudget: number | null = null,
-        filters: WildcardFilter[] = [],
+        filters: Filter[] = [],
     ) {
         this.filters = filters;
     }
-}
-
-export class WildcardFilter {
-    // A filter is a way of automatically connecting transactions to categories.
-    //
-    // Note: This is a draft.
-    // Note: It might be a good idea to have Filter as an abstract type.
-    //       There could be many different kinds of filters, for example wildcard filters, regex filters, ML filters, etc.
-    //
-    constructor(
-        public contraAccount: string | null,
-        public description: string | null,
-    ) {}
 }
 
 export class SourceDataInfo {

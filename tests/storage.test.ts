@@ -4,6 +4,7 @@ import {
     Account,
     Category,
     DECIMAL,
+    ManualFilter,
     Preferences,
     Settings,
     WildcardFilter,
@@ -42,10 +43,11 @@ const testSettings = new Settings(
     [new Account("NL00SNSB1234567890", "Mr. G", 40 * DECIMAL, true)],
     [
         new Category("Shopping", 300 * DECIMAL, [
-            new WildcardFilter("bol.com", "90340932902"),
+            new WildcardFilter(1, "bol.com", "90340932902"),
         ]),
         new Category("Salary", null, [
-            new WildcardFilter("Company Inc.", "Salary for"),
+            new WildcardFilter(2, "Company Inc.", "Salary for"),
+            new ManualFilter(3, 0x320923df),
         ]),
     ],
 );
@@ -65,6 +67,8 @@ const testStoredSettings = {
             monthlyBudget: 300 * DECIMAL,
             filters: [
                 {
+                    type: "wildcard",
+                    id: 1,
                     contraAccount: "bol.com",
                     description: "90340932902",
                 },
@@ -75,8 +79,15 @@ const testStoredSettings = {
             monthlyBudget: null,
             filters: [
                 {
+                    type: "wildcard",
+                    id: 2,
                     contraAccount: "Company Inc.",
                     description: "Salary for",
+                },
+                {
+                    type: "manual",
+                    id: 3,
+                    transactionHash: 0x320923df,
                 },
             ],
         },
