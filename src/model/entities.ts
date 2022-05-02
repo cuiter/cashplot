@@ -117,29 +117,31 @@ export class SourceTransaction {
     }
 
     public equals(other: SourceTransaction) {
-        return JSON.stringify(this) === JSON.stringify(other);
+        return this.hash === other.hash;
+    }
+
+    /** Overrides the hash of this transaction. For testing purposes only. */
+    public overrideHash(hash: number): SourceTransaction {
+        (this as any).hash = hash; // eslint-disable-line
+
+        return this;
     }
 }
 
 export class AssignedTransaction extends SourceTransaction {
     constructor(
-        date: Date,
-        amount: number,
-        account: string,
-        contraAccount: string | null,
-        contraAccountName: string | null,
-        description: string,
+        transaction: SourceTransaction,
         public readonly assignedCategories: Category[],
-        public readonly assignedAccount: Account,
-        public readonly assignedContraAccount: Account,
+        public readonly assignedAccount: Account | null,
+        public readonly assignedContraAccount: Account | null,
     ) {
         super(
-            date,
-            amount,
-            account,
-            contraAccount,
-            contraAccountName,
-            description,
+            transaction.date,
+            transaction.amount,
+            transaction.account,
+            transaction.contraAccount,
+            transaction.contraAccountName,
+            transaction.description,
         );
     }
 }
