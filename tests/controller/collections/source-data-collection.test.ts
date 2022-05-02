@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createInjector } from "typed-inject";
-import { SourceDataCollectionImpl } from "../src/controller/collections/source-data-collection";
+import { SourceDataCollectionImpl } from "../../../src/controller/collections/source-data-collection";
 import {
     DECIMAL,
     Preferences,
     Settings,
     SourceTransaction,
-} from "../src/model/entities";
-import { Storage, Sources } from "../src/interfaces";
+} from "../../../src/model/entities";
+import { Storage, Sources } from "../../../src/interfaces";
 
 class SourcesMock implements Sources {
     public parseTransactions(transactionData: string): SourceTransaction[] {

@@ -1,5 +1,5 @@
-import { StorageDriver } from "../src/interfaces";
-import { StorageImpl } from "../src/model/storage";
+import { StorageDriver } from "../../src/interfaces";
+import { StorageImpl } from "../../src/model/storage";
 import {
     Account,
     Category,
@@ -8,7 +8,7 @@ import {
     Preferences,
     Settings,
     WildcardFilter,
-} from "../src/model/entities";
+} from "../../src/model/entities";
 
 class StorageDriverMock implements StorageDriver {
     private valueStore: any = {};

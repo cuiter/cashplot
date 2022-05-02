@@ -1,5 +1,5 @@
-import { DECIMAL } from "../src/model/entities";
-import { SourcesImpl } from "../src/controller/sources";
+import { DECIMAL } from "../../../src/model/entities";
+import { SourcesImpl } from "../../../src/controller/sources";
 
 const testTransactionsSnsCsvFormat = `28-06-2021,NL00MAIN1234567890,NL01WORK0987654321,Company Inc.,,,,EUR,0.00,EUR,4000.00,28-06-2021,28-06-2021,6305,IOS,5976384,,'Salary for June 2020’,1
 29-06-2021,NL00MAIN1234567890,NL00MAIN1234567892,Mr. G,,,,EUR,4000,EUR,-1000.00,29-06-2021,29-06-2021,8949,NGI,5949432,,'Savings’,1`;

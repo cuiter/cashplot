@@ -1,4 +1,4 @@
-import { LocalStorageDriver } from "../src/model/storage/localstorage-driver";
+import { LocalStorageDriver } from "../../src/model/storage/localstorage-driver";
 
 class LocalStorageMock implements Storage {
     private valueStore: any = {};
