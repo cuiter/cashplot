@@ -6,7 +6,7 @@
     "main": "index.js",
     "scripts": {
         "configure": "cordova platform add android",
-        "build-debug": "cordova build android -d"
+        "build": "cordova build android"
     },
     "keywords": [
         "ecosystem:cordova"
@@ -14,6 +14,7 @@
     "author": "cuiter",
     "license": "Apache-2.0",
     "devDependencies": {
+        "cordova": "^11.0.0",
         "cordova-android": "^10.1.1",
         "cordova-plugin-splashscreen": "^6.0.0"
     },
