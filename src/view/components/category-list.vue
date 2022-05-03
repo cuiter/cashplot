@@ -1,20 +1,21 @@
 <template>
-    <div class="collection-grid">
-        <div
-            v-for="category of categories"
-            class="grid-item button button-dark"
-            @click="selectCategory(category)"
-        >
-            <span class="transaction-amount">{{ category }}</span>
-        </div>
-        <div class="grid-item button button-light" @click="addCategory">
-            Nieuw
+    <div class="collection-grid-container">
+        <div class="collection-grid">
+            <div
+                v-for="category of categories"
+                class="grid-item button button-dark"
+                @click="selectCategory(category)"
+            >
+                <div class="category-name">{{ category }}</div>
+            </div>
+            <div class="grid-item button button-light" @click="addCategory">
+                <div class="category-name">Nieuw</div>
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { filter } from "vue/types/umd";
 import { ManualFilter } from "../../model/entities";
 import { createUniqueId } from "../../utils";
 const newCategoryName = "New category";

@@ -475,23 +475,39 @@ a {
     height: 5.2rem;
 }
 
-.collection-grid {
+.collection-grid-container {
     flex: 0 0 40%;
     max-height: 30rem;
+    width: 100%;
     overflow-y: auto;
+}
 
-    display: flex;
-    align-content: flex-start;
-    flex-wrap: wrap;
-    flex-flow: row wrap;
+.collection-grid {
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    font-size: 0; /* Remove any accidental whitespace between items */
 }
 
 .grid-item {
+    display: inline-block;
+    vertical-align: top;
     border: 0.25rem solid var(--color-primary-deselected);
-    width: 18.25rem;
+    width: calc(33% - 1.2rem);
     height: 7rem;
     margin: 0.6rem;
-    padding-top: 2rem;
+}
+
+.category-name {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    font-size: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    word-wrap: break-word;
+    white-space: initial;
 }
 
 /* Custom classes */
@@ -616,7 +632,7 @@ a {
 
 .large-button {
     height: 5rem;
-    width: 13rem;
+    width: 100%;
     margin: 0.5rem;
     border-radius: 1rem;
     font-size: 1.5rem;
