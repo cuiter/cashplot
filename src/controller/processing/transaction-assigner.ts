@@ -1,16 +1,54 @@
-import { TransactionAssigner } from "../../interfaces";
+import {
+    CategoryCollection,
+    SourceDataCollection,
+    TransactionAssigner,
+} from "../../interfaces";
 import {
     SourceTransaction,
-    Account,
     Category,
     AssignedTransaction,
     ManualFilter,
 } from "../../model/entities";
 
 export class TransactionAssignerImpl implements TransactionAssigner {
-    assignTransactions(
+    public static inject = ["sourceData", "categories"] as const;
+
+    private assignedTransactions: AssignedTransaction[] = [];
+    private updateRequired = false;
+
+    constructor(
+        private sourceData: SourceDataCollection,
+        private categories: CategoryCollection,
+    ) {
+        this.sourceData.subscribeToChanges(() => {
+            this.updateRequired = true;
+        });
+        this.categories.subscribeToChanges(() => {
+            this.updateRequired = true;
+        });
+    }
+
+    public allTransactions(): AssignedTransaction[] {
+        if (this.updateRequired) {
+            this.updateTransactions();
+            this.updateRequired = false;
+        }
+
+        return this.assignedTransactions;
+    }
+
+    private updateTransactions() {
+        const transactions = this.sourceData.allTransactions();
+        const categories = this.categories.all();
+
+        this.assignedTransactions = this.assignTransactions(
+            transactions,
+            categories,
+        );
+    }
+
+    private assignTransactions(
         transactions: SourceTransaction[],
-        accounts: Account[],
         categories: Category[],
     ): AssignedTransaction[] {
         const manualMatches: Record<number, Category[]> = {};

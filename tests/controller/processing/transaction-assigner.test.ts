@@ -1,9 +1,17 @@
+import { Observable } from "@daign/observable";
+import { createInjector } from "typed-inject";
 import { TransactionAssignerImpl } from "../../../src/controller/processing/transaction-assigner";
+import {
+    CategoryCollection,
+    SourceDataCollection,
+} from "../../../src/interfaces";
 import {
     Account,
     Category,
     DECIMAL,
+    Filter,
     ManualFilter,
+    SourceDataInfo,
     SourceTransaction,
 } from "../../../src/model/entities";
 
@@ -34,9 +42,67 @@ const testTransactions = [
     ).overrideHash(0x1003),
 ];
 
+class SourceDataCollectionMock
+    extends Observable
+    implements SourceDataCollection
+{
+    constructor(private transactions: SourceTransaction[]) {
+        super();
+    }
+    init(): void {
+        this.notifyObservers();
+    }
+    add(_name: string, _transactionsData: string): void {
+        throw new Error("Method not implemented.");
+    }
+    remove(_name: string): void {
+        throw new Error("Method not implemented.");
+    }
+    allInfo(): SourceDataInfo {
+        throw new Error("Method not implemented.");
+    }
+    allTransactions(): SourceTransaction[] {
+        return this.transactions;
+    }
+}
+
+class CategoryCollectionMock extends Observable implements CategoryCollection {
+    constructor(private categories: Category[]) {
+        super();
+    }
+    init(): void {
+        this.notifyObservers();
+    }
+    add(_defaultName: string): string {
+        throw new Error("Method not implemented.");
+    }
+    remove(_name: string): void {
+        throw new Error("Method not implemented.");
+    }
+    rename(_name: string, _newName: string): boolean {
+        throw new Error("Method not implemented.");
+    }
+    addFilter(_categoryName: string, _filter: Filter): void {
+        throw new Error("Method not implemented.");
+    }
+    removeFilter(_categoryName: string, _filterId: number): void {
+        throw new Error("Method not implemented.");
+    }
+    get(_name: string): Category {
+        throw new Error("Method not implemented.");
+    }
+    list(): string[] {
+        throw new Error("Method not implemented.");
+    }
+    all(): Category[] {
+        return this.categories;
+    }
+}
+
 describe("TransactionAssigner", () => {
+    const injector = createInjector();
+
     test("should assign categories based on manual filters", () => {
-        const accounts: Account[] = [];
         const categories: Category[] = [
             new Category("Catering", 200 * DECIMAL, [
                 new ManualFilter(1, 0x1002),
@@ -46,12 +112,18 @@ describe("TransactionAssigner", () => {
             ]),
             new Category("Food", 400 * DECIMAL, [new ManualFilter(1, 0x1002)]),
         ];
-
-        const transactions = new TransactionAssignerImpl().assignTransactions(
+        const sourceDataCollection = new SourceDataCollectionMock(
             testTransactions,
-            accounts,
-            categories,
         );
+        const categoryCollection = new CategoryCollectionMock(categories);
+        const transactionAssigner = injector
+            .provideValue("sourceData", sourceDataCollection)
+            .provideValue("categories", categoryCollection)
+            .injectClass(TransactionAssignerImpl);
+
+        sourceDataCollection.init();
+        categoryCollection.init();
+        const transactions = transactionAssigner.allTransactions();
 
         expect(transactions.length).toBe(3);
         expect(transactions[0].assignedCategories).toEqual([categories[1]]);

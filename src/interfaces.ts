@@ -1,5 +1,4 @@
 import {
-    Account,
     AssignedTransaction,
     Category,
     Filter,
@@ -31,6 +30,8 @@ export interface SourceDataCollection {
     allInfo(): SourceDataInfo;
     /** Returns the list of all transactions, ordered by date ascending. */
     allTransactions(): SourceTransaction[];
+    /** Allows another component to subscribe to any changes in this component. */
+    subscribeToChanges(callback: () => void): void;
 }
 
 export interface CategoryCollection {
@@ -72,17 +73,20 @@ export interface CategoryCollection {
     get(name: string): Category;
     /** Returns the names of all categories. */
     list(): string[];
+    /** Returns all categories in the collection. */
+    all(): Category[];
+    /** Allows another component to subscribe to any changes in this component. */
+    subscribeToChanges(callback: () => void): void;
 }
 
+/**
+  Takes transactions (from SourceDataCollection) and using filters, matches it to categories (from CategoryCollection).
+*/
 export interface TransactionAssigner {
     /**
-      Assigns matching accounts and categories to each source transaction.
-    */
-    assignTransactions(
-        transactions: SourceTransaction[],
-        accounts: Account[],
-        categories: Category[],
-    ): AssignedTransaction[];
+     * Returns all transactions after assigning them to their respective categories.
+     */
+    allTransactions(): AssignedTransaction[];
 }
 
 export interface Sources {

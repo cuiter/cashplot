@@ -75,6 +75,21 @@ describe("CategoryCollectionImpl", () => {
         expect(category.name).toBe("Category 2");
     });
 
+    test("should return all categories in the collection", () => {
+        const categoryCollection = injector
+            .provideClass("storage", StorageMock)
+            .injectClass(CategoryCollectionImpl);
+
+        categoryCollection.add("Category 1");
+        categoryCollection.add("Category 2");
+
+        const categories = categoryCollection.all();
+
+        expect(categories.length).toBe(2);
+        expect(categories[0].name).toBe("Category 1");
+        expect(categories[1].name).toBe("Category 2");
+    });
+
     test("should add a filter to a category", () => {
         const categoryCollection = injector
             .provideClass("storage", StorageMock)

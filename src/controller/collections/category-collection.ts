@@ -129,4 +129,7 @@ export class CategoryCollectionImpl
     public list(): string[] {
         return this.settings.categories.map((category) => category.name);
     }
+    public all(): Category[] {
+        return this.settings.categories;
+    }
 }
