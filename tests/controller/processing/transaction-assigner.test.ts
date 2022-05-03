@@ -82,10 +82,10 @@ class CategoryCollectionMock extends Observable implements CategoryCollection {
     rename(_name: string, _newName: string): boolean {
         throw new Error("Method not implemented.");
     }
-    addFilter(_categoryName: string, _filter: Filter): void {
+    addFilters(_categoryName: string, _filter: Filter[]): void {
         throw new Error("Method not implemented.");
     }
-    removeFilter(_categoryName: string, _filterId: number): void {
+    removeFilters(_categoryName: string, _filterId: number[]): void {
         throw new Error("Method not implemented.");
     }
     get(_name: string): Category {

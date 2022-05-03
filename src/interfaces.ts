@@ -61,13 +61,14 @@ export interface CategoryCollection {
     */
 
     /**
-     * Adds a filter to the category. If a filter with the same id already exists, it is replaced.
+     * Adds filters to the category. If a filter with the same id already exists, it is replaced.
      */
-    addFilter(categoryName: string, filter: Filter): void;
+    addFilters(categoryName: string, filters: Filter[]): void;
     /**
-     * Removes a filter from the category.
+     * Removes filters from the category.
+     * Note: Throws an error if one of the given filter ids do not exist.
      */
-    removeFilter(categoryName: string, filterId: number): void;
+    removeFilters(categoryName: string, filterId: number[]): void;
 
     /** Returns the category with the given name. */
     get(name: string): Category;

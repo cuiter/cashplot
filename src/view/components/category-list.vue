@@ -14,6 +14,7 @@
 </template>
 
 <script lang="ts">
+import { filter } from "vue/types/umd";
 import { ManualFilter } from "../../model/entities";
 import { createUniqueId } from "../../utils";
 const newCategoryName = "New category";
@@ -28,18 +29,15 @@ export default {
             (this as any).$root.$data.categories.add(newCategoryName);
         },
         selectCategory(name: string) {
-            const selectedTransactionHashes = (this as any).$props
+            const selectedTransactionHashes: number[] = (this as any).$props
                 .selectedTransactionHashes;
+
             if (selectedTransactionHashes.length !== 0) {
-                for (const selectedTransactionHash of selectedTransactionHashes) {
-                    (this as any).$root.$data.categories.addFilter(
-                        name,
-                        new ManualFilter(
-                            createUniqueId(),
-                            selectedTransactionHash,
-                        ),
-                    );
-                }
+                var filters = selectedTransactionHashes.map(
+                    (hash) => new ManualFilter(createUniqueId(), hash),
+                );
+
+                (this as any).$root.$data.categories.addFilters(name, filters);
             }
         },
     },

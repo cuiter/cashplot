@@ -69,7 +69,7 @@ export class CategoryCollectionImpl
         return false;
     }
 
-    public addFilter(categoryName: string, filter: Filter): void {
+    public addFilters(categoryName: string, filters: Filter[]): void {
         const category = this.settings.categories.filter(
             (category) => category.name == categoryName,
         )[0];
@@ -79,18 +79,21 @@ export class CategoryCollectionImpl
             );
         }
 
-        // Remove filter with same id if it already exists.
+        // Remove filters with same id if they already exist.
         const filterIds = category.filters.map((filter) => filter.id);
-        if (filterIds.indexOf(filter.id) !== -1) {
-            category.filters.splice(filterIds.indexOf(filter.id), 1);
+        for (const filter of filters) {
+            const filterIndex = filterIds.indexOf(filter.id);
+            if (filterIndex !== -1) {
+                category.filters[filterIndex] = filter;
+            } else {
+                category.filters.push(filter);
+            }
         }
-
-        category.filters.push(filter);
 
         this.notifyObservers();
     }
 
-    public removeFilter(categoryName: string, filterId: number): void {
+    public removeFilters(categoryName: string, filterIds: number[]): void {
         const category = this.settings.categories.filter(
             (category) => category.name == categoryName,
         )[0];
@@ -100,17 +103,22 @@ export class CategoryCollectionImpl
             );
         }
 
-        const filterIds = category.filters.map((filter) => filter.id);
-        if (filterIds.indexOf(filterId) !== -1) {
-            category.filters.splice(filterIds.indexOf(filterId), 1);
-        } else {
-            throw new Error(
-                "Could not find filter with id " +
-                    filterId +
-                    ' inside category "' +
-                    categoryName +
-                    '"',
-            );
+        const existingFilterIds = category.filters.map((filter) => filter.id);
+        for (const filterId of filterIds) {
+            const filterIndex = existingFilterIds.indexOf(filterId);
+
+            if (filterIndex !== -1) {
+                category.filters.splice(filterIndex, 1);
+                existingFilterIds.splice(filterIndex, 1);
+            } else {
+                throw new Error(
+                    "Could not find filter with id " +
+                        filterId +
+                        ' inside category "' +
+                        categoryName +
+                        '"',
+                );
+            }
         }
 
         this.notifyObservers();

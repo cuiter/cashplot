@@ -90,39 +90,43 @@ describe("CategoryCollectionImpl", () => {
         expect(categories[1].name).toBe("Category 2");
     });
 
-    test("should add a filter to a category", () => {
+    test("should add filters to a category", () => {
         const categoryCollection = injector
             .provideClass("storage", StorageMock)
             .injectClass(CategoryCollectionImpl);
 
         categoryCollection.add("New category");
 
-        categoryCollection.addFilter(
-            "New category",
+        categoryCollection.addFilters("New category", [
             new ManualFilter(0x3528, 0x9302323),
-        );
+            new ManualFilter(0x6934, 0x2393803),
+        ]);
 
         const category = categoryCollection.get("New category");
-        expect(category.filters.length).toBe(1);
+        expect(category.filters.length).toBe(2);
         expect(category.filters[0]).toBeInstanceOf(ManualFilter);
         expect(category.filters[0].id).toBe(0x3528);
         expect((category.filters[0] as ManualFilter).transactionHash).toBe(
             0x9302323,
         );
-
-        // Override filter with new filter
-        categoryCollection.addFilter(
-            "New category",
-            new ManualFilter(0x3528, 0x10239234),
+        expect(category.filters[1].id).toBe(0x6934);
+        expect((category.filters[1] as ManualFilter).transactionHash).toBe(
+            0x2393803,
         );
 
+        // Override filter with new filter
+        categoryCollection.addFilters("New category", [
+            new ManualFilter(0x3528, 0x10239234),
+        ]);
+
         const overriddenCategory = categoryCollection.get("New category");
-        expect(overriddenCategory.filters.length).toBe(1);
+        expect(overriddenCategory.filters.length).toBe(2);
         expect(overriddenCategory.filters[0]).toBeInstanceOf(ManualFilter);
         expect(overriddenCategory.filters[0].id).toBe(0x3528);
         expect(
             (overriddenCategory.filters[0] as ManualFilter).transactionHash,
         ).toBe(0x10239234);
+        expect(category.filters[1].id).toBe(0x6934);
     });
 
     test("should remove a filter from a category", () => {
@@ -132,16 +136,12 @@ describe("CategoryCollectionImpl", () => {
 
         categoryCollection.add("New category");
 
-        categoryCollection.addFilter(
-            "New category",
+        categoryCollection.addFilters("New category", [
             new ManualFilter(0x3528, 0x9302323),
-        );
-        categoryCollection.addFilter(
-            "New category",
             new ManualFilter(0x6934, 0x2393803),
-        );
+        ]);
 
-        categoryCollection.removeFilter("New category", 0x3528);
+        categoryCollection.removeFilters("New category", [0x3528]);
 
         const category = categoryCollection.get("New category");
         expect(category.filters.length).toBe(1);
