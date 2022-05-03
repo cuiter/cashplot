@@ -96,7 +96,7 @@ a {
 .nav .nav-button span {
     position: absolute;
     left: 0;
-    top: 3.3rem;
+    top: 3.33rem;
     width: 100%;
     font-size: 1.4rem;
     text-align: center;
@@ -107,7 +107,7 @@ a {
 .nav .nav-button svg {
     position: absolute;
     left: 1.75rem;
-    top: 0.45rem;
+    top: 0.43rem;
     width: 3.5rem;
     height: 3.5rem;
     fill: var(--color-fill-icon);
@@ -144,7 +144,7 @@ a {
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     color: var(--color-primary-deselected);
-    padding: 0rem 1rem;
+    padding: 0.1rem 1rem 0rem;
 
     border-radius: 1rem;
 }
