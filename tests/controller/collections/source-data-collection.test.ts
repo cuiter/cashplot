@@ -53,7 +53,7 @@ class SourcesMock implements Sources {
     }
 }
 
-class StorageMock implements Storage {
+export class StorageMock implements Storage {
     private settings: Settings | null = null;
     private preferences: Preferences | null = null;
     private sourceData: { [name: string]: string } = {};

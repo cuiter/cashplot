@@ -2,6 +2,7 @@ import {
     Account,
     AssignedTransaction,
     Category,
+    Filter,
     Preferences,
     Settings,
     SourceDataInfo,
@@ -35,26 +36,42 @@ export interface SourceDataCollection {
 export interface CategoryCollection {
     /** Initializes and restores state from previous session if available */
     init(): void;
+
     /**
-     * Adds a new category to the collection. Generates and returns the new name.
+     * Adds a new category to the collection. Returns the new name.
      */
-    add(): string;
+    add(defaultName: string): string;
     /**
-     * Removes the category and its associated filters.
-     * Note: Not implemented yet.
-     *
-     * remove(name: string): void;
+     * Removes the category and its associated filters from the collection.
      */
-    /** Returns the names of all categories. */
-    list(): string[];
+    remove(name: string): void;
+    /**
+     * Renames a category.
+     * Returns whether the rename was successful (i.e. whether there no conflicting category existed).
+     */
+    rename(name: string, newName: string): boolean;
 
     /*
-      To implement:
-      get(name: string): Category
-      rename(oldName: string, newName: string): void
-      setBudget(name: string, monthlyBudget: number): void
-      setFilters(name: string, filters: WildcardFilter[]): void
+    To implement:
+    get(name: string): Category
+    rename(oldName: string, newName: string): void
+    setBudget(name: string, monthlyBudget: number): void
+    setFilters(name: string, filters: WildcardFilter[]): void
     */
+
+    /**
+     * Adds a filter to the category. If a filter with the same id already exists, it is replaced.
+     */
+    addFilter(categoryName: string, filter: Filter): void;
+    /**
+     * Removes a filter from the category.
+     */
+    removeFilter(categoryName: string, filterId: number): void;
+
+    /** Returns the category with the given name. */
+    get(name: string): Category;
+    /** Returns the names of all categories. */
+    list(): string[];
 }
 
 export interface TransactionAssigner {
