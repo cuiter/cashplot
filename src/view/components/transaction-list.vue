@@ -5,6 +5,12 @@
             <div
                 v-for="transaction of item.transactions"
                 class="collection-item"
+                :class="{
+                    selectable: selectable,
+                    clickable: selectable,
+                    selected: value.indexOf(transaction.hash) !== -1,
+                }"
+                @click="selectTransaction(transaction.hash)"
             >
                 <span class="transaction-amount"
                     >€{{
@@ -44,7 +50,9 @@ const itemIncrement = 20;
 
 export default {
     props: {
+        value: { type: Array, default: () => null }, // Hashes of selected transactions
         transactions: { type: Array, default: () => [] },
+        selectable: { type: Boolean, default: () => false },
     },
     data: () => {
         return {
@@ -95,6 +103,18 @@ export default {
             } else {
                 $state.complete();
             }
+        },
+
+        selectTransaction(transactionHash: number) {
+            const selectedTransactionIndex = (this as any).$props.value.indexOf(
+                transactionHash,
+            );
+            if (selectedTransactionIndex === -1) {
+                (this as any).$props.value.push(transactionHash);
+            } else {
+                (this as any).$props.value.splice(selectedTransactionIndex, 1);
+            }
+            (this as any).$emit("input", (this as any).$props.value);
         },
     },
 };

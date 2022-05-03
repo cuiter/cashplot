@@ -73,6 +73,8 @@ export class CategoryCollectionImpl implements CategoryCollection {
         }
 
         category.filters.push(filter);
+
+        this.storage.storeSettings(this.settings);
     }
 
     public removeFilter(categoryName: string, filterId: number): void {
@@ -97,6 +99,8 @@ export class CategoryCollectionImpl implements CategoryCollection {
                     '"',
             );
         }
+
+        this.storage.storeSettings(this.settings);
     }
 
     public get(name: string): Category {

@@ -46,3 +46,16 @@ export function findNewName(name: string, existingNames: string[]): string {
 
     return newName;
 }
+
+/**
+ * Generates a new unique numerical id in the form "1yyyyyyyyyxxxxxx"
+ * where y = determined by the current time, and
+ *       x = determined by a random value
+ */
+export function createUniqueId(): number {
+    return (
+        Math.pow(10, 15) +
+        (Date.now() % Math.pow(10, 9)) * 1_000_000 +
+        Math.floor(Math.random() * 1_000_000)
+    );
+}

@@ -273,6 +273,19 @@ a {
     font-size: 1.3rem;
 }
 
+.collection-item.selectable {
+    background-color: var(--color-background-button);
+}
+
+.collection-item.selectable:hover {
+    background-color: var(--color-background-light-hover);
+}
+
+.collection-item.selectable.selected {
+    background-color: var(--color-background-button-dark);
+    border-color: var(--color-background-light-hover);
+}
+
 .source-data-remove-button {
     right: 0.25rem;
     bottom: 1rem;
