@@ -13,11 +13,15 @@
 </template>
 
 <script lang="ts">
+const newCategoryName = "New category";
+
 export default {
-    props: ["categories"],
+    props: {
+        categories: { type: Array, default: () => [] },
+    },
     methods: {
         addCategory() {
-            (this as any).$root.$data.categories.add();
+            (this as any).$root.$data.categories.add(newCategoryName);
         },
     },
 };

@@ -10,7 +10,7 @@
             <balance-tab-component v-if="currentTab == 'balance'" />
         </div>
 
-        <nav-component v-model="currentTab" />
+        <bottom-nav-component v-model="currentTab" />
     </div>
 </template>
 

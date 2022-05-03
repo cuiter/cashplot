@@ -11,7 +11,7 @@ import {
 } from "../../src/model/entities";
 
 class StorageDriverMock implements StorageDriver {
-    private valueStore: any = {};
+    private valueStore: any = {}; // eslint-disable-line
 
     constructor() {}
 

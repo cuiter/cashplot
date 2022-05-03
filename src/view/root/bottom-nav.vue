@@ -85,7 +85,9 @@
 
 <script lang="ts">
 export default {
-    props: ["value"],
+    props: {
+        value: { type: String, default: () => null },
+    },
     computed: {
         isDataAvailable(): boolean {
             return (this as any).$root.$data.sourceData.allInfo().length !== 0;

@@ -43,7 +43,9 @@ const defaultItemsLoaded = 50;
 const itemIncrement = 20;
 
 export default {
-    props: ["transactions"],
+    props: {
+        transactions: { type: Array, default: () => [] },
+    },
     data: () => {
         return {
             itemsLoaded: defaultItemsLoaded,
@@ -61,7 +63,12 @@ export default {
                 .forEach((transaction) => {
                     var timeStr = transaction.date.getTime().toString();
 
-                    if (!transactionsByDate.hasOwnProperty(timeStr)) {
+                    if (
+                        !Object.prototype.hasOwnProperty.call(
+                            transactionsByDate,
+                            timeStr,
+                        )
+                    ) {
                         transactionsByDate[timeStr] = [];
                     }
                     transactionsByDate[timeStr].push(transaction);

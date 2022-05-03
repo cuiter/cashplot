@@ -154,7 +154,7 @@
 
 <script lang="ts">
 import * as dayjs from "dayjs";
-import { SourceDataInfo, SourceDataInfoItem } from "../../model/entities";
+import { SourceDataInfoItem } from "../../model/entities";
 
 const infoDateWidthThresholdRem = 40;
 const longInfoDateFormat = "D MMMM YYYY";
@@ -165,10 +165,10 @@ const shortInfoDateFormat = "D MMM. YYYY";
  * Note: Also calls the handler <wait> milliseconds after the last trigger.
  */
 function debounce(func: any, wait: number) {
-    var timeout: NodeJS.Timeout | null;
+    var timeout: NodeJS.Timeout | null; // eslint-disable-line
     var lastCalled: number | null;
     return function (this: any) {
-        var context = this,
+        var context = this, // eslint-disable-line
             args = arguments;
 
         var callIfBouncePeriodOver = () => {
@@ -177,7 +177,7 @@ function debounce(func: any, wait: number) {
                 lastCalled = Date.now();
             }
 
-            clearTimeout(timeout!);
+            clearTimeout(timeout!); // eslint-disable-line
         };
 
         callIfBouncePeriodOver();
@@ -186,7 +186,6 @@ function debounce(func: any, wait: number) {
 }
 
 export default {
-    props: ["currentTab"],
     data: function () {
         return {
             sourceSelectionOpen: false,

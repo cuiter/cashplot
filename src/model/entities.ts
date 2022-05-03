@@ -1,8 +1,7 @@
-import { Exclude, Type } from "class-transformer";
+import { Type } from "class-transformer";
 import "reflect-metadata";
 import { hash } from "../utils";
 
-const MAX_ID = 1_000_000_000_000;
 const DECIMAL = 100;
 export { DECIMAL };
 

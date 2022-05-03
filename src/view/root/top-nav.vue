@@ -19,7 +19,9 @@
 
 <script lang="ts">
 export default {
-    props: ["value"],
+    props: {
+        value: { type: String, default: () => null },
+    },
     methods: {
         openTab(tab: string) {
             (this as any).$props.value = tab;
