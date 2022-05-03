@@ -16,6 +16,7 @@
 </template>
 
 <script lang="ts">
+import { AssignedTransaction } from "../../model/entities";
 export default {
     data: () => {
         return {
@@ -24,7 +25,12 @@ export default {
     },
     computed: {
         allTransactions() {
-            return (this as any).$root.$data.sourceData.allTransactions();
+            return (this as any).$root.$data.assigner
+                .allTransactions()
+                .filter(
+                    (transaction: AssignedTransaction) =>
+                        transaction.assignedCategories.length === 0,
+                );
         },
         allCategories() {
             return (this as any).$root.$data.categories.list();

@@ -1,4 +1,9 @@
-import { CategoryCollection, SourceDataCollection, UI } from "../interfaces";
+import {
+    CategoryCollection,
+    SourceDataCollection,
+    TransactionAssigner,
+    UI,
+} from "../interfaces";
 import Vue from "vue";
 
 import InfiniteLoading from "vue-infinite-loading";
@@ -20,11 +25,12 @@ declare global {
 }
 
 export class WebUI implements UI {
-    public static inject = ["sourceData", "categories"] as const;
+    public static inject = ["sourceData", "categories", "assigner"] as const;
 
     constructor(
         private sourceData: SourceDataCollection,
         private categories: CategoryCollection,
+        private assigner: TransactionAssigner,
     ) {}
 
     public init(): void {
@@ -73,6 +79,7 @@ export class WebUI implements UI {
             data: {
                 sourceData: this.sourceData,
                 categories: this.categories,
+                assigner: this.assigner,
             },
             methods: {
                 handleError: handleError,
