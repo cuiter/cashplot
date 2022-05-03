@@ -34,7 +34,7 @@ export interface SourceDataCollection {
 }
 
 export interface CategoryCollection {
-    /** Initializes and restores state from previous session if available */
+    /** Initializes storage and restores state from previous session if available */
     init(): void;
 
     /**

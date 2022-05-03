@@ -1,17 +1,30 @@
 import { Category, Filter, Settings } from "../../model/entities";
 import { CategoryCollection, Storage } from "../../interfaces";
 import { findNewName } from "../../utils";
+import { Observable } from "@daign/observable";
 
-export class CategoryCollectionImpl implements CategoryCollection {
+export class CategoryCollectionImpl
+    extends Observable
+    implements CategoryCollection
+{
     public static inject = ["storage"] as const;
 
     private settings: Settings;
 
     constructor(private storage: Storage) {
-        this.settings = storage.loadSettings() || new Settings();
+        super();
+
+        this.settings = new Settings();
     }
 
-    public init() {}
+    public init() {
+        this.settings = this.storage.loadSettings() || this.settings;
+
+        // Save settings to storage when any changes are made.
+        this.subscribeToChanges(() => {
+            this.storage.storeSettings(this.settings);
+        });
+    }
 
     public add(defaultName: string): string {
         const newName = findNewName(
@@ -20,7 +33,7 @@ export class CategoryCollectionImpl implements CategoryCollection {
         );
         this.settings.categories.push(new Category(newName));
 
-        this.storage.storeSettings(this.settings);
+        this.notifyObservers();
         return newName;
     }
 
@@ -32,7 +45,7 @@ export class CategoryCollectionImpl implements CategoryCollection {
             }
         }
 
-        this.storage.storeSettings(this.settings);
+        this.notifyObservers();
     }
 
     public rename(name: string, newName: string): boolean {
@@ -49,7 +62,7 @@ export class CategoryCollectionImpl implements CategoryCollection {
             if (category.name === name) {
                 category.name = newName;
 
-                this.storage.storeSettings(this.settings);
+                this.notifyObservers();
                 return true;
             }
         }
@@ -74,7 +87,7 @@ export class CategoryCollectionImpl implements CategoryCollection {
 
         category.filters.push(filter);
 
-        this.storage.storeSettings(this.settings);
+        this.notifyObservers();
     }
 
     public removeFilter(categoryName: string, filterId: number): void {
@@ -100,7 +113,7 @@ export class CategoryCollectionImpl implements CategoryCollection {
             );
         }
 
-        this.storage.storeSettings(this.settings);
+        this.notifyObservers();
     }
 
     public get(name: string): Category {

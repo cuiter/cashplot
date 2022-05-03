@@ -148,12 +148,13 @@ describe("CategoryCollectionImpl", () => {
                 ],
             ),
         );
-
         const categoryCollection = injector
             .provideValue("storage", storageMock)
             .injectClass(CategoryCollectionImpl);
-        const categoryList = categoryCollection.list();
 
+        categoryCollection.init();
+
+        const categoryList = categoryCollection.list();
         expect(categoryList.length).toBe(2);
         expect(categoryList[0]).toBe("Category 1");
         expect(categoryList[1]).toBe("Category 2");
@@ -164,6 +165,8 @@ describe("CategoryCollectionImpl", () => {
         const categoryCollection = injector
             .provideValue("storage", storageMock)
             .injectClass(CategoryCollectionImpl);
+
+        categoryCollection.init();
 
         categoryCollection.add("Category 1");
         categoryCollection.add("Category 2");

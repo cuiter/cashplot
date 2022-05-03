@@ -1,11 +1,11 @@
 import {
-    Settings,
     SourceDataInfo,
     SourceDataInfoItem,
     SourceTransaction,
 } from "../../model/entities";
 import { Storage, Sources, SourceDataCollection } from "../../interfaces";
 import { findNewName } from "../../utils";
+import { Observable } from "@daign/observable";
 
 class SourceData {
     constructor(
@@ -14,7 +14,10 @@ class SourceData {
     ) {}
 }
 
-export class SourceDataCollectionImpl implements SourceDataCollection {
+export class SourceDataCollectionImpl
+    extends Observable
+    implements SourceDataCollection
+{
     public static inject = ["sources", "storage"] as const;
 
     private sourceDatas: SourceData[] = [];
@@ -22,11 +25,15 @@ export class SourceDataCollectionImpl implements SourceDataCollection {
     private sourceDataInfo: SourceDataInfo;
     private sourceTransactions: SourceTransaction[] = [];
 
-    private settings: Settings;
-
     constructor(private sources: Sources, private storage: Storage) {
+        super();
+
         this.sourceDataInfo = new SourceDataInfo();
-        this.settings = new Settings();
+
+        // Update info when changes are made
+        this.subscribeToChanges(() => {
+            this.updateInfo();
+        });
     }
 
     public init() {
@@ -45,7 +52,7 @@ export class SourceDataCollectionImpl implements SourceDataCollection {
         this.insertTransactions(transactions);
 
         this.storage.storeSourceData(name, transactionData);
-        this.updateInfo();
+        this.notifyObservers();
     }
 
     public remove(name: string): void {
@@ -61,7 +68,7 @@ export class SourceDataCollectionImpl implements SourceDataCollection {
 
         this.storage.removeSourceData(name);
 
-        this.updateInfo();
+        this.notifyObservers();
     }
 
     /**

@@ -39,6 +39,7 @@
         "vue-infinite-loading": "2.4.5"
     },
     "devDependencies": {
+        "@daign/observable": "^1.0.3",
         "@types/jest": "^27.0.3",
         "@types/papaparse": "^5.3.1",
         "@typescript-eslint/eslint-plugin": "^5.21.0",
