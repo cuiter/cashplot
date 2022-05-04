@@ -74,6 +74,8 @@ export class WebUI implements UI {
             }
         }
 
+        Vue.mixin(this.createNavigationMixin());
+
         const _v = new Vue({
             el: "#app",
             data: {
@@ -83,8 +85,7 @@ export class WebUI implements UI {
             },
             methods: {
                 handleError: handleError,
-                isDebugModeEnabled: () =>
-                    Object.prototype.hasOwnProperty.call(window, "LiveReload"),
+                isDebugModeEnabled: () => this.isDebugModeEnabled(),
             },
         });
 
@@ -93,6 +94,64 @@ export class WebUI implements UI {
 
         this.sourceData.init();
         this.categories.init();
+    }
+
+    private isDebugModeEnabled(): boolean {
+        return Object.prototype.hasOwnProperty.call(window, "LiveReload");
+    }
+
+    /** Creates a Vue mixin attached to a navigation state object. This is used across the Vue components for navigation. */
+    private createNavigationMixin() {
+        const currentTabKey = "debug/currentTab";
+        const currentTabDefault = "overview";
+
+        const navState = {
+            currentTab:
+                window.localStorage.getItem(currentTabKey) ?? currentTabDefault,
+            tabOpenDialogs: {} as Record<string, string[]>,
+        };
+
+        return {
+            data: () => {
+                return { navState: navState };
+            },
+            computed: {
+                currentTab: () => navState.currentTab,
+                openDialogs: () =>
+                    navState.tabOpenDialogs[navState.currentTab] ?? [],
+            },
+            methods: {
+                switchTab: (newTabName: string) => {
+                    navState.currentTab = newTabName;
+                    if (this.isDebugModeEnabled()) {
+                        window.localStorage.setItem(currentTabKey, newTabName);
+                    }
+                },
+                openDialog: (dialogName: string) => {
+                    if (
+                        navState.tabOpenDialogs[navState.currentTab] ===
+                        undefined
+                    ) {
+                        navState.tabOpenDialogs[navState.currentTab] = [];
+                    }
+
+                    navState.tabOpenDialogs[navState.currentTab].push(
+                        dialogName,
+                    );
+                },
+                closeDialog: (dialogName: string) => {
+                    const dialogIndex = (
+                        navState.tabOpenDialogs[navState.currentTab] ?? []
+                    ).indexOf(dialogName);
+                    if (dialogIndex !== -1) {
+                        navState.tabOpenDialogs[navState.currentTab].splice(
+                            dialogIndex,
+                            1,
+                        );
+                    }
+                },
+            },
+        };
     }
 
     private onResize(): void {

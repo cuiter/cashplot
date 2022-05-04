@@ -2,8 +2,8 @@
     <div class="nav">
         <div
             class="nav-button"
-            :class="{ selected: value === 'overview' }"
-            @click="openTab('overview')"
+            :class="{ selected: currentTab === 'overview' }"
+            @click="switchTab('overview')"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -21,9 +21,10 @@
         <div
             class="nav-button"
             :class="{
-                selected: value === 'source-data' || value == 'category',
+                selected:
+                    currentTab === 'source-data' || currentTab == 'category',
             }"
-            @click="openTab('source-data')"
+            @click="switchTab('source-data')"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -41,10 +42,10 @@
         <div
             class="nav-button"
             :class="{
-                selected: value === 'budget',
+                selected: currentTab === 'budget',
                 faded: !isDataAvailable,
             }"
-            @click="isDataAvailable && openTab('budget')"
+            @click="isDataAvailable && switchTab('budget')"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -62,10 +63,10 @@
         <div
             class="nav-button"
             :class="{
-                selected: value === 'balance',
+                selected: currentTab === 'balance',
                 faded: !isDataAvailable,
             }"
-            @click="isDataAvailable && openTab('balance')"
+            @click="isDataAvailable && switchTab('balance')"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -85,18 +86,9 @@
 
 <script lang="ts">
 export default {
-    props: {
-        value: { type: String, default: () => null },
-    },
     computed: {
         isDataAvailable(): boolean {
             return (this as any).$root.$data.sourceData.allInfo().length !== 0;
-        },
-    },
-    methods: {
-        openTab(view: string) {
-            (this as any).$props.value = view;
-            (this as any).$emit("input", view);
         },
     },
 };
