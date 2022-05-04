@@ -66,6 +66,9 @@ a {
 .view {
     flex: 1 1 auto;
     position: relative;
+}
+
+.view-width {
     min-width: 32rem;
     width: 90%;
     max-width: 60rem;
@@ -102,6 +105,7 @@ a {
     text-align: center;
     user-select: none;
     color: var(--color-primary-deselected);
+    transition: color 0.2s;
 }
 
 .nav .nav-button svg {
@@ -111,48 +115,63 @@ a {
     width: 3.5rem;
     height: 3.5rem;
     fill: var(--color-fill-icon);
-}
-
-.nav .nav-button.selected svg {
-    filter: brightness(150%);
     transition: filter 0.2s;
 }
 
-.nav .nav-button.selected span {
+.nav .nav-button.selected svg,
+.nav .nav-button:hover svg {
+    filter: brightness(150%);
+}
+
+.nav .nav-button.selected span,
+.nav .nav-button:hover span {
     color: var(--color-primary-selected);
-    transition: color 0.2s;
 }
 
 .nav .nav-button.selected {
     background-color: var(--color-background-nav-selected);
 }
 
-.tab-nav {
+.top-nav {
     flex: 0 1 5rem;
     background-color: var(--color-background-nav);
     box-shadow: 0 0rem 0.2rem black;
     border-bottom: 0.1rem solid var(--color-border-nav);
-
-    display: flex;
-    justify-content: center;
 }
 
-.tab-nav .tab-nav-button {
-    margin: 0.7rem 1.05rem 0.5rem;
+.top-nav .top-nav-button,
+.top-nav .top-nav-title {
+    margin: 0.4rem 1.05rem 0.3rem;
     font-size: 2.1rem;
     user-select: none;
-    cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     color: var(--color-primary-deselected);
-    padding: 0.1rem 1rem 0rem;
+    padding: 0.1rem 1rem 0.3rem;
 
     border-radius: 1rem;
 }
 
-.tab-nav .tab-nav-button.selected {
+.top-nav .top-nav-button {
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.top-nav .top-nav-button:hover {
+    color: var(--color-primary-selected);
+}
+
+.top-nav .top-nav-button.selected {
     color: var(--color-primary-selected);
     background-color: var(--color-background-nav-selected);
-    transition: color 0.2s;
+}
+
+.top-nav .top-nav-title {
+    color: var(--color-primary);
+    margin-top: 0.6rem;
+}
+
+.top-nav .top-nav-edge {
+    width: 9rem;
 }
 
 .tab-splitter {
@@ -302,6 +321,11 @@ a {
     height: 4.2rem;
     transform: scale(0.75, 1);
     fill: var(--color-fill-icon);
+    transition: filter 0.2s;
+}
+
+.source-data-remove-button:hover {
+    filter: brightness(150%);
 }
 
 .source-data-name {
@@ -558,6 +582,11 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.flex-space-between {
+    display: flex;
+    justify-content: space-between;
 }
 
 .flex-item-full {

@@ -38,7 +38,11 @@ export default {
                     (hash) => new ManualFilter(createUniqueId(), hash),
                 );
 
+                (this as any).$props.selectedTransactionHashes = [];
+
                 (this as any).$root.$data.categories.addFilters(name, filters);
+            } else {
+                (this as any).openDialog("category-edit", name);
             }
         },
     },

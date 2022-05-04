@@ -108,7 +108,21 @@ export class WebUI implements UI {
         const navState = {
             currentTab:
                 window.localStorage.getItem(currentTabKey) ?? currentTabDefault,
-            tabOpenDialogs: {} as Record<string, string[]>,
+            tabOpenDialogs: {} as Record<
+                string,
+                [string, string | number | null][]
+            >,
+        };
+
+        const dialogInFront = () => {
+            const tabOpenedDialogs =
+                navState.tabOpenDialogs[navState.currentTab] || [];
+
+            if (tabOpenedDialogs.length !== 0) {
+                return tabOpenedDialogs[tabOpenedDialogs.length - 1];
+            } else {
+                return [null, null];
+            }
         };
 
         return {
@@ -117,8 +131,8 @@ export class WebUI implements UI {
             },
             computed: {
                 currentTab: () => navState.currentTab,
-                openDialogs: () =>
-                    navState.tabOpenDialogs[navState.currentTab] ?? [],
+                openedDialog: () => dialogInFront()[0],
+                openedDialogEntry: () => dialogInFront()[1],
             },
             methods: {
                 switchTab: (newTabName: string) => {
@@ -127,22 +141,32 @@ export class WebUI implements UI {
                         window.localStorage.setItem(currentTabKey, newTabName);
                     }
                 },
-                openDialog: (dialogName: string) => {
+                openDialog: (
+                    dialogName: string, // for example: category-edit
+                    entry: string | number | null, // category name, filter id, etc.
+                ) => {
                     if (
                         navState.tabOpenDialogs[navState.currentTab] ===
                         undefined
                     ) {
-                        navState.tabOpenDialogs[navState.currentTab] = [];
+                        Vue.set(
+                            navState.tabOpenDialogs,
+                            navState.currentTab,
+                            [],
+                        );
                     }
 
-                    navState.tabOpenDialogs[navState.currentTab].push(
+                    navState.tabOpenDialogs[navState.currentTab].push([
                         dialogName,
-                    );
+                        entry,
+                    ]);
                 },
                 closeDialog: (dialogName: string) => {
                     const dialogIndex = (
                         navState.tabOpenDialogs[navState.currentTab] ?? []
-                    ).indexOf(dialogName);
+                    )
+                        .map((dialog) => dialog[0])
+                        .indexOf(dialogName);
                     if (dialogIndex !== -1) {
                         navState.tabOpenDialogs[navState.currentTab].splice(
                             dialogIndex,

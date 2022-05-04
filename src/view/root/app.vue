@@ -1,15 +1,27 @@
 <template>
     <div class="app full-size">
-        <top-nav-component v-model="currentTab" />
+        <top-nav-component />
 
-        <div class="view">
-            <overview-tab-component v-if="currentTab == 'overview'" />
-            <source-data-tab-component v-if="currentTab == 'source-data'" />
-            <category-tab-component v-if="currentTab == 'category'" />
-            <budget-tab-component v-if="currentTab == 'budget'" />
-            <balance-tab-component v-if="currentTab == 'balance'" />
+        <div class="view view-width">
+            <overview-tab-component
+                v-if="openedDialog === null && currentTab == 'overview'"
+            />
+            <source-data-tab-component
+                v-if="openedDialog === null && currentTab == 'source-data'"
+            />
+            <category-tab-component
+                v-if="openedDialog === null && currentTab == 'category'"
+            />
+            <budget-tab-component
+                v-if="openedDialog === null && currentTab == 'budget'"
+            />
+            <balance-tab-component
+                v-if="openedDialog === null && currentTab == 'balance'"
+            />
+
+            <category-edit-component v-if="openedDialog === 'category-edit'" />
         </div>
 
-        <bottom-nav-component v-model="currentTab" />
+        <bottom-nav-component />
     </div>
 </template>
