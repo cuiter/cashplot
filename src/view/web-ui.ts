@@ -104,11 +104,15 @@ export class WebUI implements UI {
     private createNavigationMixin() {
         const currentTabKey = "debug/currentTab";
         const currentTabDefault = "overview";
+        const tabOpenDialogsKey = "debug/tabOpenDialogs";
+        const tabOpenDialogsDefault = {};
 
         const navState = {
             currentTab:
                 window.localStorage.getItem(currentTabKey) ?? currentTabDefault,
-            tabOpenDialogs: {} as Record<
+            tabOpenDialogs: (JSON.parse(
+                window.localStorage.getItem(tabOpenDialogsKey) ?? "null",
+            ) ?? tabOpenDialogsDefault) as Record<
                 string,
                 [string, string | number | null][]
             >,
@@ -125,6 +129,31 @@ export class WebUI implements UI {
             }
         };
 
+        const storeCurrentTab = this.isDebugModeEnabled()
+            ? () => {
+                  if (this.isDebugModeEnabled()) {
+                      window.localStorage.setItem(
+                          currentTabKey,
+                          navState.currentTab,
+                      );
+                  }
+              }
+            : () => {
+                  // Do nothing
+              };
+        const storeOpenedDialogs = this.isDebugModeEnabled()
+            ? () => {
+                  if (this.isDebugModeEnabled()) {
+                      window.localStorage.setItem(
+                          tabOpenDialogsKey,
+                          JSON.stringify(navState.tabOpenDialogs),
+                      );
+                  }
+              }
+            : () => {
+                  // Do nothing
+              };
+
         return {
             data: () => {
                 return { navState: navState };
@@ -137,6 +166,7 @@ export class WebUI implements UI {
             methods: {
                 switchTab: (newTabName: string) => {
                     navState.currentTab = newTabName;
+                    storeCurrentTab();
                     if (this.isDebugModeEnabled()) {
                         window.localStorage.setItem(currentTabKey, newTabName);
                     }
@@ -160,6 +190,8 @@ export class WebUI implements UI {
                         dialogName,
                         entry,
                     ]);
+
+                    storeOpenedDialogs();
                 },
                 closeDialog: (dialogName: string) => {
                     const dialogIndex = (
@@ -172,6 +204,8 @@ export class WebUI implements UI {
                             dialogIndex,
                             1,
                         );
+
+                        storeOpenedDialogs();
                     }
                 },
             },
