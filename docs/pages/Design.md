@@ -28,7 +28,7 @@ and re-processes the transactions when needed.
 ## UI design
 
 To promote reuse of UI elements and colors, a number of standard terms and colors are defined.
-By using these terms consistently, the resulting application can be much easier to change.
+By using these terms consistently, the resulting application can begin to have a solid shape.
 
 Concept definitions:
 
@@ -59,6 +59,26 @@ Color definitions:
 
 -   positive (green)
 -   negative (orange)
+
+**User introduction**
+
+There are a few ways the user can be introduced to the application:
+
+-   Introduction tutorials, as seen in most open-source apps.
+-   Explanation dialogs, opened when the user opens a screen for the first time.
+
+CashPlot may contain both.
+
+## UI architecture
+
+The UI's main UI consists of three parts: the top-nav, the view (current tab or dialog) and the bottom nav.
+
+At every point, there is a selected tab, and there may be one or more dialogs present on top of each other.
+
+**Navigation**
+
+Navigation methods are provided to all components as a Vue mixin.
+Every component has the ability to open a dialog, or change the current tab.
 
 ## Tech stack
 
@@ -105,3 +125,7 @@ The system is subdivided into components using the MVC pattern.
 ...transaction processing...
 
 ...separation of concerns...
+
+## Footnotes
+
+Less-visible aspects of the design, such as the alternatives that were considered, and the UI wireframes, are not described in this document.
