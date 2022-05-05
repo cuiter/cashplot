@@ -8,6 +8,7 @@ import { SourceDataCollectionImpl } from "./controller/collections/source-data-c
 import { CategoryCollectionImpl } from "./controller/collections/category-collection";
 import { WebUI } from "./view/web-ui";
 import { TransactionAssignerImpl } from "./controller/processing/transaction-assigner";
+import { TransactionSearcherImpl } from "./controller/processing/transaction-searcher";
 
 const appInjector = createInjector()
     .provideClass("sources", SourcesImpl)
@@ -15,7 +16,8 @@ const appInjector = createInjector()
     .provideClass("storage", StorageImpl)
     .provideClass("sourceData", SourceDataCollectionImpl)
     .provideClass("categories", CategoryCollectionImpl)
-    .provideClass("assigner", TransactionAssignerImpl);
+    .provideClass("assigner", TransactionAssignerImpl)
+    .provideClass("searcher", TransactionSearcherImpl);
 
 const ui = appInjector.injectClass(WebUI);
 

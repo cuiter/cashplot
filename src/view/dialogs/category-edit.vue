@@ -44,6 +44,7 @@
     </div>
 </template>
 <script lang="ts">
+import { AssignedTransaction } from "../../model/entities";
 export default {
     data: function () {
         return {
@@ -55,7 +56,11 @@ export default {
     },
     computed: {
         manualTransactions: function () {
-            return (this as any).$root.$data.assigner.allTransactions();
+            return (this as any).$root.$data.searcher.searchTransactions(
+                (this as any).$data.categoryName,
+                "Category",
+                "ManualFilter",
+            );
         },
     },
     watch: {
@@ -89,7 +94,31 @@ export default {
             (this as any).$data.currentFilterType = type;
         },
         removeSelectedManualTransactions: function () {
-            // TODO: implement
+            const selectedManualTransactionHashes = (this as any).$data
+                .selectedManualTransactionHashes;
+            const manualTransactions: AssignedTransaction[] = (this as any)
+                .manualTransactions;
+            const selectedTransactions = manualTransactions.filter(
+                (transaction) =>
+                    selectedManualTransactionHashes.indexOf(
+                        transaction.hash,
+                    ) !== -1,
+            );
+
+            const transactionManualFilterIds = selectedTransactions.map(
+                (transaction) =>
+                    transaction.assignments
+                        .filter(
+                            (assignment) =>
+                                assignment.filterType === "ManualFilter",
+                        )
+                        .map((assignment) => assignment.filterId),
+            );
+
+            (this as any).$root.$data.categories.removeFilters(
+                (this as any).$data.categoryName,
+                Array.prototype.concat.apply([], transactionManualFilterIds),
+            );
         },
     },
 };
