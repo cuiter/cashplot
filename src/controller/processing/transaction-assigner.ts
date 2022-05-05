@@ -1,3 +1,4 @@
+import { Observable } from "@daign/observable";
 import {
     CategoryCollection,
     SourceDataCollection,
@@ -11,7 +12,10 @@ import {
     Assignment,
 } from "../../model/entities";
 
-export class TransactionAssignerImpl implements TransactionAssigner {
+export class TransactionAssignerImpl
+    extends Observable
+    implements TransactionAssigner
+{
     public static inject = ["sourceData", "categories"] as const;
 
     private assignedTransactions: AssignedTransaction[] = [];
@@ -21,11 +25,14 @@ export class TransactionAssignerImpl implements TransactionAssigner {
         private sourceData: SourceDataCollection,
         private categories: CategoryCollection,
     ) {
+        super();
         this.sourceData.subscribeToChanges(() => {
             this.updateRequired = true;
+            this.notifyObservers();
         });
         this.categories.subscribeToChanges(() => {
             this.updateRequired = true;
+            this.notifyObservers();
         });
     }
 

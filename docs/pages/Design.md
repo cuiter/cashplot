@@ -18,6 +18,8 @@ Separation of component interfaces from their implementation means that componen
 
 Write specifications and interfaces using the language of the user domain, only describing what it should do, not how it should do it. Automate testing the fulfillment of specifications wherever possible, and build fast feedback loops between the users and developers.
 
+Eventually, the tests should serve as an overview of all functionality within the application.
+
 **Data propagation and caching**
 
 An Observer pattern is used for most components that provide data. Subscribers are notified whenever their data is updated.

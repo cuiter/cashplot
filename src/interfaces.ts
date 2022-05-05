@@ -88,6 +88,22 @@ export interface TransactionAssigner {
      * Returns all transactions after assigning them to their respective categories.
      */
     allTransactions(): AssignedTransaction[];
+    /** Allows another component to subscribe to any changes in this component. */
+    subscribeToChanges(callback: () => void): void;
+}
+
+/**
+ * Takes assigned transactions from TransactionAssigner and performs search queries.
+ *
+ * Uses a cache to save results for recent queries.
+ */
+export interface TransactionSearcher {
+    searchTransactions(
+        assignmentName?: string,
+        assignmentType?: string,
+        filterType?: string,
+        filterId?: number,
+    ): AssignedTransaction[];
 }
 
 export interface Sources {

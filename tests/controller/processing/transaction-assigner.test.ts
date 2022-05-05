@@ -108,11 +108,12 @@ describe("TransactionAssigner", () => {
             new Category("Catering", 200 * DECIMAL, [
                 new ManualFilter(0x01, 0x1002),
             ]),
-            new Category("Electronics", 400 * DECIMAL, [
+            new Category("Tools", 400 * DECIMAL, [
                 new ManualFilter(0x02, 0x1001),
+                new ManualFilter(0x03, 0x1003),
             ]),
             new Category("Food", 400 * DECIMAL, [
-                new ManualFilter(0x03, 0x1002),
+                new ManualFilter(0x04, 0x1002),
             ]),
         ];
         const sourceDataCollection = new SourceDataCollectionMock(
@@ -130,12 +131,14 @@ describe("TransactionAssigner", () => {
 
         expect(transactions.length).toBe(3);
         expect(transactions[0].assignments).toEqual([
-            new Assignment("Electronics", "Category", 0x02, "ManualFilter"),
+            new Assignment("Tools", "Category", 0x02, "ManualFilter"),
         ]);
         expect(transactions[1].assignments).toEqual([
             new Assignment("Catering", "Category", 0x01, "ManualFilter"),
-            new Assignment("Food", "Category", 0x03, "ManualFilter"),
+            new Assignment("Food", "Category", 0x04, "ManualFilter"),
         ]);
-        expect(transactions[2].assignments).toEqual([]);
+        expect(transactions[2].assignments).toEqual([
+            new Assignment("Tools", "Category", 0x03, "ManualFilter"),
+        ]);
     });
 });
