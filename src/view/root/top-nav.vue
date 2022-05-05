@@ -16,7 +16,7 @@
                     v-if="openedDialog !== null"
                     class="top-nav-button"
                     :class="{ selected: true }"
-                    @click="closeDialog(openedDialog)"
+                    @click="closeDialog()"
                 >
                     &#60;&nbsp;
                 </span>

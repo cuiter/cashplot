@@ -27,7 +27,10 @@ export default {
     },
     methods: {
         addCategory() {
-            (this as any).$root.$data.categories.add(newCategoryName);
+            const categoryName = (this as any).$root.$data.categories.add(
+                newCategoryName,
+            );
+            (this as any).openDialog("category-edit", categoryName);
         },
         selectCategory(name: string) {
             const selectedTransactionHashes: number[] = (this as any).$props
@@ -38,7 +41,10 @@ export default {
                     (hash) => new ManualFilter(createUniqueId(), hash),
                 );
 
-                (this as any).$props.selectedTransactionHashes = [];
+                selectedTransactionHashes.splice(
+                    0,
+                    selectedTransactionHashes.length,
+                );
 
                 (this as any).$root.$data.categories.addFilters(name, filters);
             } else {

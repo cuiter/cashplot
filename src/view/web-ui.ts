@@ -193,12 +193,9 @@ export class WebUI implements UI {
 
                     storeOpenedDialogs();
                 },
-                closeDialog: (dialogName: string) => {
-                    const dialogIndex = (
-                        navState.tabOpenDialogs[navState.currentTab] ?? []
-                    )
-                        .map((dialog) => dialog[0])
-                        .indexOf(dialogName);
+                closeDialog: () => {
+                    const dialogIndex =
+                        navState.tabOpenDialogs[navState.currentTab].length - 1;
                     if (dialogIndex !== -1) {
                         navState.tabOpenDialogs[navState.currentTab].splice(
                             dialogIndex,

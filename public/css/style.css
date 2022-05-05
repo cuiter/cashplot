@@ -140,7 +140,8 @@ a {
 }
 
 .top-nav .top-nav-button,
-.top-nav .top-nav-title {
+.top-nav .top-nav-title,
+.sub-nav-button {
     margin: 0.4rem 1.05rem 0.3rem;
     font-size: 2.1rem;
     user-select: none;
@@ -151,18 +152,25 @@ a {
     border-radius: 1rem;
 }
 
-.top-nav .top-nav-button {
+.top-nav .top-nav-button,
+.sub-nav-button {
     cursor: pointer;
     transition: color 0.2s;
 }
 
-.top-nav .top-nav-button:hover {
+.top-nav .top-nav-button:hover,
+.sub-nav-button:hover {
     color: var(--color-primary-selected);
 }
 
-.top-nav .top-nav-button.selected {
+.top-nav .top-nav-button.selected,
+.sub-nav-button.selected {
     color: var(--color-primary-selected);
-    background-color: var(--color-background-nav-selected);
+    background-color: var(--color-background-button);
+}
+
+.sub-nav-button {
+    background-color: var(--color-background-nav);
 }
 
 .top-nav .top-nav-title {
@@ -174,9 +182,13 @@ a {
     width: 9rem;
 }
 
+.sub-nav-button {
+    font-size: 1.7rem;
+    background: var(--color-background-button-dark);
+}
+
 .tab-splitter {
     flex: 0 0 0.3rem;
-    margin-top: -1rem;
     margin-left: -150rem;
     width: 360rem;
     background-color: var(--color-primary-deselected);
@@ -258,7 +270,7 @@ a {
 .collection-list {
     flex: auto;
     overflow-y: auto;
-    margin: 1rem 0rem;
+    margin: 0.5rem 0rem 0rem;
     padding: -1rem 0rem 0rem;
 }
 
@@ -314,17 +326,23 @@ a {
     border-color: var(--color-background-light-hover);
 }
 
+.remove-button,
 .source-data-remove-button {
-    right: 0.25rem;
-    bottom: 1rem;
-    width: 4.2rem;
-    height: 4.2rem;
+    min-width: 3.4rem;
+    min-height: 3.4rem;
     transform: scale(0.75, 1);
     fill: var(--color-fill-icon);
     transition: filter 0.2s;
 }
 
-.source-data-remove-button:hover {
+.source-data-remove-button {
+    min-width: 4.2rem;
+    min-height: 4.2rem;
+    right: 0.25rem;
+    bottom: 1rem;
+}
+
+.remove-button:hover {
     filter: brightness(150%);
 }
 
@@ -546,6 +564,12 @@ a {
     white-space: initial;
 }
 
+.manual-filter-remove-button {
+    position: absolute;
+    right: 5rem;
+    top: 0rem;
+}
+
 /* Custom classes */
 
 #app {
@@ -559,12 +583,24 @@ a {
     height: 100%;
 }
 
+.position-relative {
+    position: relative;
+}
+
 .margin-top-10 {
     margin-top: 10rem;
 }
 
 .margin-top-5 {
     margin-top: 5rem;
+}
+
+.margin-top-small {
+    margin-top: 0.5rem;
+}
+
+.margin-bottom-small {
+    margin-bottom: 0.5rem;
 }
 
 .button-small {
@@ -587,6 +623,7 @@ a {
 .flex-space-between {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .flex-item-full {
