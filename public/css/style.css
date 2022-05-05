@@ -166,10 +166,10 @@ a {
 .top-nav .top-nav-button.selected,
 .sub-nav-button.selected {
     color: var(--color-primary-selected);
-    background-color: var(--color-background-button);
+    background-color: var(--color-background-nav-selected);
 }
 
-.sub-nav-button {
+.sub-nav-button.selected {
     background-color: var(--color-background-nav);
 }
 
