@@ -8,6 +8,7 @@ import {
     Category,
     AssignedTransaction,
     ManualFilter,
+    Assignment,
 } from "../../model/entities";
 
 export class TransactionAssignerImpl implements TransactionAssigner {
@@ -51,7 +52,7 @@ export class TransactionAssignerImpl implements TransactionAssigner {
         transactions: SourceTransaction[],
         categories: Category[],
     ): AssignedTransaction[] {
-        const manualMatches: Record<number, Category[]> = {};
+        const manualMatches: Record<number, Assignment[]> = {};
 
         for (const category of categories) {
             for (const filter of category.filters) {
@@ -65,7 +66,14 @@ export class TransactionAssignerImpl implements TransactionAssigner {
                         manualMatches[manualFilter.transactionHash] = [];
                     }
 
-                    manualMatches[manualFilter.transactionHash].push(category);
+                    manualMatches[manualFilter.transactionHash].push(
+                        new Assignment(
+                            category.name,
+                            "Category",
+                            manualFilter.id,
+                            "ManualFilter",
+                        ),
+                    );
                 }
             }
         }
@@ -77,8 +85,6 @@ export class TransactionAssignerImpl implements TransactionAssigner {
                 new AssignedTransaction(
                     transaction,
                     manualMatches[transaction.hash] || [],
-                    null,
-                    null,
                 ),
             );
         }

@@ -1,6 +1,6 @@
 import { Type } from "class-transformer";
 import "reflect-metadata";
-import { hash } from "../utils";
+import { assert, hash } from "../utils";
 
 const DECIMAL = 100;
 export { DECIMAL };
@@ -127,12 +127,30 @@ export class SourceTransaction {
     }
 }
 
+export class Assignment {
+    constructor(
+        public name: string,
+        public type: string, // May be Account or Category
+        public filterId: number,
+        public filterType: string,
+    ) {
+        assert(
+            type === "Category" ||
+                type === "Account" ||
+                type === "ContraAccount",
+            "Assignment.type must be one of: Category, Account, ContraAccount",
+        );
+        assert(
+            filterType.lastIndexOf("Filter") === filterType.length - 6,
+            "Assignment.filterType must end with ...Filter",
+        );
+    }
+}
+
 export class AssignedTransaction extends SourceTransaction {
     constructor(
         transaction: SourceTransaction,
-        public readonly assignedCategories: Category[],
-        public readonly assignedAccount: Account | null,
-        public readonly assignedContraAccount: Account | null,
+        public readonly assignments: Assignment[] = [],
     ) {
         super(
             transaction.date,

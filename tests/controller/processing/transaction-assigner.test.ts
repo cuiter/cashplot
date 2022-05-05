@@ -7,6 +7,7 @@ import {
 } from "../../../src/interfaces";
 import {
     Account,
+    Assignment,
     Category,
     DECIMAL,
     Filter,
@@ -105,12 +106,14 @@ describe("TransactionAssigner", () => {
     test("should assign categories based on manual filters", () => {
         const categories: Category[] = [
             new Category("Catering", 200 * DECIMAL, [
-                new ManualFilter(1, 0x1002),
+                new ManualFilter(0x01, 0x1002),
             ]),
             new Category("Electronics", 400 * DECIMAL, [
-                new ManualFilter(1, 0x1001),
+                new ManualFilter(0x02, 0x1001),
             ]),
-            new Category("Food", 400 * DECIMAL, [new ManualFilter(1, 0x1002)]),
+            new Category("Food", 400 * DECIMAL, [
+                new ManualFilter(0x03, 0x1002),
+            ]),
         ];
         const sourceDataCollection = new SourceDataCollectionMock(
             testTransactions,
@@ -126,11 +129,13 @@ describe("TransactionAssigner", () => {
         const transactions = transactionAssigner.allTransactions();
 
         expect(transactions.length).toBe(3);
-        expect(transactions[0].assignedCategories).toEqual([categories[1]]);
-        expect(transactions[1].assignedCategories).toEqual([
-            categories[0],
-            categories[2],
+        expect(transactions[0].assignments).toEqual([
+            new Assignment("Electronics", "Category", 0x02, "ManualFilter"),
         ]);
-        expect(transactions[2].assignedCategories).toEqual([]);
+        expect(transactions[1].assignments).toEqual([
+            new Assignment("Catering", "Category", 0x01, "ManualFilter"),
+            new Assignment("Food", "Category", 0x03, "ManualFilter"),
+        ]);
+        expect(transactions[2].assignments).toEqual([]);
     });
 });

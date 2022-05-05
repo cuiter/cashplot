@@ -29,7 +29,7 @@ export default {
                 .allTransactions()
                 .filter(
                     (transaction: AssignedTransaction) =>
-                        transaction.assignedCategories.length === 0,
+                        transaction.assignments.length === 0,
                 );
         },
         allCategories() {
