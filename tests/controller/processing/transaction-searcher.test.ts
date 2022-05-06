@@ -40,13 +40,13 @@ const testTransactions = [
             new Date("2021-11-02"),
             -430 * DECIMAL,
             "NL00MAIN1234567890",
-            "NL23ABNA9349042743",
+            "NL23ABNA0983409855",
             "Mike's Tire Repairs",
             "13th of November tire sale, 4x sports tires",
         ),
         [
             new Assignment("Tools", "Category", 0x04, "ManualFilter"),
-            new Assignment("Tools", "Category", 0x05, "WildcardFilter"),
+            new Assignment("Tools", "Category", 0x05, "TextFilter"),
         ],
     ),
 ];
@@ -122,7 +122,7 @@ describe("TransactionSearcher", () => {
         const transactionsAutomatic = transactionSearcher.searchTransactions(
             undefined,
             undefined,
-            "WildcardFilter",
+            "TextFilter",
         );
 
         expect(transactionsAutomatic.length).toBe(1);

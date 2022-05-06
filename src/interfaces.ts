@@ -57,7 +57,7 @@ export interface CategoryCollection {
     get(name: string): Category
     rename(oldName: string, newName: string): void
     setBudget(name: string, monthlyBudget: number): void
-    setFilters(name: string, filters: WildcardFilter[]): void
+    setFilters(name: string, filters: TextFilter[]): void
     */
 
     /**
@@ -69,9 +69,9 @@ export interface CategoryCollection {
      * Note: Throws an error if one of the given filter ids do not exist.
      */
     removeFilters(categoryName: string, filterId: number[]): void;
+    /** Returns the filters of the category. */
+    getFilters(name: string): Filter[];
 
-    /** Returns the category with the given name. */
-    get(name: string): Category;
     /** Returns the names of all categories. */
     list(): string[];
     /** Returns all categories in the collection. */

@@ -14,6 +14,7 @@ import {
     ManualFilter,
     SourceDataInfo,
     SourceTransaction,
+    TextFilter,
 } from "../../../src/model/entities";
 
 const testTransactions = [
@@ -37,7 +38,7 @@ const testTransactions = [
         new Date("2021-11-02"),
         -430 * DECIMAL,
         "NL00MAIN1234567890",
-        "NL23ABNA9349042743",
+        "NL23ABNA0983409855",
         "Mike's Tire Repairs",
         "13th of November tire sale, 4x sports tires",
     ).overrideHash(0x1003),
@@ -73,6 +74,12 @@ class CategoryCollectionMock extends Observable implements CategoryCollection {
     }
     init(): void {
         this.notifyObservers();
+
+        for (const category of this.categories) {
+            for (const filter of category.filters) {
+                filter.init();
+            }
+        }
     }
     add(_defaultName: string): string {
         throw new Error("Method not implemented.");
@@ -89,7 +96,7 @@ class CategoryCollectionMock extends Observable implements CategoryCollection {
     removeFilters(_categoryName: string, _filterId: number[]): void {
         throw new Error("Method not implemented.");
     }
-    get(_name: string): Category {
+    getFilters(_name: string): Filter[] {
         throw new Error("Method not implemented.");
     }
     list(): string[] {
@@ -139,6 +146,82 @@ describe("TransactionAssigner", () => {
         ]);
         expect(transactions[2].assignments).toEqual([
             new Assignment("Tools", "Category", 0x03, "ManualFilter"),
+        ]);
+    });
+
+    test("should assign categories based on text match filters", () => {
+        const categories: Category[] = [
+            new Category("Catering", 200 * DECIMAL, [
+                new TextFilter(0x01, "", "wildcard", {
+                    contraAccount: "Mr. John",
+                    description: "Lunch",
+                }),
+            ]),
+            new Category("Tools", 400 * DECIMAL, [
+                new TextFilter(0x02, "", "wildcard", {
+                    contraAccount: "NL23ABNA9349042743",
+                    description: "Invoice *, laptop model *",
+                }),
+                new TextFilter(0x03, "", "regexp", {
+                    contraAccount: "^(Robot Computer Shop|NL23ABNA0983409855)$",
+                    description: ".*",
+                }),
+                new TextFilter(0x11, "", "regexp", {
+                    contraAccount: "^(non-existent-name|NL23ABNA0983409855)$",
+                    description: ".*",
+                }),
+                new TextFilter(0x12, "", "regexp", {
+                    contraAccount:
+                        "^(Robot Computer Shop|non-existent-number)$",
+                    description: ".*",
+                }),
+            ]),
+            new Category("Food", 400 * DECIMAL, [
+                new TextFilter(0x04, "", "wildcard", {
+                    contraAccount: "Mr. John",
+                    description: "Lunch",
+                }),
+                new TextFilter(0x13, "", "regexp", {
+                    contraAccount: "Non-matching contra name",
+                    description: "",
+                }),
+                new TextFilter(0x14, "", "wildcard", {
+                    contraAccount: "",
+                    description: "Non-matching description",
+                }),
+                new TextFilter(0x15, "", "wildcard", {
+                    contraAccount: "", // Does not match anything since all fields are empty
+                    description: "",
+                }),
+            ]),
+        ];
+
+        const sourceDataCollection = new SourceDataCollectionMock(
+            testTransactions,
+        );
+        const categoryCollection = new CategoryCollectionMock(categories);
+        const transactionAssigner = injector
+            .provideValue("sourceData", sourceDataCollection)
+            .provideValue("categories", categoryCollection)
+            .injectClass(TransactionAssignerImpl);
+
+        sourceDataCollection.init();
+        categoryCollection.init();
+        const transactions = transactionAssigner.allTransactions();
+
+        expect(transactions.length).toBe(3);
+        expect(transactions[0].assignments).toEqual([
+            new Assignment("Tools", "Category", 0x02, "TextFilter"),
+            new Assignment("Tools", "Category", 0x03, "TextFilter"),
+            new Assignment("Tools", "Category", 0x12, "TextFilter"),
+        ]);
+        expect(transactions[1].assignments).toEqual([
+            new Assignment("Catering", "Category", 0x01, "TextFilter"),
+            new Assignment("Food", "Category", 0x04, "TextFilter"),
+        ]);
+        expect(transactions[2].assignments).toEqual([
+            new Assignment("Tools", "Category", 0x03, "TextFilter"),
+            new Assignment("Tools", "Category", 0x11, "TextFilter"),
         ]);
     });
 });

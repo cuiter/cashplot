@@ -10,6 +10,7 @@ import {
     AssignedTransaction,
     ManualFilter,
     Assignment,
+    TextFilter,
 } from "../../model/entities";
 
 export class TransactionAssignerImpl
@@ -59,21 +60,23 @@ export class TransactionAssignerImpl
         transactions: SourceTransaction[],
         categories: Category[],
     ): AssignedTransaction[] {
-        const manualMatches: Record<number, Assignment[]> = {};
+        const matches: Record<number, Assignment[]> = {};
+
+        const addToMatches = (transactionHash: number, match: Assignment) => {
+            if (matches[transactionHash] === undefined) {
+                matches[transactionHash] = [match];
+            } else {
+                matches[transactionHash].push(match);
+            }
+        };
 
         for (const category of categories) {
             for (const filter of category.filters) {
                 if (filter instanceof ManualFilter) {
                     const manualFilter = filter as ManualFilter;
 
-                    if (
-                        manualMatches[manualFilter.transactionHash] ===
-                        undefined
-                    ) {
-                        manualMatches[manualFilter.transactionHash] = [];
-                    }
-
-                    manualMatches[manualFilter.transactionHash].push(
+                    addToMatches(
+                        manualFilter.transactionHash,
                         new Assignment(
                             category.name,
                             "Category",
@@ -81,6 +84,29 @@ export class TransactionAssignerImpl
                             "ManualFilter",
                         ),
                     );
+                } else if (filter instanceof TextFilter) {
+                    const matchers = filter.getMatchers();
+                    for (const transaction of transactions) {
+                        if (
+                            (matchers.contraAccount.test(
+                                transaction.contraAccount ?? "",
+                            ) ||
+                                matchers.contraAccount.test(
+                                    transaction.contraAccountName ?? "",
+                                )) &&
+                            matchers.description.test(transaction.description)
+                        ) {
+                            addToMatches(
+                                transaction.hash,
+                                new Assignment(
+                                    category.name,
+                                    "Category",
+                                    filter.id,
+                                    "TextFilter",
+                                ),
+                            );
+                        }
+                    }
                 }
             }
         }
@@ -91,7 +117,7 @@ export class TransactionAssignerImpl
             assignedTransactions.push(
                 new AssignedTransaction(
                     transaction,
-                    manualMatches[transaction.hash] || [],
+                    matches[transaction.hash] || [],
                 ),
             );
         }

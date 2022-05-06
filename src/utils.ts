@@ -59,3 +59,14 @@ export function createUniqueId(): number {
         Math.floor(Math.random() * 1_000_000)
     );
 }
+
+/**
+ * Translates a wildcard pattern (such as "One+*+Three") into a regex pattern ("One\+.*\+Three")
+ * Applies the necessary escape sequences to match characters such as +, ?, ^, and $.
+ */
+export function wildcardToRegExp(wildcardStr: string): string {
+    const escapedStr = wildcardStr.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const wildcardEscapedStr = escapedStr.replace(/\\\*/g, ".*");
+
+    return wildcardEscapedStr;
+}

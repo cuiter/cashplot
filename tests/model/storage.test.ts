@@ -7,7 +7,7 @@ import {
     ManualFilter,
     Preferences,
     Settings,
-    WildcardFilter,
+    TextFilter,
 } from "../../src/model/entities";
 
 class StorageDriverMock implements StorageDriver {
@@ -43,10 +43,16 @@ const testSettings = new Settings(
     [new Account("NL00SNSB1234567890", "Mr. G", 40 * DECIMAL, true)],
     [
         new Category("Shopping", 300 * DECIMAL, [
-            new WildcardFilter(1, "bol.com", "90340932902"),
+            new TextFilter(1, "Bol.com", "wildcard", {
+                contraAccount: "bol.com",
+                description: "90340932902",
+            }),
         ]),
         new Category("Salary", null, [
-            new WildcardFilter(2, "Company Inc.", "Salary for"),
+            new TextFilter(2, "Company", "regexp", {
+                contraAccount: "Company Inc\\.",
+                description: "Salary for",
+            }),
             new ManualFilter(3, 0x320923df),
         ]),
     ],
@@ -67,10 +73,14 @@ const testStoredSettings = {
             monthlyBudget: 300 * DECIMAL,
             filters: [
                 {
-                    type: "wildcard",
                     id: 1,
-                    contraAccount: "bol.com",
-                    description: "90340932902",
+                    type: "text",
+                    displayName: "Bol.com",
+                    matchType: "wildcard",
+                    matchPatterns: {
+                        contraAccount: "bol.com",
+                        description: "90340932902",
+                    },
                 },
             ],
         },
@@ -79,14 +89,20 @@ const testStoredSettings = {
             monthlyBudget: null,
             filters: [
                 {
-                    type: "wildcard",
                     id: 2,
-                    contraAccount: "Company Inc.",
-                    description: "Salary for",
+                    type: "text",
+                    matchType: "regexp",
+                    displayName: "Company",
+
+                    matchPatterns: {
+                        contraAccount: "Company Inc\\.",
+                        description: "Salary for",
+                    },
                 },
                 {
-                    type: "manual",
                     id: 3,
+                    type: "manual",
+
                     transactionHash: 0x320923df,
                 },
             ],

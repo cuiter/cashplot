@@ -82,6 +82,8 @@ export class CategoryCollectionImpl
         // Remove filters with same id if they already exist.
         const filterIds = category.filters.map((filter) => filter.id);
         for (const filter of filters) {
+            filter.init();
+
             const filterIndex = filterIds.indexOf(filter.id);
             if (filterIndex !== -1) {
                 category.filters[filterIndex] = filter;
@@ -124,7 +126,7 @@ export class CategoryCollectionImpl
         this.notifyObservers();
     }
 
-    public get(name: string): Category {
+    public getFilters(name: string): Filter[] {
         const category = this.settings.categories.filter(
             (category) => category.name == name,
         )[0];
@@ -132,8 +134,9 @@ export class CategoryCollectionImpl
             throw new Error('Could not find category named "' + name + '"');
         }
 
-        return category;
+        return category.filters;
     }
+
     public list(): string[] {
         return this.settings.categories.map((category) => category.name);
     }

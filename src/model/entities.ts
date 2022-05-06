@@ -1,6 +1,6 @@
-import { Type } from "class-transformer";
+import { Exclude, Type } from "class-transformer";
 import "reflect-metadata";
-import { assert, hash } from "../utils";
+import { assert, hash, wildcardToRegExp } from "../utils";
 
 const DECIMAL = 100;
 export { DECIMAL };
@@ -41,16 +41,76 @@ export class Filter {
     constructor(id: number) {
         this.id = id;
     }
+
+    /** Initializes the filter. May be overridden by child classes to contain extra logic. */
+    public init() {}
 }
 
-/** Matches transactions based on content. Matches case-insensitively, supporting a wildcard character. */
-export class WildcardFilter extends Filter {
+/** Matches transactions based on content. Matches case-insensitively, supporting a wildcard character (*) or regex pattern. */
+export class TextFilter extends Filter {
+    @Exclude()
+    private matchers: {
+        contraAccount: RegExp;
+        description: RegExp;
+    } | null = null;
+
     constructor(
         id: number,
-        public contraAccount: string,
-        public description: string,
+        public displayName: string, // When empty, the contra account pattern should be displayed.
+        public matchType: string, // Either Wildcard or RegExp
+        public matchPatterns: {
+            contraAccount: string; // Matches the contraAccount and contraAccountName attributes.
+            // May be empty, in which case it matches any value
+            description: string; // Matches the description attribute. May be empty as well
+            // Note: If both patterns are set to the empty string, the filter will not match anything.
+        },
     ) {
         super(id);
+    }
+
+    /** Initializes this filter, compiling the appropriate RegExp patterns. */
+    public init() {
+        // Note: This assertion is moved out of the constructor so class-transformer
+        //       does not have to be modified to provide constructor arguments.
+        assert(
+            this.matchType === "wildcard" || this.matchType === "regexp",
+            "filterType must be either 'wildcard' or 'regexp'",
+        );
+
+        if (
+            this.matchPatterns.contraAccount !== "" ||
+            this.matchPatterns.description !== ""
+        ) {
+            this.matchers = {
+                contraAccount: new RegExp(
+                    this.matchType === "wildcard"
+                        ? wildcardToRegExp(this.matchPatterns.contraAccount)
+                        : this.matchPatterns.contraAccount,
+                    "i", // Case-insensitive
+                ),
+                description: new RegExp(
+                    this.matchType === "wildcard"
+                        ? wildcardToRegExp(this.matchPatterns.description)
+                        : this.matchPatterns.description,
+                    "i",
+                ),
+            };
+        } else {
+            const neverMatches = new RegExp("(?!x)x");
+            this.matchers = {
+                contraAccount: neverMatches,
+                description: neverMatches,
+            };
+        }
+    }
+
+    /** Returns this filter's RegExp matchers with their corresponding transaction attributes. */
+    public getMatchers() {
+        if (this.matchers === null) {
+            throw new Error("Filter has not been initialized yet.");
+        } else {
+            return this.matchers;
+        }
     }
 }
 
@@ -66,7 +126,7 @@ export class Category {
         discriminator: {
             property: "type",
             subTypes: [
-                { value: WildcardFilter, name: "wildcard" },
+                { value: TextFilter, name: "text" },
                 { value: ManualFilter, name: "manual" },
             ],
         },
@@ -132,7 +192,7 @@ export class Assignment {
         public name: string,
         public type: string, // May be Account or Category
         public filterId: number,
-        public filterType: string,
+        public filterType: string, // Name of the filter type (e.g. TextFilter)
     ) {
         assert(
             type === "Category" ||

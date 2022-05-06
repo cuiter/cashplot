@@ -62,19 +62,6 @@ describe("CategoryCollectionImpl", () => {
         expect(categories[1]).toBe("Category Test");
     });
 
-    test("should return a category with a given name", () => {
-        const categoryCollection = injector
-            .provideClass("storage", StorageMock)
-            .injectClass(CategoryCollectionImpl);
-
-        categoryCollection.add("Category 1");
-        categoryCollection.add("Category 2");
-
-        const category = categoryCollection.get("Category 2");
-
-        expect(category.name).toBe("Category 2");
-    });
-
     test("should return all categories in the collection", () => {
         const categoryCollection = injector
             .provideClass("storage", StorageMock)
@@ -97,36 +84,37 @@ describe("CategoryCollectionImpl", () => {
 
         categoryCollection.add("New category");
 
+        const customFilter = new ManualFilter(0x3528, 0x9302323);
+        let customFilterInitCalled = false;
+        customFilter.init = () => (customFilterInitCalled = true);
+
         categoryCollection.addFilters("New category", [
-            new ManualFilter(0x3528, 0x9302323),
+            customFilter,
             new ManualFilter(0x6934, 0x2393803),
         ]);
 
-        const category = categoryCollection.get("New category");
-        expect(category.filters.length).toBe(2);
-        expect(category.filters[0]).toBeInstanceOf(ManualFilter);
-        expect(category.filters[0].id).toBe(0x3528);
-        expect((category.filters[0] as ManualFilter).transactionHash).toBe(
-            0x9302323,
-        );
-        expect(category.filters[1].id).toBe(0x6934);
-        expect((category.filters[1] as ManualFilter).transactionHash).toBe(
-            0x2393803,
-        );
+        expect(customFilterInitCalled).toBe(true);
+        const filters = categoryCollection.getFilters("New category");
+        expect(filters.length).toBe(2);
+        expect(filters[0]).toBeInstanceOf(ManualFilter);
+        expect(filters[0].id).toBe(0x3528);
+        expect((filters[0] as ManualFilter).transactionHash).toBe(0x9302323);
+        expect(filters[1].id).toBe(0x6934);
+        expect((filters[1] as ManualFilter).transactionHash).toBe(0x2393803);
 
         // Override filter with new filter
         categoryCollection.addFilters("New category", [
             new ManualFilter(0x3528, 0x10239234),
         ]);
 
-        const overriddenCategory = categoryCollection.get("New category");
-        expect(overriddenCategory.filters.length).toBe(2);
-        expect(overriddenCategory.filters[0]).toBeInstanceOf(ManualFilter);
-        expect(overriddenCategory.filters[0].id).toBe(0x3528);
-        expect(
-            (overriddenCategory.filters[0] as ManualFilter).transactionHash,
-        ).toBe(0x10239234);
-        expect(category.filters[1].id).toBe(0x6934);
+        const overriddenFilters = categoryCollection.getFilters("New category");
+        expect(overriddenFilters.length).toBe(2);
+        expect(overriddenFilters[0]).toBeInstanceOf(ManualFilter);
+        expect(overriddenFilters[0].id).toBe(0x3528);
+        expect((overriddenFilters[0] as ManualFilter).transactionHash).toBe(
+            0x10239234,
+        );
+        expect(overriddenFilters[1].id).toBe(0x6934);
     });
 
     test("should remove a filter from a category", () => {
@@ -143,13 +131,11 @@ describe("CategoryCollectionImpl", () => {
 
         categoryCollection.removeFilters("New category", [0x3528]);
 
-        const category = categoryCollection.get("New category");
-        expect(category.filters.length).toBe(1);
-        expect(category.filters[0]).toBeInstanceOf(ManualFilter);
-        expect(category.filters[0].id).toBe(0x6934);
-        expect((category.filters[0] as ManualFilter).transactionHash).toBe(
-            0x2393803,
-        );
+        const filters = categoryCollection.getFilters("New category");
+        expect(filters.length).toBe(1);
+        expect(filters[0]).toBeInstanceOf(ManualFilter);
+        expect(filters[0].id).toBe(0x6934);
+        expect((filters[0] as ManualFilter).transactionHash).toBe(0x2393803);
     });
 
     test("should load categories from persistent storage", () => {
