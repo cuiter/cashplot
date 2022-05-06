@@ -30,7 +30,9 @@ export default {
             const categoryName = (this as any).$root.$data.categories.add(
                 newCategoryName,
             );
-            (this as any).openDialog("category-edit", categoryName);
+            (this as any).openDialog("category-edit", {
+                categoryName: categoryName,
+            });
         },
         selectCategory(name: string) {
             const selectedTransactionHashes: number[] = (this as any).$props
@@ -48,7 +50,9 @@ export default {
 
                 (this as any).$root.$data.categories.addFilters(name, filters);
             } else {
-                (this as any).openDialog("category-edit", name);
+                (this as any).openDialog("category-edit", {
+                    categoryName: name,
+                });
             }
         },
     },

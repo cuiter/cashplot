@@ -20,6 +20,9 @@
             />
 
             <category-edit-component v-if="openedDialog === 'category-edit'" />
+            <text-filter-edit-component
+                v-if="openedDialog === 'text-filter-edit'"
+            />
         </div>
 
         <bottom-nav-component />

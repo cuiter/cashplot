@@ -50,6 +50,12 @@
             <span v-if="openedDialog === 'category-edit'" class="top-nav-title">
                 Categorie bewerken
             </span>
+            <span
+                v-if="openedDialog === 'text-filter-edit'"
+                class="top-nav-title"
+            >
+                Filter bewerken
+            </span>
 
             <div class="top-nav-edge" />
         </div>

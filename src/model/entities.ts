@@ -68,7 +68,10 @@ export class TextFilter extends Filter {
         super(id);
     }
 
-    /** Initializes this filter, compiling the appropriate RegExp patterns. */
+    /**
+     * Initializes this filter, compiling the appropriate RegExp patterns.
+     * Throws an exception if the given pattern is not valid.
+     */
     public init() {
         // Note: This assertion is moved out of the constructor so class-transformer
         //       does not have to be modified to provide constructor arguments.

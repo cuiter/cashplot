@@ -122,7 +122,7 @@ export class WebUI implements UI {
                 window.localStorage.getItem(tabOpenDialogsKey) ?? "null",
             ) ?? tabOpenDialogsDefault) as Record<
                 string,
-                [string, string | number | null][]
+                [string, { categoryName?: string; filterId?: number } | null][]
             >,
         };
 
@@ -181,7 +181,7 @@ export class WebUI implements UI {
                 },
                 openDialog: (
                     dialogName: string, // for example: category-edit
-                    entry: string | number | null, // category name, filter id, etc.
+                    entry: { categoryName?: string; filterId?: number }, // category name, filter id, etc.
                 ) => {
                     if (
                         navState.tabOpenDialogs[navState.currentTab] ===

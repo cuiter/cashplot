@@ -50,7 +50,7 @@ const itemIncrement = 20;
 
 export default {
     props: {
-        value: { type: Array, default: () => null }, // Hashes of selected transactions
+        value: { type: Array, default: () => [] }, // Hashes of selected transactions
         transactions: { type: Array, default: () => [] },
         selectable: { type: Boolean, default: () => false },
     },

@@ -35,6 +35,12 @@
                 @click.native="removeSelectedManualTransactions"
             />
         </div>
+        <automatic-filter-list-component
+            v-if="currentFilterType === 'automatic'"
+            v-model="selectedManualTransactionHashes"
+            :filters="filters"
+            :category-name="categoryName"
+        />
         <transaction-list-component
             v-if="currentFilterType === 'manual'"
             v-model="selectedManualTransactionHashes"
@@ -62,6 +68,11 @@ export default {
                 "ManualFilter",
             );
         },
+        filters: function () {
+            return (this as any).$root.$data.categories.getFilters(
+                (this as any).$data.categoryName,
+            );
+        },
     },
     watch: {
         categoryName: function () {
@@ -78,7 +89,9 @@ export default {
         },
     },
     created: function () {
-        (this as any).$data.categoryName = (this as any).openedDialogEntry;
+        (this as any).$data.categoryName = (
+            this as any
+        ).openedDialogEntry.categoryName;
         (this as any).$data.previousCategoryName = (
             this as any
         ).$data.categoryName;

@@ -20,6 +20,12 @@ export class CategoryCollectionImpl
     public init() {
         this.settings = this.storage.loadSettings() || this.settings;
 
+        for (const category of this.settings.categories) {
+            for (const filter of category.filters) {
+                filter.init();
+            }
+        }
+
         // Save settings to storage when any changes are made.
         this.subscribeToChanges(() => {
             this.storage.storeSettings(this.settings);
