@@ -64,7 +64,7 @@ export class WebUI implements UI {
         // Load Vue component dependencies.
         Vue.use(InfiniteLoading, {
             slots: {
-                noResults: "No data available",
+                noResults: "-",
                 noMore: "-",
                 error: "Error while loading data",
             },
@@ -83,6 +83,9 @@ export class WebUI implements UI {
 
         Vue.mixin(this.createNavigationMixin());
 
+        this.sourceData.init();
+        this.categories.init();
+
         const _v = new Vue({
             el: "#app",
             data: {
@@ -99,9 +102,6 @@ export class WebUI implements UI {
 
         this.onResize();
         window.addEventListener("resize", () => this.onResize());
-
-        this.sourceData.init();
-        this.categories.init();
     }
 
     private isDebugModeEnabled(): boolean {

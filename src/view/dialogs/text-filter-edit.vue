@@ -1,26 +1,51 @@
 <template>
     <div class="tab-contents full-size">
-        <div class="full-width flex-space-between">
-            <input
-                v-model="displayName"
-                class="flex-item-full margin-top-small text-center margin-top-small margin-bottom-small"
-            />
-            <remove-button-component @click.native="removeFilter" />
-        </div>
-        <div class="full-width flex-space-between">
-            <input
-                v-model="contraAccountPattern"
-                class="flex-item-full margin-top-small text-center margin-top-small margin-bottom-small"
-            />
-        </div>
-        <div class="full-width flex-space-between">
-            <input
-                v-model="descriptionPattern"
-                class="flex-item-full margin-top-small text-center margin-top-small margin-bottom-small"
-            />
+        <div class="full-width" v-if="matchingTransactionsExpanded === false">
+            <div class="full-width flex-space-between">
+                <input
+                    v-model="displayName"
+                    class="flex-item-full margin-top-small text-center margin-top-small margin-bottom-small"
+                    placeholder="Naam"
+                />
+                <remove-button-component @click.native="removeFilter" />
+            </div>
+            <div class="full-width flex-space-between">
+                <input
+                    v-model="contraAccountPattern"
+                    class="flex-item-full margin-top-small text-center margin-top-small margin-bottom-small"
+                    placeholder="Tegenpartij of -rekening"
+                />
+            </div>
+            <div class="full-width flex-space-between">
+                <input
+                    v-model="descriptionPattern"
+                    class="flex-item-full margin-top-small text-center margin-top-small margin-bottom-small"
+                    placeholder="Beschrijving"
+                />
+            </div>
         </div>
 
         <div class="tab-splitter"></div>
+
+        <div class="full-width flex-center position-relative">
+            <span class="sub-tab-heading margin-top-small"
+                >Overeenkomende transacties</span
+            >
+            <button
+                v-if="matchingTransactionsExpanded === false"
+                class="button expand-button"
+                @click="toggleMatchingTransactionsExpanded"
+            >
+                Toon meer
+            </button>
+            <button
+                v-if="matchingTransactionsExpanded === true"
+                class="button expand-button"
+                @click="toggleMatchingTransactionsExpanded"
+            >
+                Toon minder
+            </button>
+        </div>
 
         <transaction-list-component :transactions="matchingTransactions" />
     </div>
@@ -36,6 +61,7 @@ export default {
             matchType: "",
             contraAccountPattern: "",
             descriptionPattern: "",
+            matchingTransactionsExpanded: false,
         };
     },
     computed: {
@@ -109,6 +135,10 @@ export default {
         },
         switchFilterType: function (type: string) {
             (this as any).$data.currentFilterType = type;
+        },
+        toggleMatchingTransactionsExpanded: function () {
+            (this as any).$data.matchingTransactionsExpanded = !(this as any)
+                .$data.matchingTransactionsExpanded;
         },
     },
 };
