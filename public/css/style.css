@@ -64,6 +64,7 @@ a {
 }
 
 .view {
+    z-index: 0;
     flex: 1 1 auto;
     position: relative;
 }
@@ -76,6 +77,7 @@ a {
 }
 
 .nav {
+    z-index: 1;
     flex: 0 1 6rem;
     background-color: var(--color-background-nav);
     box-shadow: 0 0rem 0.2rem black;
@@ -83,6 +85,12 @@ a {
 
     display: flex;
     justify-content: center;
+}
+
+@media screen and not (min-height: 15.8rem) {
+    .nav {
+        display: none;
+    }
 }
 
 .nav .nav-button {
@@ -133,6 +141,7 @@ a {
 }
 
 .top-nav {
+    z-index: 1;
     flex: 0 1 5rem;
     background-color: var(--color-background-nav);
     box-shadow: 0 0rem 0.2rem black;
