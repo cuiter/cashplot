@@ -30,8 +30,14 @@
                 </span>
             </div>
             <remove-button-component
-                v-if="currentFilterType === 'manual'"
+                v-if="
+                    currentFilterType === 'manual' &&
+                    manualTransactions.length !== 0
+                "
                 class="float-right manual-filter-remove-button"
+                :class="{
+                    inactive: selectedManualTransactionHashes.length === 0,
+                }"
                 @click.native="removeSelectedManualTransactions"
             />
         </div>

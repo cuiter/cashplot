@@ -648,7 +648,7 @@ a {
     display: none;
 }
 
-.faded {
+.inactive {
     filter: brightness(55%);
     pointer-events: none;
 }

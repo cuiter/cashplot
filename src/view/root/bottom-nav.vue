@@ -43,7 +43,7 @@
             class="nav-button"
             :class="{
                 selected: currentTab === 'budget',
-                faded: !isDataAvailable,
+                inactive: !isDataAvailable,
             }"
             @click="isDataAvailable && switchTab('budget')"
         >
@@ -64,7 +64,7 @@
             class="nav-button"
             :class="{
                 selected: currentTab === 'balance',
-                faded: !isDataAvailable,
+                inactive: !isDataAvailable,
             }"
             @click="isDataAvailable && switchTab('balance')"
         >

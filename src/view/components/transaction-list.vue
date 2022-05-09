@@ -92,6 +92,31 @@ export default {
             });
         },
     },
+    watch: {
+        transactions: function () {
+            const selectedTransactionHashes: number[] = (this as any).$props
+                .value;
+            const transactions: SourceTransaction[] = (this as any).$props
+                .transactions;
+
+            const existingHashes = new Set(
+                transactions.map((transaction) => transaction.hash),
+            );
+
+            const existingSelectedTransactionHashes =
+                selectedTransactionHashes.filter((hash) =>
+                    existingHashes.has(hash),
+                );
+
+            if (
+                existingSelectedTransactionHashes.length !==
+                selectedTransactionHashes.length
+            ) {
+                (this as any).$props.value = existingSelectedTransactionHashes;
+                (this as any).$emit("input", (this as any).$props.value);
+            }
+        },
+    },
     methods: {
         infiniteHandler($state: any) {
             (this as any).$data.itemsLoaded += itemIncrement;
