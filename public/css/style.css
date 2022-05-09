@@ -327,6 +327,10 @@ a {
     font-size: 1.3rem;
 }
 
+.collection-item.clickable {
+    background-color: var(--color-background-button-dark);
+}
+
 .collection-item.selectable {
     background-color: var(--color-background-button);
 }
@@ -380,7 +384,7 @@ a {
 
 .source-data-accounts {
     right: 11.4rem;
-    bottom: 0.6rem;
+    bottom: 0.7rem;
 }
 
 .source-data-accounts-icon {
@@ -394,7 +398,7 @@ a {
 
 .source-data-transactions {
     right: 5.9rem;
-    bottom: 0.6rem;
+    bottom: 0.7rem;
 }
 
 .source-data-transactions-icon {
@@ -576,12 +580,6 @@ a {
     text-align: center;
     word-wrap: break-word;
     white-space: initial;
-}
-
-.manual-filter-remove-button {
-    position: absolute;
-    right: 5rem;
-    top: 0rem;
 }
 
 /* Custom classes */

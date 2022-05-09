@@ -36,14 +36,14 @@
                 class="button expand-button"
                 @click="toggleMatchingTransactionsExpanded"
             >
-                Toon meer
+                &#9650;
             </button>
             <button
                 v-if="matchingTransactionsExpanded === true"
                 class="button expand-button"
                 @click="toggleMatchingTransactionsExpanded"
             >
-                Toon minder
+                &#9660;
             </button>
         </div>
 
@@ -101,6 +101,12 @@ export default {
         const filter = categoryFilters.filter(
             (filter) => filter.id === (this as any).$data.filterId,
         )[0];
+
+        if (filter === undefined) {
+            // Filter does not exist anymore.
+            (this as any).closeWindow();
+            return;
+        }
 
         (this as any).$data.displayName = filter.displayName;
         (this as any).$data.matchType = filter.matchType;

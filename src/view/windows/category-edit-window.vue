@@ -10,36 +10,41 @@
         <div class="tab-splitter"></div>
         <div class="full-width position-relative margin-top-small">
             <div class="full-width flex-center">
-                <span
-                    class="sub-nav-button"
-                    :class="{
-                        selected: currentFilterType === 'automatic',
-                    }"
-                    @click="switchFilterType('automatic')"
-                >
-                    Automatische filters
-                </span>
-                <span
-                    class="sub-nav-button"
-                    :class="{
-                        selected: currentFilterType === 'manual',
-                    }"
-                    @click="switchFilterType('manual')"
-                >
-                    Handmatig toegewezen
-                </span>
+                <div class="flex-center">
+                    <!-- To center nav buttons on both sides -->
+                    <remove-button-component class="invisible" />
+                    <span
+                        class="sub-nav-button"
+                        :class="{
+                            selected: currentFilterType === 'automatic',
+                        }"
+                        @click="switchFilterType('automatic')"
+                    >
+                        Automatische filters
+                    </span>
+                </div>
+                <div class="flex-center">
+                    <span
+                        class="sub-nav-button"
+                        :class="{
+                            selected: currentFilterType === 'manual',
+                        }"
+                        @click="switchFilterType('manual')"
+                    >
+                        Handmatig toegewezen
+                    </span>
+                    <remove-button-component
+                        :class="{
+                            invisible:
+                                currentFilterType !== 'manual' ||
+                                manualTransactions.length === 0,
+                            inactive:
+                                selectedManualTransactionHashes.length === 0,
+                        }"
+                        @click.native="removeSelectedManualTransactions"
+                    />
+                </div>
             </div>
-            <remove-button-component
-                v-if="
-                    currentFilterType === 'manual' &&
-                    manualTransactions.length !== 0
-                "
-                class="float-right manual-filter-remove-button"
-                :class="{
-                    inactive: selectedManualTransactionHashes.length === 0,
-                }"
-                @click.native="removeSelectedManualTransactions"
-            />
         </div>
         <automatic-filter-list-component
             v-if="currentFilterType === 'automatic'"
