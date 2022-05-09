@@ -26,6 +26,7 @@
                 v-if="openedWindow === 'source-data'"
             />
             <assignment-window-component v-if="openedWindow === 'assignment'" />
+            <budget-window-component v-if="openedWindow === 'budget'" />
         </div>
 
         <bottom-nav-component />

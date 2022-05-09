@@ -63,5 +63,14 @@
 
             <div class="top-nav-edge" />
         </div>
+
+        <div
+            v-if="openedWindow === 'budget'"
+            class="full-size view-width flex-space-between"
+        >
+            <span class="top-nav-title">{{
+                openedWindowEntry.categoryName
+            }}</span>
+        </div>
     </div>
 </template>

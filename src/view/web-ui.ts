@@ -116,27 +116,30 @@ export class WebUI implements UI {
         const tabOpenWindowsDefault: Record<
             string,
             [string, { categoryName?: string; filterId?: number } | null][]
-        > = {
-            data: [["source-data", null]],
-        };
+        > = {};
 
         const navState = {
             currentTab: currentTabDefault,
             tabOpenWindows: tabOpenWindowsDefault,
         };
 
-        if (this.isDebugModeEnabled()) {
-            if (window.localStorage.getItem(currentTabKey) !== null) {
-                navState.currentTab =
-                    window.localStorage.getItem(currentTabKey) ??
-                    currentTabDefault;
+        // Note: The LiveReload script is loaded asychronously, hence the delay.
+        //       An alternative may be considered in the future.
+        setTimeout(() => {
+            if (this.isDebugModeEnabled()) {
+                console.log("LOADING");
+                if (window.localStorage.getItem(currentTabKey) !== null) {
+                    navState.currentTab =
+                        window.localStorage.getItem(currentTabKey) ??
+                        currentTabDefault;
+                }
+                if (window.localStorage.getItem(tabOpenWindowsKey) !== null) {
+                    navState.tabOpenWindows = JSON.parse(
+                        window.localStorage.getItem(tabOpenWindowsKey) ?? "{}",
+                    );
+                }
             }
-            if (window.localStorage.getItem(tabOpenWindowsKey) !== null) {
-                navState.tabOpenWindows = JSON.parse(
-                    window.localStorage.getItem(tabOpenWindowsKey) ?? "{}",
-                );
-            }
-        }
+        }, 500);
 
         const windowInFront = () => {
             const tabOpenedWindows =
@@ -149,30 +152,19 @@ export class WebUI implements UI {
             }
         };
 
-        const storeCurrentTab = this.isDebugModeEnabled()
-            ? () => {
-                  if (this.isDebugModeEnabled()) {
-                      window.localStorage.setItem(
-                          currentTabKey,
-                          navState.currentTab,
-                      );
-                  }
-              }
-            : () => {
-                  // Do nothing
-              };
-        const storeOpenedWindows = this.isDebugModeEnabled()
-            ? () => {
-                  if (this.isDebugModeEnabled()) {
-                      window.localStorage.setItem(
-                          tabOpenWindowsKey,
-                          JSON.stringify(navState.tabOpenWindows),
-                      );
-                  }
-              }
-            : () => {
-                  // Do nothing
-              };
+        const storeCurrentTab = () => {
+            if (this.isDebugModeEnabled()) {
+                window.localStorage.setItem(currentTabKey, navState.currentTab);
+            }
+        };
+        const storeOpenedWindows = () => {
+            if (this.isDebugModeEnabled()) {
+                window.localStorage.setItem(
+                    tabOpenWindowsKey,
+                    JSON.stringify(navState.tabOpenWindows),
+                );
+            }
+        };
 
         return {
             data: () => {
@@ -187,9 +179,6 @@ export class WebUI implements UI {
                 switchTab: (newTabName: string) => {
                     navState.currentTab = newTabName;
                     storeCurrentTab();
-                    if (this.isDebugModeEnabled()) {
-                        window.localStorage.setItem(currentTabKey, newTabName);
-                    }
                 },
                 openWindow: (
                     windowName: string, // for example: category-edit
