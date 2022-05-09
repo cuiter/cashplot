@@ -112,15 +112,17 @@ export class WebUI implements UI {
     private createNavigationMixin() {
         const currentTabKey = "debug/currentTab";
         const currentTabDefault = "overview";
-        const tabOpenDialogsKey = "debug/tabOpenDialogs";
-        const tabOpenDialogsDefault = {};
+        const tabOpenWindowsKey = "debug/tabOpenWindows";
+        const tabOpenWindowsDefault: Record<
+            string,
+            [string, { categoryName?: string; filterId?: number } | null][]
+        > = {
+            data: [["source-data", null]],
+        };
 
         const navState = {
             currentTab: currentTabDefault,
-            tabOpenDialogs: tabOpenDialogsDefault as Record<
-                string,
-                [string, { categoryName?: string; filterId?: number } | null][]
-            >,
+            tabOpenWindows: tabOpenWindowsDefault,
         };
 
         if (this.isDebugModeEnabled()) {
@@ -129,19 +131,19 @@ export class WebUI implements UI {
                     window.localStorage.getItem(currentTabKey) ??
                     currentTabDefault;
             }
-            if (window.localStorage.getItem(tabOpenDialogsKey) !== null) {
-                navState.tabOpenDialogs = JSON.parse(
-                    window.localStorage.getItem(tabOpenDialogsKey) ?? "{}",
+            if (window.localStorage.getItem(tabOpenWindowsKey) !== null) {
+                navState.tabOpenWindows = JSON.parse(
+                    window.localStorage.getItem(tabOpenWindowsKey) ?? "{}",
                 );
             }
         }
 
-        const dialogInFront = () => {
-            const tabOpenedDialogs =
-                navState.tabOpenDialogs[navState.currentTab] || [];
+        const windowInFront = () => {
+            const tabOpenedWindows =
+                navState.tabOpenWindows[navState.currentTab] || [];
 
-            if (tabOpenedDialogs.length !== 0) {
-                return tabOpenedDialogs[tabOpenedDialogs.length - 1];
+            if (tabOpenedWindows.length !== 0) {
+                return tabOpenedWindows[tabOpenedWindows.length - 1];
             } else {
                 return [null, null];
             }
@@ -159,12 +161,12 @@ export class WebUI implements UI {
             : () => {
                   // Do nothing
               };
-        const storeOpenedDialogs = this.isDebugModeEnabled()
+        const storeOpenedWindows = this.isDebugModeEnabled()
             ? () => {
                   if (this.isDebugModeEnabled()) {
                       window.localStorage.setItem(
-                          tabOpenDialogsKey,
-                          JSON.stringify(navState.tabOpenDialogs),
+                          tabOpenWindowsKey,
+                          JSON.stringify(navState.tabOpenWindows),
                       );
                   }
               }
@@ -178,8 +180,8 @@ export class WebUI implements UI {
             },
             computed: {
                 currentTab: () => navState.currentTab,
-                openedDialog: () => dialogInFront()[0],
-                openedDialogEntry: () => dialogInFront()[1],
+                openedWindow: () => windowInFront()[0],
+                openedWindowEntry: () => windowInFront()[1],
             },
             methods: {
                 switchTab: (newTabName: string) => {
@@ -189,38 +191,38 @@ export class WebUI implements UI {
                         window.localStorage.setItem(currentTabKey, newTabName);
                     }
                 },
-                openDialog: (
-                    dialogName: string, // for example: category-edit
-                    entry: { categoryName?: string; filterId?: number }, // category name, filter id, etc.
+                openWindow: (
+                    windowName: string, // for example: category-edit
+                    entry: { categoryName?: string; filterId?: number } | null, // category name, filter id, etc.
                 ) => {
                     if (
-                        navState.tabOpenDialogs[navState.currentTab] ===
+                        navState.tabOpenWindows[navState.currentTab] ===
                         undefined
                     ) {
                         Vue.set(
-                            navState.tabOpenDialogs,
+                            navState.tabOpenWindows,
                             navState.currentTab,
                             [],
                         );
                     }
 
-                    navState.tabOpenDialogs[navState.currentTab].push([
-                        dialogName,
+                    navState.tabOpenWindows[navState.currentTab].push([
+                        windowName,
                         entry,
                     ]);
 
-                    storeOpenedDialogs();
+                    storeOpenedWindows();
                 },
-                closeDialog: () => {
-                    const dialogIndex =
-                        navState.tabOpenDialogs[navState.currentTab].length - 1;
-                    if (dialogIndex !== -1) {
-                        navState.tabOpenDialogs[navState.currentTab].splice(
-                            dialogIndex,
+                closeWindow: () => {
+                    const windowIndex =
+                        navState.tabOpenWindows[navState.currentTab].length - 1;
+                    if (windowIndex !== -1) {
+                        navState.tabOpenWindows[navState.currentTab].splice(
+                            windowIndex,
                             1,
                         );
 
-                        storeOpenedDialogs();
+                        storeOpenedWindows();
                     }
                 },
             },

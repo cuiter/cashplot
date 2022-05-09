@@ -4,25 +4,28 @@
 
         <div class="view view-width">
             <overview-tab-component
-                v-if="openedDialog === null && currentTab == 'overview'"
+                v-if="openedWindow === null && currentTab == 'overview'"
             />
-            <source-data-tab-component
-                v-if="openedDialog === null && currentTab == 'source-data'"
-            />
-            <category-tab-component
-                v-if="openedDialog === null && currentTab == 'category'"
+            <data-tab-component
+                v-if="openedWindow === null && currentTab == 'data'"
             />
             <budget-tab-component
-                v-if="openedDialog === null && currentTab == 'budget'"
+                v-if="openedWindow === null && currentTab == 'budget'"
             />
             <balance-tab-component
-                v-if="openedDialog === null && currentTab == 'balance'"
+                v-if="openedWindow === null && currentTab == 'balance'"
             />
 
-            <category-edit-component v-if="openedDialog === 'category-edit'" />
-            <text-filter-edit-component
-                v-if="openedDialog === 'text-filter-edit'"
+            <category-edit-window-component
+                v-if="openedWindow === 'category-edit'"
             />
+            <text-filter-edit-window-component
+                v-if="openedWindow === 'text-filter-edit'"
+            />
+            <source-data-window-component
+                v-if="openedWindow === 'source-data'"
+            />
+            <assignment-window-component v-if="openedWindow === 'assignment'" />
         </div>
 
         <bottom-nav-component />

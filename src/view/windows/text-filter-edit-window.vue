@@ -92,8 +92,8 @@ export default {
     created: function () {
         (this as any).$data.categoryName = (
             this as any
-        ).openedDialogEntry.categoryName;
-        (this as any).$data.filterId = (this as any).openedDialogEntry.filterId;
+        ).openedWindowEntry.categoryName;
+        (this as any).$data.filterId = (this as any).openedWindowEntry.filterId;
 
         const categoryFilters: TextFilter[] = (
             this as any
@@ -115,7 +115,7 @@ export default {
                 (this as any).$data.categoryName,
                 [(this as any).$data.filterId],
             );
-            (this as any).closeDialog();
+            (this as any).closeWindow();
         },
         updateFilter: function () {
             let changedFilter = new TextFilter(

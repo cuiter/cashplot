@@ -1,57 +1,61 @@
 <template>
-    <div
-        v-if="currentTab === 'source-data' || currentTab === 'category'"
-        class="top-nav"
-    >
+    <div v-if="openedWindow !== null" class="top-nav">
         <div
-            :class="{
-                'full-size': true,
-                'view-width': true,
-                'flex-center': openedDialog === null,
-                'flex-space-between': openedDialog !== null,
-            }"
+            v-if="
+                openedWindow === 'source-data' || openedWindow === 'assignment'
+            "
+            class="full-size view-width flex-center"
+        >
+            <span
+                class="top-nav-button"
+                :class="{
+                    selected: openedWindow === 'source-data',
+                }"
+                @click="
+                    closeWindow();
+                    openWindow('source-data', {});
+                "
+            >
+                Bronnen
+            </span>
+            <span
+                class="top-nav-button"
+                :class="{
+                    selected: openedWindow === 'assignment',
+                }"
+                @click="
+                    closeWindow();
+                    openWindow('assignment', {});
+                "
+            >
+                Categorieën
+            </span>
+        </div>
+
+        <div
+            v-if="
+                openedWindow === 'category-edit' ||
+                openedWindow === 'text-filter-edit'
+            "
+            class="full-size view-width flex-space-between"
         >
             <div class="top-nav-edge flex-center">
                 <span
-                    v-if="openedDialog !== null"
+                    v-if="openedWindow !== null"
                     class="top-nav-button"
                     :class="{ selected: true }"
-                    @click="closeDialog()"
+                    @click="closeWindow()"
                 >
                     &#60;&nbsp;
                 </span>
             </div>
 
-            <!-- Category tab buttons -->
-
-            <span
-                class="top-nav-button"
-                :class="{
-                    disabled: openedDialog !== null,
-                    selected: currentTab === 'source-data',
-                }"
-                @click="switchTab('source-data')"
-            >
-                Bronnen
-            </span>
-            <span
-                v-if="openedDialog === null"
-                class="top-nav-button"
-                :class="{
-                    disabled: openedDialog !== null,
-                    selected: currentTab === 'category',
-                }"
-                @click="switchTab('category')"
-            >
-                Categorieën
-            </span>
-
-            <!-- Dialog titles -->
-            <span v-if="openedDialog === 'category-edit'" class="top-nav-title">
+            <!-- Window titles -->
+            <span v-if="openedWindow === 'category-edit'" class="top-nav-title">
                 Categorie bewerken
             </span>
             <span
-                v-if="openedDialog === 'text-filter-edit'"
+                v-if="openedWindow === 'text-filter-edit'"
                 class="top-nav-title"
             >
                 Filter bewerken

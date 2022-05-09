@@ -30,7 +30,7 @@ export default {
             const categoryName = (this as any).$root.$data.categories.add(
                 newCategoryName,
             );
-            (this as any).openDialog("category-edit", {
+            (this as any).openWindow("category-edit", {
                 categoryName: categoryName,
             });
         },
@@ -50,7 +50,7 @@ export default {
 
                 (this as any).$root.$data.categories.addFilters(name, filters);
             } else {
-                (this as any).openDialog("category-edit", {
+                (this as any).openWindow("category-edit", {
                     categoryName: name,
                 });
             }

@@ -34,12 +34,12 @@ By using these terms consistently, the resulting application can begin to have a
 
 Concept definitions:
 
--   Page: home, app, FAQ (also as a dialog within the app)
+-   Page: home, app, FAQ (also as a window within the app)
 
 -   Root: app, nav, top-nav
 
 -   Tab: overview, source-data, category, budget, balance
--   Dialog (full-screen pop-up view): category-entry, filter-entry
+-   Window (full-screen pop-up view): category-entry, filter-entry
 -   Modal (partial-screen pop-up view): error-message, confirmation-request
 
 -   Container: scrollable-list, transaction-list, category-list
@@ -67,20 +67,25 @@ Color definitions:
 There are a few ways the user can be introduced to the application:
 
 -   Introduction tutorials, as seen in most open-source apps.
--   Explanation dialogs, opened when the user opens a screen for the first time.
+-   Explanation windows, opened when the user opens a screen for the first time.
 
 CashPlot may contain both.
 
 ## UI architecture
 
-The UI's main UI consists of three parts: the top-nav, the view (current tab or dialog) and the bottom nav.
+The UI's main UI layout consists of three parts: the top-nav, the view (current tab or window) and the bottom nav.
 
-At every point, there is a selected tab, and there may be one or more dialogs present on top of each other.
+At any point, there may be multiple overlapping views:
+
+-   The selected tab at the bottom
+-   Zero, one or multiple windows present on top
+
+The opened windows are stored per-tab. Whenever the user switches to another tab, the previous tab will still keep its opened windows.
 
 **Navigation**
 
 Navigation methods are provided to all components as a Vue mixin.
-Every component has the ability to open a dialog, or change the current tab.
+Every component has the ability to open a window, or change the current tab.
 
 ## Tech stack
 

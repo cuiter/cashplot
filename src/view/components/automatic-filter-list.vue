@@ -54,14 +54,14 @@ export default {
             (this as any).$root.$data.categories.addFilters(categoryName, [
                 newFilter,
             ]);
-            (this as any).openDialog("text-filter-edit", {
+            (this as any).openWindow("text-filter-edit", {
                 categoryName: categoryName,
                 filterId: newFilter.id,
             });
         },
 
         openFilter(filterId: number) {
-            (this as any).openDialog("text-filter-edit", {
+            (this as any).openWindow("text-filter-edit", {
                 categoryName: (this as any).$props.categoryName,
                 filterId: filterId,
             });

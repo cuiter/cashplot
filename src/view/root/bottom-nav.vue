@@ -21,10 +21,9 @@
         <div
             class="nav-button"
             :class="{
-                selected:
-                    currentTab === 'source-data' || currentTab == 'category',
+                selected: currentTab === 'data',
             }"
-            @click="switchTab('source-data')"
+            @click="switchTab('data')"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"

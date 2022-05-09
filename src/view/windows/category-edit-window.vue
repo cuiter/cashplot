@@ -97,7 +97,7 @@ export default {
     created: function () {
         (this as any).$data.categoryName = (
             this as any
-        ).openedDialogEntry.categoryName;
+        ).openedWindowEntry.categoryName;
         (this as any).$data.previousCategoryName = (
             this as any
         ).$data.categoryName;
@@ -107,7 +107,7 @@ export default {
             (this as any).$root.$data.categories.remove(
                 (this as any).$data.categoryName,
             );
-            (this as any).closeDialog();
+            (this as any).closeWindow();
         },
         switchFilterType: function (type: string) {
             (this as any).$data.currentFilterType = type;
