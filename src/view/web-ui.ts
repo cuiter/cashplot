@@ -116,15 +116,25 @@ export class WebUI implements UI {
         const tabOpenDialogsDefault = {};
 
         const navState = {
-            currentTab:
-                window.localStorage.getItem(currentTabKey) ?? currentTabDefault,
-            tabOpenDialogs: (JSON.parse(
-                window.localStorage.getItem(tabOpenDialogsKey) ?? "null",
-            ) ?? tabOpenDialogsDefault) as Record<
+            currentTab: currentTabDefault,
+            tabOpenDialogs: tabOpenDialogsDefault as Record<
                 string,
                 [string, { categoryName?: string; filterId?: number } | null][]
             >,
         };
+
+        if (this.isDebugModeEnabled()) {
+            if (window.localStorage.getItem(currentTabKey) !== null) {
+                navState.currentTab =
+                    window.localStorage.getItem(currentTabKey) ??
+                    currentTabDefault;
+            }
+            if (window.localStorage.getItem(tabOpenDialogsKey) !== null) {
+                navState.tabOpenDialogs = JSON.parse(
+                    window.localStorage.getItem(tabOpenDialogsKey) ?? "{}",
+                );
+            }
+        }
 
         const dialogInFront = () => {
             const tabOpenedDialogs =
