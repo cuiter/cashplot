@@ -104,26 +104,12 @@
             </div>
         </div>
         <div class="sources-entry flex-center">
-            <button
-                class="button flex-item-full"
-                @click="toggleSourceSelectionOpen()"
-                @blur="sourceSelectionOpen = false"
-            >
-                <div
-                    class="sources-selection"
-                    :class="{ disabled: sourceSelectionOpen === false }"
-                >
-                    <span
-                        v-for="name of sourceSelectionNames"
-                        @click="onSourceItemSelected"
-                        >{{ name }}</span
-                    >
-                </div>
-                <span class="float-left select-name">{{
-                    sourceProperties[selectedSource].name
-                }}</span>
-                <span class="float-right select-tick">▲</span>
-            </button>
+            <selection-component
+                v-model="selectedSource"
+                :options="availableSources"
+                :option-names="availableSourcesNames"
+                :drop-down="false"
+            />
             <button
                 class="sources-entry-open-button button"
                 @click="onOpenButtonPressed"
@@ -179,7 +165,6 @@ function debounce(func: any, wait: number) {
 export default {
     data: function () {
         return {
-            sourceSelectionOpen: false,
             selectedSource: "ing",
             sourceProperties: {
                 ing: {
@@ -213,13 +198,16 @@ export default {
     },
 
     computed: {
-        sourceSelectionNames(): string[] {
-            const selectedSource = (this as any).$data.selectedSource;
+        availableSources(): string[] {
+            return Object.keys((this as any).$data.sourceProperties);
+        },
+
+        availableSourcesNames(): string[] {
             const sourceProperties = (this as any).$data.sourceProperties;
 
-            return Object.keys(sourceProperties)
-                .filter((source) => source !== selectedSource)
-                .map((source) => sourceProperties[source].name);
+            return Object.keys(sourceProperties).map(
+                (source) => sourceProperties[source].name,
+            );
         },
 
         allSourceDataInfo() {
@@ -238,31 +226,12 @@ export default {
         );
         (this as any).updateInfoDateFormat();
     },
+
     beforeDestroy: function () {
         window.removeEventListener("resize", (this as any).resizeEventHandler);
     },
 
     methods: {
-        toggleSourceSelectionOpen(open: boolean | null = null) {
-            if (open === null) {
-                (this as any).$data.sourceSelectionOpen = !(this as any).$data
-                    .sourceSelectionOpen;
-            } else {
-                (this as any).$data.sourceSelectionOpen = open;
-            }
-        },
-
-        onSourceItemSelected(event: any) {
-            var name = event.target.textContent;
-            var sourceProperties = (this as any).$data.sourceProperties;
-
-            for (const source of Object.keys(sourceProperties)) {
-                if (sourceProperties[source].name === name) {
-                    (this as any).$data.selectedSource = source;
-                }
-            }
-        },
-
         onOpenButtonPressed() {
             const selectedSource = (this as any).$data.selectedSource;
             const sourceProperties = (this as any).$data.sourceProperties;
