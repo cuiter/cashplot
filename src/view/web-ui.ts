@@ -127,7 +127,6 @@ export class WebUI implements UI {
         //       An alternative may be considered in the future.
         setTimeout(() => {
             if (this.isDebugModeEnabled()) {
-                console.log("LOADING");
                 if (window.localStorage.getItem(currentTabKey) !== null) {
                     navState.currentTab =
                         window.localStorage.getItem(currentTabKey) ??
