@@ -39,6 +39,7 @@ a {
     font-size: 1.8rem;
     line-height: 1.7rem;
     padding: 0rem 1rem;
+    margin-bottom: 0rem;
     font-weight: initial;
     text-transform: none;
 }
@@ -159,6 +160,7 @@ a {
     padding: 0.1rem 1rem 0.3rem;
 
     border-radius: 1rem;
+    border: none;
 }
 
 .top-nav .top-nav-button,
@@ -462,36 +464,6 @@ a {
     margin-right: 1.2rem;
 }
 
-.sources-selection {
-    position: absolute;
-    bottom: 3.5rem;
-    padding-top: 0rem;
-    padding-bottom: 0.7rem;
-    box-sizing: content-box;
-
-    left: -0.1rem;
-    right: -0.1rem;
-    background-color: var(--color-background-nav);
-    border: 0.15rem solid var(--color-primary-deselected);
-    border-bottom: none;
-}
-
-.sources-selection span {
-    display: block;
-    width: calc(100% - 1.7rem);
-    padding: 0.5rem 0.7rem 0.5rem 1rem;
-    line-height: 2rem;
-    text-align: left;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    color: var(--color-primary-deselected);
-}
-
-.sources-selection span:hover {
-    color: var(--color-primary-selected);
-    background: var(--color-background-light-hover);
-}
-
 /* Categories tab */
 
 .transaction-date-splitter {
@@ -597,6 +569,47 @@ a {
     width: 100vw;
     height: 100vh; /* Fallback for browsers that do not support Custom Properties */
     height: calc(var(--vh, 1vh) * 100);
+}
+
+.selection-options {
+    box-sizing: content-box;
+
+    left: -0.1rem;
+    right: -0.1rem;
+    background-color: var(--color-background-nav);
+    border: 0.15rem solid var(--color-primary-deselected);
+}
+
+.selection-options.drop-down {
+    position: absolute;
+    top: 2em;
+    padding-top: 0.7rem;
+    padding-bottom: 0rem;
+    border-top: none;
+}
+
+.selection-options.drop-up {
+    position: absolute;
+    bottom: 2em;
+    padding-top: 0rem;
+    padding-bottom: 0.7rem;
+    border-bottom: none;
+}
+
+.selection-options span {
+    display: block;
+    width: calc(100% - 1.7rem);
+    padding: 0.5rem 0.7rem 0.5rem 1rem;
+    line-height: 2rem;
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: var(--color-primary-deselected);
+}
+
+.selection-options span:hover {
+    color: var(--color-primary-selected);
+    background: var(--color-background-light-hover);
 }
 
 .full-size {

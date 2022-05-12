@@ -4,7 +4,14 @@
         @click="opened = !opened"
         @blur="opened = false"
     >
-        <div class="sources-selection" :class="{ disabled: opened === false }">
+        <div
+            class="selection-options"
+            :class="{
+                disabled: opened === false,
+                'drop-down': dropDown,
+                'drop-up': !dropDown,
+            }"
+        >
             <span
                 v-for="(option, index) in options"
                 @click="onOptionSelected(option)"
@@ -30,6 +37,16 @@ export default {
         return {
             opened: false,
         };
+    },
+    created: function () {
+        const currentOption = (this as any).$props.value;
+        if (currentOption === "") {
+            const firstOption = (this as any).$props.options[0];
+            if (firstOption !== undefined) {
+                (this as any).$props.value = firstOption;
+                (this as any).$emit("input", firstOption);
+            }
+        }
     },
     computed: {
         selectedOptionName: function () {
