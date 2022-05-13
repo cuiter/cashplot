@@ -12,6 +12,7 @@ import {
     DECIMAL,
     Filter,
     ManualFilter,
+    PeriodType,
     SourceDataInfo,
     SourceTransaction,
     TextFilter,
@@ -90,6 +91,16 @@ class CategoryCollectionMock extends Observable implements CategoryCollection {
     rename(_name: string, _newName: string): boolean {
         throw new Error("Method not implemented.");
     }
+    setBudget(
+        name: string,
+        budgetAmount: number,
+        budgetPeriodType: PeriodType,
+    ): void {
+        throw new Error("Method not implemented.");
+    }
+    getBudget(name: string): { amount: number | null; periodType: PeriodType } {
+        throw new Error("Method not implemented.");
+    }
     addFilters(_categoryName: string, _filter: Filter[]): void {
         throw new Error("Method not implemented.");
     }
@@ -112,14 +123,14 @@ describe("TransactionAssigner", () => {
 
     test("should assign categories based on manual filters", () => {
         const categories: Category[] = [
-            new Category("Catering", 200 * DECIMAL, [
+            new Category("Catering", 200 * DECIMAL, PeriodType.Month, [
                 new ManualFilter(0x01, 0x1002),
             ]),
-            new Category("Tools", 400 * DECIMAL, [
+            new Category("Tools", 400 * DECIMAL, PeriodType.Month, [
                 new ManualFilter(0x02, 0x1001),
                 new ManualFilter(0x03, 0x1003),
             ]),
-            new Category("Food", 400 * DECIMAL, [
+            new Category("Food", 400 * DECIMAL, PeriodType.Month, [
                 new ManualFilter(0x04, 0x1002),
             ]),
         ];
@@ -151,13 +162,13 @@ describe("TransactionAssigner", () => {
 
     test("should assign categories based on text match filters", () => {
         const categories: Category[] = [
-            new Category("Catering", 200 * DECIMAL, [
+            new Category("Catering", 200 * DECIMAL, PeriodType.Month, [
                 new TextFilter(0x01, "", "wildcard", {
                     contraAccount: "Mr. John",
                     description: "Lunch",
                 }),
             ]),
-            new Category("Tools", 400 * DECIMAL, [
+            new Category("Tools", 400 * DECIMAL, PeriodType.Month, [
                 new TextFilter(0x02, "", "wildcard", {
                     contraAccount: "NL23ABNA9349042743",
                     description: "Invoice *, laptop model *",
@@ -176,7 +187,7 @@ describe("TransactionAssigner", () => {
                     description: ".*",
                 }),
             ]),
-            new Category("Food", 400 * DECIMAL, [
+            new Category("Food", 400 * DECIMAL, PeriodType.Month, [
                 new TextFilter(0x04, "", "wildcard", {
                     contraAccount: "Mr. John",
                     description: "Lunch",

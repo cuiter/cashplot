@@ -5,6 +5,7 @@ import {
     Category,
     DECIMAL,
     ManualFilter,
+    PeriodType,
     Preferences,
     Settings,
     TextFilter,
@@ -42,13 +43,13 @@ class StorageDriverMock implements StorageDriver {
 const testSettings = new Settings(
     [new Account("NL00SNSB1234567890", "Mr. G", 40 * DECIMAL, true)],
     [
-        new Category("Shopping", 300 * DECIMAL, [
+        new Category("Shopping", 300 * DECIMAL, PeriodType.Year, [
             new TextFilter(1, "Bol.com", "wildcard", {
                 contraAccount: "bol.com",
                 description: "90340932902",
             }),
         ]),
-        new Category("Salary", null, [
+        new Category("Salary", null, PeriodType.Month, [
             new TextFilter(2, "Company", "regexp", {
                 contraAccount: "Company Inc\\.",
                 description: "Salary for",
@@ -70,7 +71,8 @@ const testStoredSettings = {
     categories: [
         {
             name: "Shopping",
-            monthlyBudget: 300 * DECIMAL,
+            budgetAmount: 300 * DECIMAL,
+            budgetPeriodType: "year",
             filters: [
                 {
                     id: 1,
@@ -86,7 +88,8 @@ const testStoredSettings = {
         },
         {
             name: "Salary",
-            monthlyBudget: null,
+            budgetAmount: null,
+            budgetPeriodType: "month",
             filters: [
                 {
                     id: 2,

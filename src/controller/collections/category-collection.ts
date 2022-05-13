@@ -1,4 +1,4 @@
-import { Category, Filter, Settings } from "../../model/entities";
+import { Category, Filter, PeriodType, Settings } from "../../model/entities";
 import { CategoryCollection, Storage } from "../../interfaces";
 import { findNewName } from "../../utils";
 import { Observable } from "@daign/observable";
@@ -75,15 +75,40 @@ export class CategoryCollectionImpl
         return false;
     }
 
-    public addFilters(categoryName: string, filters: Filter[]): void {
+    private get(name: string): Category {
         const category = this.settings.categories.filter(
-            (category) => category.name == categoryName,
+            (category) => category.name == name,
         )[0];
         if (category === undefined) {
-            throw new Error(
-                'Could not find category named "' + categoryName + '"',
-            );
+            throw new Error('Could not find category named "' + name + '"');
         }
+
+        return category;
+    }
+
+    public setBudget(
+        name: string,
+        budgetAmount: number | null,
+        budgetPeriodType: PeriodType,
+    ): void {
+        const category = this.get(name);
+        category.budgetAmount = budgetAmount;
+        category.budgetPeriodType = budgetPeriodType;
+
+        this.notifyObservers();
+    }
+
+    public getBudget(name: string) {
+        const category = this.get(name);
+
+        return {
+            amount: category.budgetAmount,
+            periodType: category.budgetPeriodType,
+        };
+    }
+
+    public addFilters(categoryName: string, filters: Filter[]): void {
+        const category = this.get(categoryName);
 
         // Remove filters with same id if they already exist.
         const filterIds = category.filters.map((filter) => filter.id);
@@ -102,14 +127,7 @@ export class CategoryCollectionImpl
     }
 
     public removeFilters(categoryName: string, filterIds: number[]): void {
-        const category = this.settings.categories.filter(
-            (category) => category.name == categoryName,
-        )[0];
-        if (category === undefined) {
-            throw new Error(
-                'Could not find category named "' + categoryName + '"',
-            );
-        }
+        const category = this.get(categoryName);
 
         const existingFilterIds = category.filters.map((filter) => filter.id);
         for (const filterId of filterIds) {
@@ -133,12 +151,7 @@ export class CategoryCollectionImpl
     }
 
     public getFilters(name: string): Filter[] {
-        const category = this.settings.categories.filter(
-            (category) => category.name == name,
-        )[0];
-        if (category === undefined) {
-            throw new Error('Could not find category named "' + name + '"');
-        }
+        const category = this.get(name);
 
         return category.filters;
     }

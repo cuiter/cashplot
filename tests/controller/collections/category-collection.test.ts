@@ -4,6 +4,7 @@ import {
     Category,
     DECIMAL,
     ManualFilter,
+    PeriodType,
     Settings,
 } from "../../../src/model/entities";
 import { StorageMock } from "./source-data-collection.test";
@@ -77,6 +78,49 @@ describe("CategoryCollectionImpl", () => {
         expect(categories[1].name).toBe("Category 2");
     });
 
+    test("should set the budget of a category", () => {
+        const categoryCollection = injector
+            .provideClass("storage", StorageMock)
+            .injectClass(CategoryCollectionImpl);
+        categoryCollection.add("Category 1");
+        categoryCollection.add("Category 2");
+
+        categoryCollection.setBudget(
+            "Category 1",
+            200 * DECIMAL,
+            PeriodType.Week,
+        );
+        categoryCollection.setBudget("Category 2", null, PeriodType.Year);
+
+        const categories = categoryCollection.all();
+
+        expect(categories.length).toBe(2);
+        expect(categories[0].name).toBe("Category 1");
+        expect(categories[0].budgetAmount).toBe(200 * DECIMAL);
+        expect(categories[0].budgetPeriodType).toBe(PeriodType.Week);
+        expect(categories[1].name).toBe("Category 2");
+        expect(categories[1].budgetAmount).toBe(null);
+        expect(categories[1].budgetPeriodType).toBe(PeriodType.Year);
+    });
+
+    test("should return the budget of a category", () => {
+        const categoryCollection = injector
+            .provideClass("storage", StorageMock)
+            .injectClass(CategoryCollectionImpl);
+        categoryCollection.add("Category 1");
+
+        categoryCollection.setBudget(
+            "Category 1",
+            200 * DECIMAL,
+            PeriodType.Week,
+        );
+
+        const budget = categoryCollection.getBudget("Category 1");
+
+        expect(budget.amount).toBe(200 * DECIMAL);
+        expect(budget.periodType).toBe(PeriodType.Week);
+    });
+
     test("should add filters to a category", () => {
         const categoryCollection = injector
             .provideClass("storage", StorageMock)
@@ -144,8 +188,18 @@ describe("CategoryCollectionImpl", () => {
             new Settings(
                 [],
                 [
-                    new Category("Category 1", 100 * DECIMAL, []),
-                    new Category("Category 2", 100 * DECIMAL, []),
+                    new Category(
+                        "Category 1",
+                        100 * DECIMAL,
+                        PeriodType.Month,
+                        [],
+                    ),
+                    new Category(
+                        "Category 2",
+                        100 * DECIMAL,
+                        PeriodType.Month,
+                        [],
+                    ),
                 ],
             ),
         );

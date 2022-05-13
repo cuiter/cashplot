@@ -2,6 +2,7 @@ import {
     AssignedTransaction,
     Category,
     Filter,
+    PeriodType,
     Preferences,
     Settings,
     SourceDataInfo,
@@ -34,6 +35,10 @@ export interface SourceDataCollection {
     subscribeToChanges(callback: () => void): void;
 }
 
+/**
+ * Stores a collection of categories, including budgets and filters.
+ * Provides methods for modifying the collection.
+ */
 export interface CategoryCollection {
     /** Initializes storage and restores state from previous session if available */
     init(): void;
@@ -52,13 +57,21 @@ export interface CategoryCollection {
      */
     rename(name: string, newName: string): boolean;
 
-    /*
-    To implement:
-    get(name: string): Category
-    rename(oldName: string, newName: string): void
-    setBudget(name: string, monthlyBudget: number): void
-    setFilters(name: string, filters: TextFilter[]): void
-    */
+    /**
+     * Sets the budget for the specified category.
+     * Note: The budget must be multiplied by entities.DECIMAL to become an integer,
+     *       to avoid floating point storage-related inconsistencies.
+     */
+    setBudget(
+        name: string,
+        budgetAmount: number | null,
+        budgetPeriodType: PeriodType,
+    ): void;
+
+    /**
+     * Returns the budget for the specified category.
+     */
+    getBudget(name: string): { amount: number | null; periodType: PeriodType };
 
     /**
      * Adds filters to the category. If a filter with the same id already exists, it is replaced.

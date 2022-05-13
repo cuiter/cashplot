@@ -5,6 +5,17 @@ import { assert, hash, wildcardToRegExp } from "../utils";
 const DECIMAL = 100;
 export { DECIMAL };
 
+// ========== Note: the following types are stored persistently.              ==========
+// ========== When modifying, make sure to test for backwards-compatibility.  ==========
+
+export enum PeriodType {
+    Day = "day",
+    Week = "week",
+    Month = "month",
+    Quarter = "quarter",
+    Year = "year",
+}
+
 export class Settings {
     @Type(() => Account)
     public accounts: Account[];
@@ -139,29 +150,12 @@ export class Category {
 
     constructor(
         public name: string,
-        public monthlyBudget: number | null = null,
+        public budgetAmount: number | null = null,
+        public budgetPeriodType: PeriodType = PeriodType.Month,
         filters: Filter[] = [],
     ) {
         this.filters = filters;
     }
-}
-
-export class SourceDataInfo {
-    constructor(
-        public totalAccounts: number = 0,
-        public totalTransactions: number = 0,
-        public items: SourceDataInfoItem[] = [],
-    ) {}
-}
-
-export class SourceDataInfoItem {
-    constructor(
-        public name: string,
-        public startDate: Date,
-        public endDate: Date,
-        public nAccounts: number,
-        public nTransactions: number,
-    ) {}
 }
 
 export class SourceTransaction {
@@ -189,6 +183,8 @@ export class SourceTransaction {
         return this;
     }
 }
+
+// ================== End of persistently stored types. ====================
 
 export class Assignment {
     constructor(
@@ -224,4 +220,22 @@ export class AssignedTransaction extends SourceTransaction {
             transaction.description,
         );
     }
+}
+
+export class SourceDataInfo {
+    constructor(
+        public totalAccounts: number = 0,
+        public totalTransactions: number = 0,
+        public items: SourceDataInfoItem[] = [],
+    ) {}
+}
+
+export class SourceDataInfoItem {
+    constructor(
+        public name: string,
+        public startDate: Date,
+        public endDate: Date,
+        public nAccounts: number,
+        public nTransactions: number,
+    ) {}
 }
