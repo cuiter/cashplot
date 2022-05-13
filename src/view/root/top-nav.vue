@@ -64,41 +64,6 @@
             <div class="top-nav-edge" />
         </div>
 
-        <div
-            v-if="openedWindow === 'budget'"
-            class="full-size view-width flex-space-between"
-        >
-            <selection-component
-                class="top-nav-button selected border-none"
-                v-model="categoryName"
-                :options="categoryNames"
-            />
-        </div>
+        <budget-controls-component v-if="openedWindow === 'budget'" />
     </div>
 </template>
-
-<script lang="ts">
-export default {
-    data: function () {
-        return {
-            categoryName: "",
-        };
-    },
-    watch: {
-        categoryName: function () {
-            if ((this as any).openedWindow === "budget") {
-                (this as any).closeWindow();
-                (this as any).openWindow("budget", {
-                    categoryName: (this as any).$data.categoryName,
-                });
-                console.log("Switch" + (this as any).$data.categoryName);
-            }
-        },
-    },
-    computed: {
-        categoryNames: function () {
-            return (this as any).$root.$data.categories.list();
-        },
-    },
-};
-</script>

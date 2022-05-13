@@ -563,6 +563,32 @@ a {
     white-space: initial;
 }
 
+/* Budget tab */
+
+.budget-entry {
+    width: 9rem;
+    height: 100%;
+    position: relative;
+}
+
+.budget-entry input {
+    position: absolute;
+    top: 0.6rem;
+    width: 100%;
+    font-size: 1.5rem;
+    height: 2.2rem;
+    padding: 0rem;
+}
+
+.budget-entry span {
+    position: absolute;
+    bottom: 0.3rem;
+    width: 100%;
+    text-align: center;
+    font-size: 1.15rem;
+    user-select: none;
+}
+
 /* Custom classes */
 
 #app {
@@ -760,6 +786,18 @@ a {
 /* Override Milligram defaults */
 .container {
     max-width: 75rem;
+}
+
+/* Hide number input arrow buttons */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 
 /* Override input text color to make it readable in dark-mode browsers. */

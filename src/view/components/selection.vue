@@ -44,7 +44,6 @@ export default {
             const firstOption = (this as any).$props.options[0];
             if (firstOption !== undefined) {
                 (this as any).$props.value = firstOption;
-                (this as any).$emit("input", firstOption);
             }
         }
     },
