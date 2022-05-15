@@ -2,8 +2,9 @@
     <div class="tab-contents full-size">
         <div class="full-width flex-space-between">
             <input
-                v-model="categoryName"
+                v-model="newCategoryName"
                 class="flex-item-full margin-top-small text-center margin-top-small margin-bottom-small"
+                @blur="updateCategoryName"
             />
             <remove-button-component @click.native="removeCategory" />
         </div>
@@ -68,7 +69,7 @@ export default Vue.extend({
     data: function () {
         return {
             categoryName: "",
-            previousCategoryName: "",
+            newCategoryName: "",
             currentFilterType: "automatic",
             selectedManualTransactionHashes: [] as number[],
         };
@@ -87,28 +88,26 @@ export default Vue.extend({
             );
         },
     },
-    watch: {
-        categoryName: function () {
-            let categoryName = this.categoryName;
-            let previousCategoryName = this.previousCategoryName;
-
-            if (categoryName !== previousCategoryName) {
-                this.$root.$data.categories.rename(
-                    previousCategoryName,
-                    categoryName,
-                );
-                this.previousCategoryName = categoryName;
-            }
-        },
-    },
     created: function () {
         this.categoryName = (this as any).openedWindowEntry.categoryName;
-        this.previousCategoryName = (this as any).$data.categoryName;
+        this.newCategoryName = (this as any).$data.categoryName;
     },
     methods: {
         removeCategory: function () {
             this.$root.$data.categories.remove(this.categoryName);
             (this as any).closeWindow();
+        },
+        updateCategoryName: function () {
+            let categoryName = this.categoryName;
+            let newCategoryName = this.newCategoryName;
+
+            if (newCategoryName !== categoryName) {
+                this.$root.$data.categories.rename(
+                    categoryName,
+                    newCategoryName,
+                );
+                this.categoryName = newCategoryName;
+            }
         },
         switchFilterType: function (type: string) {
             this.currentFilterType = type;

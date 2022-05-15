@@ -8,11 +8,12 @@
 
         <div class="budget-entry">
             <input
-                v-model="budgetAmount"
+                v-model="newBudgetAmount"
                 placeholder="-"
                 type="number"
                 min="0"
                 class="text-center"
+                @blur="updateBudgetAmount"
             />
             <span>Budget (€/mnd)</span>
         </div>
@@ -26,7 +27,7 @@ export default Vue.extend({
     data: function () {
         return {
             categoryName: "",
-            budgetAmount: null as null | number,
+            newBudgetAmount: null as null | number,
         };
     },
     computed: {
@@ -50,25 +51,6 @@ export default Vue.extend({
                 this.loadCategoryData();
             }
         },
-        budgetAmount: function () {
-            const newBudget = this.budgetAmount;
-            const categoryName = (this as any).openedWindowEntry.categoryName;
-
-            // If new budget is not 0, empty string, etc.
-            if (newBudget) {
-                this.$root.$data.categories.setBudget(
-                    categoryName,
-                    newBudget * DECIMAL,
-                    PeriodType.Month,
-                );
-            } else {
-                this.$root.$data.categories.setBudget(
-                    categoryName,
-                    null,
-                    PeriodType.Month,
-                );
-            }
-        },
     },
     created: function () {
         this.loadCategoryData();
@@ -81,15 +63,34 @@ export default Vue.extend({
             if (categoryName !== null) {
                 this.categoryName = categoryName;
 
-                const budgetAmount = (this.budgetAmount =
+                const newBudgetAmount = (this.newBudgetAmount =
                     this.$root.$data.categories.getBudget(categoryName).amount);
 
-                if (budgetAmount === null) {
+                if (newBudgetAmount === null) {
                     // Empty out the budget user input.
-                    this.budgetAmount = null;
+                    this.newBudgetAmount = null;
                 } else {
-                    this.budgetAmount = budgetAmount / DECIMAL;
+                    this.newBudgetAmount = newBudgetAmount / DECIMAL;
                 }
+            }
+        },
+        updateBudgetAmount: function () {
+            const newBudgetAmount = this.newBudgetAmount;
+            const categoryName = (this as any).openedWindowEntry.categoryName;
+
+            // If new budget is not 0, empty string, etc.
+            if (newBudgetAmount) {
+                this.$root.$data.categories.setBudget(
+                    categoryName,
+                    newBudgetAmount * DECIMAL,
+                    PeriodType.Month,
+                );
+            } else {
+                this.$root.$data.categories.setBudget(
+                    categoryName,
+                    null,
+                    PeriodType.Month,
+                );
             }
         },
     },
