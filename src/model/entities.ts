@@ -1,20 +1,13 @@
 import { Exclude, Type } from "class-transformer";
-import "reflect-metadata";
 import { assert, hash, wildcardToRegExp } from "../utils";
+import { Period, PeriodType } from "./period";
+import "reflect-metadata";
 
 const DECIMAL = 100;
-export { DECIMAL };
+export { DECIMAL, PeriodType };
 
 // ========== Note: the following types are stored persistently.              ==========
 // ========== When modifying, make sure to test for backwards-compatibility.  ==========
-
-export enum PeriodType {
-    Day = "day",
-    Week = "week",
-    Month = "month",
-    Quarter = "quarter",
-    Year = "year",
-}
 
 export class Settings {
     @Type(() => Account)
@@ -228,6 +221,7 @@ export interface SearchQuery {
     accountId?: number /* Note: searching based on account is not implemented yet */;
     filterType?: string;
     filterId?: number;
+    period?: Period;
 }
 
 export class SourceDataInfo {

@@ -23,7 +23,11 @@ export class TransactionSearcherImpl implements TransactionSearcher {
                 cacheEntry.query.categoryName === query.categoryName &&
                 cacheEntry.query.accountId === query.accountId &&
                 cacheEntry.query.filterType === query.filterType &&
-                cacheEntry.query.filterId === query.filterId
+                cacheEntry.query.filterId === query.filterId &&
+                cacheEntry.query.period?.type === query.period?.type &&
+                cacheEntry.query.period?.year === query.period?.year &&
+                cacheEntry.query.period?.periodNumber ===
+                    query.period?.periodNumber
             ) {
                 return cacheEntry.results;
             }
@@ -31,17 +35,20 @@ export class TransactionSearcherImpl implements TransactionSearcher {
 
         const allTransactions = this.assigner.allTransactions();
 
-        const results = allTransactions.filter((transaction) =>
-            transaction.assignments.some(
-                (filter) =>
-                    (filter.name === query.categoryName ||
-                        query.categoryName === undefined) &&
-                    filter.type === "Category" &&
-                    (filter.filterType === query.filterType ||
-                        query.filterType === undefined) &&
-                    (filter.filterId === query.filterId ||
-                        query.filterId === undefined),
-            ),
+        const results = allTransactions.filter(
+            (transaction) =>
+                transaction.assignments.some(
+                    (filter) =>
+                        (filter.name === query.categoryName ||
+                            query.categoryName === undefined) &&
+                        filter.type === "Category" &&
+                        (filter.filterType === query.filterType ||
+                            query.filterType === undefined) &&
+                        (filter.filterId === query.filterId ||
+                            query.filterId === undefined),
+                ) &&
+                (query.period === undefined ||
+                    query.period.containsDate(transaction.date)),
         );
 
         if (this.searchCache.length >= MAX_CACHE_ENTRIES) {

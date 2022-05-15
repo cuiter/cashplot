@@ -9,8 +9,20 @@ import {
     SearchQuery,
     SourceTransaction,
 } from "../../../src/model/entities";
+import { Period, PeriodType } from "../../../src/model/period";
 
 const testTransactions = [
+    new AssignedTransaction(
+        new SourceTransaction(
+            new Date("2022-02-23"),
+            -25.5 * DECIMAL,
+            "NL00MAIN1234567890",
+            "NL57RABO0329443948",
+            "M Sports Events",
+            "Ticket 2022-293302",
+        ),
+        [new Assignment("Events", "Category", 0x06, "TextFilter")],
+    ),
     new AssignedTransaction(
         new SourceTransaction(
             new Date("2021-11-16"),
@@ -24,7 +36,7 @@ const testTransactions = [
     ),
     new AssignedTransaction(
         new SourceTransaction(
-            new Date("2021-11-13"),
+            new Date("2021-10-13"),
             -20 * DECIMAL,
             "NL00MAIN1234567890",
             "NL98INGB2152156592",
@@ -38,7 +50,7 @@ const testTransactions = [
     ),
     new AssignedTransaction(
         new SourceTransaction(
-            new Date("2021-11-02"),
+            new Date("2021-09-02"),
             -430 * DECIMAL,
             "NL00MAIN1234567890",
             "NL23ABNA0983409855",
@@ -120,8 +132,11 @@ describe("TransactionSearcher", () => {
             filterType: "TextFilter",
         });
 
-        expect(transactionsAutomatic.length).toBe(1);
+        expect(transactionsAutomatic.length).toBe(2);
         expect(transactionsAutomatic[0].description).toEqual(
+            "Ticket 2022-293302",
+        );
+        expect(transactionsAutomatic[1].description).toEqual(
             "13th of November tire sale, 4x sports tires",
         );
     });
@@ -149,5 +164,48 @@ describe("TransactionSearcher", () => {
         expect(transactionsSecond[0].description).toEqual(
             "13th of November tire sale, 4x sports tires",
         );
+    });
+
+    test("should search for transactions within a specific period", () => {
+        const transactionSearcher = injector
+            .provideValue(
+                "assigner",
+                new TransactionAssignerMock(testTransactions),
+            )
+            .injectClass(TransactionSearcherImpl);
+
+        const expectedSearchResults = [
+            [
+                new Period(PeriodType.Year, 2021, 1),
+                [
+                    "Invoice 934830293, laptop model VT94",
+                    "Lunch",
+                    "13th of November tire sale, 4x sports tires",
+                ],
+            ],
+            [
+                new Period(PeriodType.Quarter, 2021, 4),
+                ["Invoice 934830293, laptop model VT94", "Lunch"],
+            ],
+            [
+                new Period(PeriodType.Month, 2021, 11),
+                ["Invoice 934830293, laptop model VT94"],
+            ],
+            [new Period(PeriodType.Week, 2022, 8), ["Ticket 2022-293302"]],
+            [new Period(PeriodType.Day, 2021, 286), ["Lunch"]],
+        ];
+
+        const searchResults = expectedSearchResults.map((expectedResults) => {
+            const transactions = transactionSearcher.searchTransactions({
+                period: expectedResults[0] as Period,
+            });
+            const transactionDescriptions = transactions.map(
+                (transaction) => transaction.description,
+            );
+
+            return [expectedResults[0] as Period, transactionDescriptions];
+        });
+
+        expect(searchResults).toEqual(expectedSearchResults);
     });
 });
