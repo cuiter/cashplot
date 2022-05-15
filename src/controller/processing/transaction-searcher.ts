@@ -1,5 +1,5 @@
 import { TransactionAssigner, TransactionSearcher } from "../../interfaces";
-import { AssignedTransaction } from "../../model/entities";
+import { AssignedTransaction, SearchQuery } from "../../model/entities";
 
 const MAX_CACHE_ENTRIES = 5;
 
@@ -7,10 +7,7 @@ export class TransactionSearcherImpl implements TransactionSearcher {
     public static inject = ["assigner"] as const;
 
     private searchCache: {
-        assignmentName: string | undefined;
-        assignmentType: string | undefined;
-        filterType: string | undefined;
-        filterId: number | undefined;
+        query: SearchQuery;
         results: AssignedTransaction[];
     }[] = [];
 
@@ -20,18 +17,13 @@ export class TransactionSearcherImpl implements TransactionSearcher {
         });
     }
 
-    searchTransactions(
-        assignmentName?: string,
-        assignmentType?: string,
-        filterType?: string,
-        filterId?: number,
-    ): AssignedTransaction[] {
+    searchTransactions(query: SearchQuery): AssignedTransaction[] {
         for (const cacheEntry of this.searchCache) {
             if (
-                cacheEntry.assignmentName === assignmentName &&
-                cacheEntry.assignmentType === assignmentType &&
-                cacheEntry.filterType === filterType &&
-                cacheEntry.filterId === filterId
+                cacheEntry.query.categoryName === query.categoryName &&
+                cacheEntry.query.accountId === query.accountId &&
+                cacheEntry.query.filterType === query.filterType &&
+                cacheEntry.query.filterId === query.filterId
             ) {
                 return cacheEntry.results;
             }
@@ -42,13 +34,13 @@ export class TransactionSearcherImpl implements TransactionSearcher {
         const results = allTransactions.filter((transaction) =>
             transaction.assignments.some(
                 (filter) =>
-                    (filter.name === assignmentName ||
-                        assignmentName === undefined) &&
-                    (filter.type === assignmentType ||
-                        assignmentType === undefined) &&
-                    (filter.filterType === filterType ||
-                        filterType === undefined) &&
-                    (filter.filterId === filterId || filterId === undefined),
+                    (filter.name === query.categoryName ||
+                        query.categoryName === undefined) &&
+                    filter.type === "Category" &&
+                    (filter.filterType === query.filterType ||
+                        query.filterType === undefined) &&
+                    (filter.filterId === query.filterId ||
+                        query.filterId === undefined),
             ),
         );
 
@@ -58,10 +50,7 @@ export class TransactionSearcherImpl implements TransactionSearcher {
         }
 
         this.searchCache.push({
-            assignmentName: assignmentName,
-            assignmentType: assignmentType,
-            filterType: filterType,
-            filterId: filterId,
+            query: Object.assign({}, query), // Copy query object
             results: results,
         });
 

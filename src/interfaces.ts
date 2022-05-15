@@ -4,6 +4,7 @@ import {
     Filter,
     PeriodType,
     Preferences,
+    SearchQuery,
     Settings,
     SourceDataInfo,
     SourceTransaction,
@@ -111,12 +112,7 @@ export interface TransactionAssigner {
  * Uses a cache to save results for recent queries.
  */
 export interface TransactionSearcher {
-    searchTransactions(
-        assignmentName?: string,
-        assignmentType?: string,
-        filterType?: string,
-        filterId?: number,
-    ): AssignedTransaction[];
+    searchTransactions(searchQuery: SearchQuery): AssignedTransaction[];
 }
 
 export interface Sources {

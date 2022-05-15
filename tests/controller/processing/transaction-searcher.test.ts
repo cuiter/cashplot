@@ -6,6 +6,7 @@ import {
     AssignedTransaction,
     Assignment,
     DECIMAL,
+    SearchQuery,
     SourceTransaction,
 } from "../../../src/model/entities";
 
@@ -75,10 +76,9 @@ describe("TransactionSearcher", () => {
             )
             .injectClass(TransactionSearcherImpl);
 
-        const transactions = transactionSearcher.searchTransactions(
-            "Tools",
-            "Category",
-        );
+        const transactions = transactionSearcher.searchTransactions({
+            categoryName: "Tools",
+        });
 
         expect(transactions.length).toBe(2);
         expect(transactions[0].description).toEqual(
@@ -88,10 +88,9 @@ describe("TransactionSearcher", () => {
             "13th of November tire sale, 4x sports tires",
         );
 
-        const transactionsEmpty = transactionSearcher.searchTransactions(
-            "NonexistentCategory",
-            "Category",
-        );
+        const transactionsEmpty = transactionSearcher.searchTransactions({
+            categoryName: "NonexistentCategory",
+        });
 
         expect(transactionsEmpty.length).toBe(0);
     });
@@ -104,11 +103,9 @@ describe("TransactionSearcher", () => {
             )
             .injectClass(TransactionSearcherImpl);
 
-        const transactionsManual = transactionSearcher.searchTransactions(
-            undefined,
-            undefined,
-            "ManualFilter",
-        );
+        const transactionsManual = transactionSearcher.searchTransactions({
+            filterType: "ManualFilter",
+        });
 
         expect(transactionsManual.length).toBe(3);
         expect(transactionsManual[0].description).toEqual(
@@ -119,11 +116,9 @@ describe("TransactionSearcher", () => {
             "13th of November tire sale, 4x sports tires",
         );
 
-        const transactionsAutomatic = transactionSearcher.searchTransactions(
-            undefined,
-            undefined,
-            "TextFilter",
-        );
+        const transactionsAutomatic = transactionSearcher.searchTransactions({
+            filterType: "TextFilter",
+        });
 
         expect(transactionsAutomatic.length).toBe(1);
         expect(transactionsAutomatic[0].description).toEqual(
@@ -139,22 +134,16 @@ describe("TransactionSearcher", () => {
             )
             .injectClass(TransactionSearcherImpl);
 
-        const transactionsFirst = transactionSearcher.searchTransactions(
-            undefined,
-            undefined,
-            undefined,
-            0x02,
-        );
+        const transactionsFirst = transactionSearcher.searchTransactions({
+            filterId: 0x02,
+        });
 
         expect(transactionsFirst.length).toBe(1);
         expect(transactionsFirst[0].description).toEqual("Lunch");
 
-        const transactionsSecond = transactionSearcher.searchTransactions(
-            undefined,
-            undefined,
-            undefined,
-            0x04,
-        );
+        const transactionsSecond = transactionSearcher.searchTransactions({
+            filterId: 0x04,
+        });
 
         expect(transactionsSecond.length).toBe(1);
         expect(transactionsSecond[0].description).toEqual(

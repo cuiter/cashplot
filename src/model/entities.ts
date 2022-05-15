@@ -222,6 +222,14 @@ export class AssignedTransaction extends SourceTransaction {
     }
 }
 
+/** Query for filtering through assigned transactions. */
+export interface SearchQuery {
+    categoryName?: string;
+    accountId?: number /* Note: searching based on account is not implemented yet */;
+    filterType?: string;
+    filterId?: number;
+}
+
 export class SourceDataInfo {
     constructor(
         public totalAccounts: number = 0,
