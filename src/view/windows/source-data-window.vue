@@ -121,6 +121,7 @@
                 id="source-data-upload"
                 ref="sourceDataUpload"
                 type="file"
+                accept="text/csv"
                 multiple="multiple"
                 class="disabled"
                 @change="onSourceDataUpload"
