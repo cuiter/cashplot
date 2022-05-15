@@ -1,6 +1,6 @@
 <template>
     <div class="tab-contents full-size">
-        <div class="full-width" v-if="matchingTransactionsExpanded === false">
+        <div v-if="matchingTransactionsExpanded === false" class="full-width">
             <div class="full-width flex-space-between">
                 <input
                     v-model="displayName"

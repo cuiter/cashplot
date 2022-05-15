@@ -1,8 +1,7 @@
 <template>
     <div class="collection-list">
         <div
-            v-for="filter of filters"
-            v-if="filter.type === 'text'"
+            v-for="filter of textFilters"
             class="collection-item clickable"
             :class="{
                 clickable: selectable,
@@ -47,6 +46,13 @@ export default Vue.extend({
     props: {
         filters: { type: Array, default: () => [] },
         categoryName: { type: String, default: () => "" },
+    },
+    computed: {
+        textFilters: function () {
+            return this.filters.filter(
+                (filter) => filter instanceof TextFilter,
+            );
+        },
     },
     methods: {
         addFilter() {

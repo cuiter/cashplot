@@ -1,8 +1,8 @@
 <template>
     <div class="full-size view-width flex-space-between">
-        <selection-component
-            class="top-nav-button selected border-none"
+        <option-selection-component
             v-model="categoryName"
+            class="top-nav-button selected border-none"
             :options="categoryNames"
         />
 

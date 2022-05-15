@@ -104,7 +104,7 @@
             </div>
         </div>
         <div class="sources-entry flex-center">
-            <selection-component
+            <option-selection-component
                 v-model="selectedSource"
                 :options="availableSources"
                 :option-names="availableSourcesNames"

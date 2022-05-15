@@ -5,7 +5,7 @@
         @blur="opened = false"
     >
         <div
-            class="selection-options"
+            class="option-selection-options"
             :class="{
                 disabled: opened === false,
                 'drop-down': dropDown,

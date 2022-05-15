@@ -6,7 +6,6 @@ import {
     SourceDataCollection,
 } from "../../../src/interfaces";
 import {
-    Account,
     Assignment,
     Category,
     DECIMAL,
@@ -92,13 +91,16 @@ class CategoryCollectionMock extends Observable implements CategoryCollection {
         throw new Error("Method not implemented.");
     }
     setBudget(
-        name: string,
-        budgetAmount: number,
-        budgetPeriodType: PeriodType,
+        _name: string,
+        _budgetAmount: number,
+        _budgetPeriodType: PeriodType,
     ): void {
         throw new Error("Method not implemented.");
     }
-    getBudget(name: string): { amount: number | null; periodType: PeriodType } {
+    getBudget(_name: string): {
+        amount: number | null;
+        periodType: PeriodType;
+    } {
         throw new Error("Method not implemented.");
     }
     addFilters(_categoryName: string, _filter: Filter[]): void {
