@@ -31,6 +31,10 @@ module.exports = {
         extensions: [".tsx", ".ts", ".js"],
         alias: { vue$: "vue/dist/vue.esm.js" },
     },
+    performance: {
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000,
+    },
     output: {
         filename: "bundle.js",
         path: path.resolve(__dirname, "public/js"),
