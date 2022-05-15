@@ -201,6 +201,19 @@ export class WebUI implements UI {
 
                     storeOpenedWindows();
                 },
+                changeWindowEntry(
+                    entry: { categoryName?: string; filterId?: number } | null,
+                ) {
+                    const tabOpenWindows =
+                        navState.tabOpenWindows[navState.currentTab];
+                    if (
+                        tabOpenWindows !== undefined &&
+                        tabOpenWindows.length !== 0
+                    ) {
+                        tabOpenWindows[tabOpenWindows.length - 1][1] = entry;
+                        storeOpenedWindows();
+                    }
+                },
                 closeWindow: () => {
                     const windowIndex =
                         navState.tabOpenWindows[navState.currentTab].length - 1;

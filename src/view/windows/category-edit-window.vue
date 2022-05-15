@@ -107,6 +107,9 @@ export default Vue.extend({
                     newCategoryName,
                 );
                 this.categoryName = newCategoryName;
+                (this as any).changeWindowEntry({
+                    categoryName: newCategoryName,
+                });
             }
         },
         switchFilterType: function (type: string) {
