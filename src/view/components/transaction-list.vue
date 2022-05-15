@@ -41,14 +41,15 @@
 </template>
 
 <script lang="ts">
-import { DECIMAL, SourceTransaction } from "../../model/entities";
+import Vue from "vue";
 import * as dayjs from "dayjs";
+import { DECIMAL, SourceTransaction } from "../../model/entities";
 
 const transactionDateFormat = "D MMMM YYYY";
 const defaultItemsLoaded = 50;
 const itemIncrement = 20;
 
-export default {
+export default Vue.extend({
     props: {
         value: { type: Array, default: () => [] }, // Hashes of selected transactions
         transactions: { type: Array, default: () => [] },
@@ -64,10 +65,10 @@ export default {
         transactionsByDate: function () {
             var transactionsByDate = {} as any;
 
-            ((this as any).transactions as SourceTransaction[])
+            (this.transactions as SourceTransaction[])
                 .map((tr) => tr)
                 .reverse()
-                .slice(0, (this as any).$data.itemsLoaded)
+                .slice(0, this.itemsLoaded)
                 .forEach((transaction) => {
                     var timeStr = transaction.date.getTime().toString();
 
@@ -94,10 +95,8 @@ export default {
     },
     watch: {
         transactions: function () {
-            const selectedTransactionHashes: number[] = (this as any).$props
-                .value;
-            const transactions: SourceTransaction[] = (this as any).$props
-                .transactions;
+            const selectedTransactionHashes: number[] = this.$props.value;
+            const transactions: SourceTransaction[] = this.$props.transactions;
 
             const existingHashes = new Set(
                 transactions.map((transaction) => transaction.hash),
@@ -112,18 +111,15 @@ export default {
                 existingSelectedTransactionHashes.length !==
                 selectedTransactionHashes.length
             ) {
-                (this as any).$props.value = existingSelectedTransactionHashes;
-                (this as any).$emit("input", (this as any).$props.value);
+                this.$props.value = existingSelectedTransactionHashes;
+                this.$emit("input", this.$props.value);
             }
         },
     },
     methods: {
         infiniteHandler($state: any) {
-            (this as any).$data.itemsLoaded += itemIncrement;
-            if (
-                (this as any).$data.itemsLoaded <
-                (this as any).transactions.length
-            ) {
+            this.itemsLoaded += itemIncrement;
+            if (this.itemsLoaded < this.transactions.length) {
                 $state.loaded();
             } else {
                 $state.complete();
@@ -131,16 +127,15 @@ export default {
         },
 
         selectTransaction(transactionHash: number) {
-            const selectedTransactionIndex = (this as any).$props.value.indexOf(
-                transactionHash,
-            );
+            const selectedTransactionIndex =
+                this.$props.value.indexOf(transactionHash);
             if (selectedTransactionIndex === -1) {
-                (this as any).$props.value.push(transactionHash);
+                this.$props.value.push(transactionHash);
             } else {
-                (this as any).$props.value.splice(selectedTransactionIndex, 1);
+                this.$props.value.splice(selectedTransactionIndex, 1);
             }
-            (this as any).$emit("input", (this as any).$props.value);
+            this.$emit("input", this.$props.value);
         },
     },
-};
+});
 </script>

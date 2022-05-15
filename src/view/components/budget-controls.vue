@@ -20,22 +20,23 @@
 </template>
 
 <script lang="ts">
+import Vue from "vue";
 import { DECIMAL, PeriodType } from "../../model/entities";
-export default {
+export default Vue.extend({
     data: function () {
         return {
             categoryName: "",
-            budgetAmount: null,
+            budgetAmount: null as null | number,
         };
     },
     computed: {
         categoryNames: function () {
-            return (this as any).$root.$data.categories.list();
+            return this.$root.$data.categories.list();
         },
     },
     watch: {
         categoryName: function () {
-            const newCategoryName = (this as any).categoryName;
+            const newCategoryName = this.categoryName;
 
             if (
                 (this as any).openedWindow === "budget" &&
@@ -46,22 +47,22 @@ export default {
                     categoryName: newCategoryName,
                 });
 
-                (this as any).loadCategoryData();
+                this.loadCategoryData();
             }
         },
         budgetAmount: function () {
-            const newBudget = (this as any).budgetAmount;
+            const newBudget = this.budgetAmount;
             const categoryName = (this as any).openedWindowEntry.categoryName;
 
             // If new budget is not 0, empty string, etc.
             if (newBudget) {
-                (this as any).$root.$data.categories.setBudget(
+                this.$root.$data.categories.setBudget(
                     categoryName,
                     newBudget * DECIMAL,
                     PeriodType.Month,
                 );
             } else {
-                (this as any).$root.$data.categories.setBudget(
+                this.$root.$data.categories.setBudget(
                     categoryName,
                     null,
                     PeriodType.Month,
@@ -70,7 +71,7 @@ export default {
         },
     },
     created: function () {
-        (this as any).loadCategoryData();
+        this.loadCategoryData();
     },
     methods: {
         loadCategoryData: function () {
@@ -78,20 +79,19 @@ export default {
                 ((this as any).openedWindowEntry ?? {}).categoryName ?? null;
 
             if (categoryName !== null) {
-                (this as any).categoryName = categoryName;
+                this.categoryName = categoryName;
 
-                const budgetAmount = ((this as any).budgetAmount = (
-                    this as any
-                ).$root.$data.categories.getBudget(categoryName).amount);
+                const budgetAmount = (this.budgetAmount =
+                    this.$root.$data.categories.getBudget(categoryName).amount);
 
                 if (budgetAmount === null) {
                     // Empty out the budget user input.
-                    (this as any).budgetAmount = "";
+                    this.budgetAmount = null;
                 } else {
-                    (this as any).budgetAmount = budgetAmount / DECIMAL;
+                    this.budgetAmount = budgetAmount / DECIMAL;
                 }
             }
         },
     },
-};
+});
 </script>

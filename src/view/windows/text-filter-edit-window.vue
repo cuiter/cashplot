@@ -51,12 +51,14 @@
     </div>
 </template>
 <script lang="ts">
+import Vue from "vue";
 import { AssignedTransaction, TextFilter } from "../../model/entities";
-export default {
+
+export default Vue.extend({
     data: function () {
         return {
             categoryName: "",
-            filterId: null,
+            filterId: null as number | null,
             displayName: "",
             matchType: "",
             contraAccountPattern: "",
@@ -69,10 +71,10 @@ export default {
             const transactions: AssignedTransaction[] = (
                 this as any
             ).$root.$data.searcher.searchTransactions(
-                (this as any).$data.categoryName,
+                this.categoryName,
                 "Category",
                 undefined,
-                (this as any).$data.filterId,
+                this.filterId,
             );
 
             return transactions;
@@ -80,26 +82,24 @@ export default {
     },
     watch: {
         displayName: function () {
-            (this as any).updateFilter();
+            this.updateFilter();
         },
         contraAccountPattern: function () {
-            (this as any).updateFilter();
+            this.updateFilter();
         },
         descriptionPattern: function () {
-            (this as any).updateFilter();
+            this.updateFilter();
         },
     },
     created: function () {
-        (this as any).$data.categoryName = (
-            this as any
-        ).openedWindowEntry.categoryName;
-        (this as any).$data.filterId = (this as any).openedWindowEntry.filterId;
+        this.categoryName = (this as any).openedWindowEntry.categoryName;
+        this.filterId = (this as any).openedWindowEntry.filterId;
 
         const categoryFilters: TextFilter[] = (
             this as any
-        ).$root.$data.categories.getFilters((this as any).$data.categoryName);
+        ).$root.$data.categories.getFilters(this.categoryName);
         const filter = categoryFilters.filter(
-            (filter) => filter.id === (this as any).$data.filterId,
+            (filter) => filter.id === this.filterId,
         )[0];
 
         if (filter === undefined) {
@@ -108,44 +108,39 @@ export default {
             return;
         }
 
-        (this as any).$data.displayName = filter.displayName;
-        (this as any).$data.matchType = filter.matchType;
-        (this as any).$data.contraAccountPattern =
-            filter.matchPatterns.contraAccount;
-        (this as any).$data.descriptionPattern =
-            filter.matchPatterns.description;
+        this.displayName = filter.displayName;
+        this.matchType = filter.matchType;
+        this.contraAccountPattern = filter.matchPatterns.contraAccount;
+        this.descriptionPattern = filter.matchPatterns.description;
     },
     methods: {
         removeFilter: function () {
-            (this as any).$root.$data.categories.removeFilters(
-                (this as any).$data.categoryName,
-                [(this as any).$data.filterId],
-            );
+            this.$root.$data.categories.removeFilters(this.categoryName, [
+                this.filterId,
+            ]);
             (this as any).closeWindow();
         },
         updateFilter: function () {
-            let changedFilter = new TextFilter(
-                (this as any).$data.filterId,
-                (this as any).$data.displayName,
-                (this as any).$data.matchType,
-                {
-                    contraAccount: (this as any).$data.contraAccountPattern,
-                    description: (this as any).$data.descriptionPattern,
-                },
-            );
+            if (this.filterId !== null) {
+                let changedFilter = new TextFilter(
+                    this.filterId,
+                    this.displayName,
+                    this.matchType,
+                    {
+                        contraAccount: this.contraAccountPattern,
+                        description: this.descriptionPattern,
+                    },
+                );
 
-            (this as any).$root.$data.categories.addFilters(
-                (this as any).$data.categoryName,
-                [changedFilter],
-            );
-        },
-        switchFilterType: function (type: string) {
-            (this as any).$data.currentFilterType = type;
+                this.$root.$data.categories.addFilters(this.categoryName, [
+                    changedFilter,
+                ]);
+            }
         },
         toggleMatchingTransactionsExpanded: function () {
-            (this as any).$data.matchingTransactionsExpanded = !(this as any)
-                .$data.matchingTransactionsExpanded;
+            this.matchingTransactionsExpanded =
+                !this.matchingTransactionsExpanded;
         },
     },
-};
+});
 </script>

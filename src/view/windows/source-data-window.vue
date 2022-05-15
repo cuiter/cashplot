@@ -130,6 +130,7 @@
 </template>
 
 <script lang="ts">
+import Vue from "vue";
 import * as dayjs from "dayjs";
 import { SourceDataInfoItem } from "../../model/entities";
 
@@ -162,7 +163,7 @@ function debounce(func: any, wait: number) {
     };
 }
 
-export default {
+export default Vue.extend({
     data: function () {
         return {
             selectedSource: "ing",
@@ -191,19 +192,21 @@ export default {
                     name: "Bunq",
                     url: "https://bunq.app/",
                 },
-            },
+            } as Record<string, { name: string; url: string }>,
             infoDateFormat: longInfoDateFormat,
-            resizeEventHandler: null,
+            resizeEventHandler: null as
+                | ((this: Window, ev: UIEvent) => void)
+                | null,
         };
     },
 
     computed: {
         availableSources(): string[] {
-            return Object.keys((this as any).$data.sourceProperties);
+            return Object.keys(this.sourceProperties);
         },
 
         availableSourcesNames(): string[] {
-            const sourceProperties = (this as any).$data.sourceProperties;
+            const sourceProperties = this.sourceProperties;
 
             return Object.keys(sourceProperties).map(
                 (source) => sourceProperties[source].name,
@@ -211,30 +214,24 @@ export default {
         },
 
         allSourceDataInfo() {
-            return (this as any).$root.$data.sourceData.allInfo();
+            return this.$root.$data.sourceData.allInfo();
         },
     },
 
     mounted: function () {
-        (this as any).$data.resizeEventHandler = debounce(
-            (this as any).updateInfoDateFormat,
-            50,
-        );
-        window.addEventListener(
-            "resize",
-            (this as any).$data.resizeEventHandler,
-        );
-        (this as any).updateInfoDateFormat();
+        this.resizeEventHandler = debounce(this.updateInfoDateFormat, 50);
+        window.addEventListener("resize", this.resizeEventHandler);
+        this.updateInfoDateFormat();
     },
 
     beforeDestroy: function () {
-        window.removeEventListener("resize", (this as any).resizeEventHandler);
+        window.removeEventListener("resize", this.resizeEventHandler!); // eslint-disable-line
     },
 
     methods: {
         onOpenButtonPressed() {
-            const selectedSource = (this as any).$data.selectedSource;
-            const sourceProperties = (this as any).$data.sourceProperties;
+            const selectedSource = this.selectedSource;
+            const sourceProperties = this.sourceProperties;
 
             window.open(sourceProperties[selectedSource].url, "_blank");
         },
@@ -248,10 +245,7 @@ export default {
                     reader.addEventListener("loadend", (event) => {
                         try {
                             const result = event.target?.result;
-                            (this as any).$root.$data.sourceData.add(
-                                file.name,
-                                result,
-                            );
+                            this.$root.$data.sourceData.add(file.name, result);
                         } catch (err) {
                             (this as any).$root.handleError(err);
                         } finally {
@@ -269,14 +263,14 @@ export default {
                 infoDateWidthThresholdRem *
                 parseFloat(getComputedStyle(document.documentElement).fontSize);
             if (window.innerWidth >= widthThresholdPx) {
-                (this as any).$data.infoDateFormat = longInfoDateFormat;
+                this.infoDateFormat = longInfoDateFormat;
             } else {
-                (this as any).$data.infoDateFormat = shortInfoDateFormat;
+                this.infoDateFormat = shortInfoDateFormat;
             }
         },
 
         getInfoItemDisplayDate(item: SourceDataInfoItem): string {
-            const dateFormat: string = (this as any).$data.infoDateFormat;
+            const dateFormat: string = this.infoDateFormat;
 
             return (
                 dayjs(item.startDate).format(longInfoDateFormat) +
@@ -286,8 +280,8 @@ export default {
         },
 
         onRemoveSourceDataPressed(name: string) {
-            return (this as any).$root.$data.sourceData.remove(name);
+            return this.$root.$data.sourceData.remove(name);
         },
     },
-};
+});
 </script>

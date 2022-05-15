@@ -26,7 +26,8 @@
 </template>
 
 <script lang="ts">
-export default {
+import Vue from "vue";
+export default Vue.extend({
     props: {
         value: { type: String, default: () => "" }, // Selected option
         options: { type: Array, default: () => [] }, // Option values
@@ -38,29 +39,29 @@ export default {
             opened: false,
         };
     },
-    created: function () {
-        const currentOption = (this as any).$props.value;
-        if (currentOption === "") {
-            const firstOption = (this as any).$props.options[0];
-            if (firstOption !== undefined) {
-                (this as any).$props.value = firstOption;
-            }
-        }
-    },
     computed: {
         selectedOptionName: function () {
-            const option = (this as any).$props.value;
-            const optionIndex = (this as any).$props.options.indexOf(option);
-            const optionName = (this as any).$props.optionNames[optionIndex];
+            const option = this.$props.value;
+            const optionIndex = this.$props.options.indexOf(option);
+            const optionName = this.$props.optionNames[optionIndex];
 
             return optionName || option;
         },
     },
+    created: function () {
+        const currentOption = this.$props.value;
+        if (currentOption === "") {
+            const firstOption = this.$props.options[0];
+            if (firstOption !== undefined) {
+                this.$props.value = firstOption;
+            }
+        }
+    },
     methods: {
         onOptionSelected: function (option: string) {
-            (this as any).$props.value = option;
-            (this as any).$emit("input", option);
+            this.$props.value = option;
+            this.$emit("input", option);
         },
     },
-};
+});
 </script>

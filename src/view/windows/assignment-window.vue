@@ -17,7 +17,9 @@
 
 <script lang="ts">
 import { AssignedTransaction } from "../../model/entities";
-export default {
+import Vue from "vue";
+
+export default Vue.extend({
     data: () => {
         return {
             selectedTransactionHashes: [],
@@ -25,7 +27,7 @@ export default {
     },
     computed: {
         allTransactions() {
-            return (this as any).$root.$data.assigner
+            return this.$root.$data.assigner
                 .allTransactions()
                 .filter(
                     (transaction: AssignedTransaction) =>
@@ -33,8 +35,8 @@ export default {
                 );
         },
         allCategories() {
-            return (this as any).$root.$data.categories.list();
+            return this.$root.$data.categories.list();
         },
     },
-};
+});
 </script>

@@ -4,11 +4,11 @@
     </div>
 </template>
 <script lang="ts">
-export default {
+import Vue from "vue";
+
+export default Vue.extend({
     created: function () {
-        const existingCategories: string[] = (
-            this as any
-        ).$root.$data.categories.list();
+        const existingCategories: string[] = this.$root.$data.categories.list();
 
         if (
             (this as any).openedWindow === null &&
@@ -19,5 +19,5 @@ export default {
             });
         }
     },
-};
+});
 </script>

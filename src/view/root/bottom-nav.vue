@@ -84,11 +84,13 @@
 </template>
 
 <script lang="ts">
-export default {
+import Vue from "vue";
+
+export default Vue.extend({
     computed: {
         isDataAvailable(): boolean {
             return (this as any).$root.$data.sourceData.allInfo().length !== 0;
         },
     },
-};
+});
 </script>

@@ -4,14 +4,16 @@
     </div>
 </template>
 <script lang="ts">
-export default {
+import Vue from "vue";
+
+export default Vue.extend({
     computed: {
         transactions: function () {
             const categoryName = ((this as any).openedWindowEntry ?? {})
                 .categoryName;
 
             if (categoryName) {
-                return (this as any).$root.$data.searcher.searchTransactions(
+                return this.$root.$data.searcher.searchTransactions(
                     categoryName,
                     "Category",
                 );
@@ -33,5 +35,5 @@ export default {
             (this as any).closeWindow();
         }
     },
-};
+});
 </script>

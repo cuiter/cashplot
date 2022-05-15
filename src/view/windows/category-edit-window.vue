@@ -62,66 +62,62 @@
 </template>
 <script lang="ts">
 import { AssignedTransaction } from "../../model/entities";
-export default {
+import Vue from "vue";
+
+export default Vue.extend({
     data: function () {
         return {
             categoryName: "",
             previousCategoryName: "",
             currentFilterType: "automatic",
-            selectedManualTransactionHashes: [],
+            selectedManualTransactionHashes: [] as number[],
         };
     },
     computed: {
         manualTransactions: function () {
-            return (this as any).$root.$data.searcher.searchTransactions(
-                (this as any).$data.categoryName,
+            return this.$root.$data.searcher.searchTransactions(
+                this.$data.categoryName,
                 "Category",
                 "ManualFilter",
             );
         },
         filters: function () {
-            return (this as any).$root.$data.categories.getFilters(
-                (this as any).$data.categoryName,
+            return this.$root.$data.categories.getFilters(
+                this.$data.categoryName,
             );
         },
     },
     watch: {
         categoryName: function () {
-            let categoryName = (this as any).$data.categoryName;
-            let previousCategoryName = (this as any).$data.previousCategoryName;
+            let categoryName = this.categoryName;
+            let previousCategoryName = this.previousCategoryName;
 
             if (categoryName !== previousCategoryName) {
-                (this as any).$root.$data.categories.rename(
+                this.$root.$data.categories.rename(
                     previousCategoryName,
                     categoryName,
                 );
-                (this as any).$data.previousCategoryName = categoryName;
+                this.previousCategoryName = categoryName;
             }
         },
     },
     created: function () {
-        (this as any).$data.categoryName = (
-            this as any
-        ).openedWindowEntry.categoryName;
-        (this as any).$data.previousCategoryName = (
-            this as any
-        ).$data.categoryName;
+        this.categoryName = (this as any).openedWindowEntry.categoryName;
+        this.previousCategoryName = (this as any).$data.categoryName;
     },
     methods: {
         removeCategory: function () {
-            (this as any).$root.$data.categories.remove(
-                (this as any).$data.categoryName,
-            );
+            this.$root.$data.categories.remove(this.categoryName);
             (this as any).closeWindow();
         },
         switchFilterType: function (type: string) {
-            (this as any).$data.currentFilterType = type;
+            this.currentFilterType = type;
         },
         removeSelectedManualTransactions: function () {
-            const selectedManualTransactionHashes = (this as any).$data
-                .selectedManualTransactionHashes;
-            const manualTransactions: AssignedTransaction[] = (this as any)
-                .manualTransactions;
+            const selectedManualTransactionHashes =
+                this.selectedManualTransactionHashes;
+            const manualTransactions: AssignedTransaction[] =
+                this.manualTransactions;
             const selectedTransactions = manualTransactions.filter(
                 (transaction) =>
                     selectedManualTransactionHashes.indexOf(
@@ -139,11 +135,11 @@ export default {
                         .map((assignment) => assignment.filterId),
             );
 
-            (this as any).$root.$data.categories.removeFilters(
-                (this as any).$data.categoryName,
+            this.$root.$data.categories.removeFilters(
+                this.categoryName,
                 Array.prototype.concat.apply([], transactionManualFilterIds),
             );
         },
     },
-};
+});
 </script>

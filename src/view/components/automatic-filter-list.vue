@@ -39,16 +39,18 @@
 </template>
 
 <script lang="ts">
+import Vue from "vue";
 import { TextFilter } from "../../model/entities";
 import { createUniqueId, findNewName } from "../../utils";
-export default {
+
+export default Vue.extend({
     props: {
         filters: { type: Array, default: () => [] },
         categoryName: { type: String, default: () => "" },
     },
     methods: {
         addFilter() {
-            const categoryName = (this as any).$props.categoryName;
+            const categoryName = this.$props.categoryName;
 
             const existingFilters = (
                 this as any
@@ -68,9 +70,7 @@ export default {
                 },
             );
 
-            (this as any).$root.$data.categories.addFilters(categoryName, [
-                newFilter,
-            ]);
+            this.$root.$data.categories.addFilters(categoryName, [newFilter]);
             (this as any).openWindow("text-filter-edit", {
                 categoryName: categoryName,
                 filterId: newFilter.id,
@@ -79,26 +79,26 @@ export default {
 
         openFilter(filterId: number) {
             (this as any).openWindow("text-filter-edit", {
-                categoryName: (this as any).$props.categoryName,
+                categoryName: this.$props.categoryName,
                 filterId: filterId,
             });
         },
 
         removeFilter(filterId: number) {
-            (this as any).$root.$data.categories.removeFilters(
-                (this as any).$props.categoryName,
+            this.$root.$data.categories.removeFilters(
+                this.$props.categoryName,
                 [filterId],
             );
         },
 
         transactionsInFilter: function (filterId: number) {
-            return (this as any).$root.$data.searcher.searchTransactions(
-                (this as any).$props.categoryName,
+            return this.$root.$data.searcher.searchTransactions(
+                this.$props.categoryName,
                 "Category",
                 undefined,
                 filterId,
             ).length as number;
         },
     },
-};
+});
 </script>

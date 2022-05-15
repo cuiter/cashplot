@@ -16,11 +16,12 @@
 </template>
 
 <script lang="ts">
+import Vue from "vue";
 import { ManualFilter } from "../../model/entities";
 import { createUniqueId } from "../../utils";
 const newCategoryName = "New category";
 
-export default {
+export default Vue.extend({
     props: {
         categories: { type: Array, default: () => [] },
         selectedTransactionHashes: { type: Array, default: () => null },
@@ -35,8 +36,8 @@ export default {
             });
         },
         selectCategory(name: string) {
-            const selectedTransactionHashes: number[] = (this as any).$props
-                .selectedTransactionHashes;
+            const selectedTransactionHashes: number[] =
+                this.$props.selectedTransactionHashes;
 
             if (selectedTransactionHashes.length !== 0) {
                 var filters = selectedTransactionHashes.map(
@@ -48,7 +49,7 @@ export default {
                     selectedTransactionHashes.length,
                 );
 
-                (this as any).$root.$data.categories.addFilters(name, filters);
+                this.$root.$data.categories.addFilters(name, filters);
             } else {
                 (this as any).openWindow("category-edit", {
                     categoryName: name,
@@ -56,5 +57,5 @@ export default {
             }
         },
     },
-};
+});
 </script>
