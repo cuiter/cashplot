@@ -1,22 +1,54 @@
 <template>
     <div class="full-size tab-contents">
-        <transaction-list-component :transactions="transactions" />
+        <period-selection-component
+            v-if="categoryTransactions.length !== 0"
+            v-model="filterPeriod"
+            :range-start-date="categoryTransactions[0].date"
+            :range-end-date="
+                categoryTransactions[categoryTransactions.length - 1].date
+            "
+        />
+        <transaction-list-component
+            :transactions="categoryTransactionsFiltered"
+        />
     </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
+import { SearchQuery } from "../../model/entities";
+import { Period, PeriodType } from "../../model/period";
 
 export default Vue.extend({
+    data: function () {
+        return {
+            filterPeriod: new Period(
+                PeriodType.Year,
+                new Date().getFullYear(),
+            ) as Period,
+        };
+    },
     computed: {
-        transactions: function () {
+        categoryTransactions: function () {
             const categoryName = ((this as any).openedWindowEntry ?? {})
                 .categoryName;
 
             if (categoryName) {
-                return this.$root.$data.searcher.searchTransactions(
-                    categoryName,
-                    "Category",
-                );
+                return this.$root.$data.searcher.searchTransactions({
+                    categoryName: categoryName,
+                } as SearchQuery);
+            } else {
+                return [];
+            }
+        },
+        categoryTransactionsFiltered: function () {
+            const categoryName = ((this as any).openedWindowEntry ?? {})
+                .categoryName;
+
+            if (categoryName) {
+                return this.$root.$data.searcher.searchTransactions({
+                    categoryName: categoryName,
+                    period: this.$data.filterPeriod,
+                } as SearchQuery);
             } else {
                 return [];
             }

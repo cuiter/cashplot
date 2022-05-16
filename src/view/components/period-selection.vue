@@ -35,11 +35,7 @@ export default Vue.extend({
         value: {
             type: Object,
             default: () =>
-                new Period(
-                    PeriodType.Month,
-                    new Date().getFullYear(),
-                    new Date().getMonth() + 1,
-                ),
+                new Period(PeriodType.Year, new Date().getFullYear(), 1),
         },
         rangeStartDate: { type: Date, default: () => new Date() },
         rangeEndDate: { type: Date, default: () => new Date() },
@@ -57,9 +53,9 @@ export default Vue.extend({
             yearOptions: [] as string[],
             periodOptions: [] as string[],
             periodNames: [] as string[],
-            type: "month",
-            year: "2022",
-            period: "november",
+            type: "year",
+            year: new Date().getFullYear().toString(),
+            period: "1",
         };
     },
     watch: {
@@ -72,6 +68,12 @@ export default Vue.extend({
         },
         period: function () {
             this.emitPeriod();
+        },
+        rangeStartDate: function () {
+            this.generateOptions();
+        },
+        rangeEndDate: function () {
+            this.generateOptions();
         },
     },
     created: function () {
@@ -91,12 +93,7 @@ export default Vue.extend({
             if (this.type === PeriodType.Quarter) {
                 // Note: This should be moved elsewhere once translations are implemented.
                 this.periodOptions = range(1, 4).map((num) => num.toString());
-                this.periodNames = [
-                    "1 (Januari t/m Maart)",
-                    "2 (April t/m Juni)",
-                    "3 (Juli t/m September)",
-                    "4 (Oktober t/m December)",
-                ];
+                this.periodNames = ["Q1", "Q2", "Q3", "Q4"];
             } else if (this.type === PeriodType.Month) {
                 this.periodOptions = range(1, 12).map((num) => num.toString());
                 this.periodNames = [
