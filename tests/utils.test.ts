@@ -1,4 +1,4 @@
-import { createUniqueId, wildcardToRegExp } from "../src/utils";
+import { createUniqueId, range, wildcardToRegExp } from "../src/utils";
 
 describe("utils", () => {
     test("should translate wildcard patterns into RegExp patterns", () => {
@@ -24,6 +24,14 @@ describe("utils", () => {
         );
 
         expect(generatedPatterns).toEqual(regExpPatterns);
+    });
+
+    test("should generate numeric ranges", () => {
+        expect(range(1, 10)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        expect(range(-5, 5)).toEqual([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]);
+        expect(range(1, 1)).toEqual([1]);
+
+        expect(() => range(5, -5)).toThrowError();
     });
 
     test("should generate unique IDs", () => {

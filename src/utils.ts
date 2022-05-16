@@ -32,6 +32,24 @@ export function hash(str: string): number {
 }
 
 /**
+ * Generates a numerical range from start (inclusive) to end (inclusive) with increment = 1.
+ */
+export function range(start: number, end: number): number[] {
+    if (end < start) {
+        throw new Error("Cannot generate range: end is less than than start");
+    }
+
+    const increment = 1;
+
+    const result = [];
+    for (let num = start; num <= end; num += increment) {
+        result.push(num);
+    }
+
+    return result;
+}
+
+/**
  * Given a name, determines a new name that does not conflict with existing names.
  * For example, if new.txt already exists: new.txt -> new.txt (1)
  */
