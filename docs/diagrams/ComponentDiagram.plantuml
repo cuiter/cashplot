@@ -33,7 +33,7 @@ Container_Boundary(cashplot_container, "CashPlot") {
     }
     Container_Boundary(model_container, "Model") {
         Component(storage_component, "Storage", "TypeScript module", "Stores user data and preferences persistently")
-        Component(types_component, "Types", "TypeScript module", "Data definitions for preferences, transactions, categories, filters and accounts")
+        Component(entities_component, "Entities", "TypeScript module", "Data definitions for preferences, transactions, categories, filters and accounts")
     }
 
     Rel(ui_component, overview_tab_component, "Uses")
@@ -68,8 +68,8 @@ Container_Boundary(cashplot_container, "CashPlot") {
 
     Lay_R(graph_generator_component, balance_calculator_component)
 
-    Rel(collections_container, types_component, "Uses")
-    Rel(sources_component, types_component, "Uses")
+    Rel(collections_container, entities_component, "Uses")
+    Rel(sources_component, entities_component, "Uses")
 }
 
 System_Ext(browser_dom, "Browser DOM")
