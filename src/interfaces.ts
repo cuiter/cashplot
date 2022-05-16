@@ -115,6 +115,18 @@ export interface TransactionSearcher {
     searchTransactions(searchQuery: SearchQuery): AssignedTransaction[];
 }
 
+/**
+ * Calculates the total cash flow (income / expenses) of transactions matching a specific search query.
+ *
+ * Uses a cache to save results for recent queries.
+ */
+export interface CashFlowCalculator {
+    calculateCashFlow(searchQuery: SearchQuery): {
+        income: number;
+        expenses: number;
+    };
+}
+
 export interface Sources {
     /**
      * Loads the source transactions from the given data.
