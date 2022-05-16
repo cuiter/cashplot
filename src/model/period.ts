@@ -1,6 +1,7 @@
 import * as dayjs from "dayjs";
 import * as dayOfYear from "dayjs/plugin/dayOfYear";
 import * as isoWeek from "dayjs/plugin/isoWeek";
+import { assert } from "../utils";
 
 dayjs.extend(dayOfYear);
 dayjs.extend(isoWeek);
@@ -20,8 +21,15 @@ export class Period {
     constructor(
         public type: PeriodType,
         public year: number,
-        public periodNumber: number /* 1-53 for PeriodType.Week, 1-12 for PeriodType.Month etc. */,
-    ) {}
+        public periodNumber?: number /* 1-53 for PeriodType.Week, 1-12 for PeriodType.Month etc. */,
+    ) {
+        if (type !== PeriodType.Year) {
+            assert(
+                periodNumber !== undefined,
+                "Period number must be set when type is not PeriodType.Year",
+            );
+        }
+    }
 
     public containsDate(date: Date): boolean {
         if (this.type === PeriodType.Year) {

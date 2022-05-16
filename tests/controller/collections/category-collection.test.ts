@@ -51,16 +51,25 @@ describe("CategoryCollectionImpl", () => {
         categoryCollection.add("Category 1");
         categoryCollection.add("Category 2");
 
-        const success = categoryCollection.rename(
-            "Category 2",
-            "Category Test",
-        );
+        const result = categoryCollection.rename("Category 2", "Category Test");
 
         const categories = categoryCollection.list();
-        expect(success).toBe(true);
+        expect(result).toBe(true);
         expect(categories.length).toBe(2);
         expect(categories[0]).toBe("Category 1");
         expect(categories[1]).toBe("Category Test");
+
+        const notFoundResult = categoryCollection.rename(
+            "Category 99",
+            "Category Test 2",
+        );
+        const alreadyExistsResult = categoryCollection.rename(
+            "Category 1",
+            "Category Test",
+        );
+
+        expect(notFoundResult).toBe(false);
+        expect(alreadyExistsResult).toBe(false);
     });
 
     test("should return all categories in the collection", () => {
@@ -119,6 +128,10 @@ describe("CategoryCollectionImpl", () => {
 
         expect(budget.amount).toBe(200 * DECIMAL);
         expect(budget.periodType).toBe(PeriodType.Week);
+
+        expect(() =>
+            categoryCollection.getBudget("Non-Existent Category"),
+        ).toThrowError('Could not find category named "Non-Existent Category"');
     });
 
     test("should add filters to a category", () => {
@@ -180,6 +193,12 @@ describe("CategoryCollectionImpl", () => {
         expect(filters[0]).toBeInstanceOf(ManualFilter);
         expect(filters[0].id).toBe(0x6934);
         expect((filters[0] as ManualFilter).transactionHash).toBe(0x2393803);
+
+        expect(() =>
+            categoryCollection.removeFilters("New category", [0x0005]),
+        ).toThrowError(
+            'Could not find filter with id 5 inside category "New category"',
+        );
     });
 
     test("should load categories from persistent storage", () => {

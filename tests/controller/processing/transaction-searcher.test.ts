@@ -75,6 +75,11 @@ class TransactionAssignerMock
     allTransactions(): AssignedTransaction[] {
         return this.transactions;
     }
+
+    changeTransactions(newTransactions: AssignedTransaction[]) {
+        this.transactions = newTransactions;
+        this.notifyObservers();
+    }
 }
 
 describe("TransactionSearcher", () => {
@@ -207,5 +212,37 @@ describe("TransactionSearcher", () => {
         });
 
         expect(searchResults).toEqual(expectedSearchResults);
+    });
+
+    test("should recalculate its results when the underlying data is changed", () => {
+        const transactionAssigner = new TransactionAssignerMock(
+            testTransactions,
+        );
+        const transactionSearcher = injector
+            .provideValue("assigner", transactionAssigner)
+            .injectClass(TransactionSearcherImpl);
+
+        const searchResults = transactionSearcher.searchTransactions({
+            categoryName: "Tools",
+        });
+
+        expect(searchResults.length).toBe(2);
+        expect(searchResults[0].description).toEqual(
+            "Invoice 934830293, laptop model VT94",
+        );
+        expect(searchResults[1].description).toEqual(
+            "13th of November tire sale, 4x sports tires",
+        );
+
+        transactionAssigner.changeTransactions(testTransactions.slice(0, 2));
+
+        const searchResultsChanged = transactionSearcher.searchTransactions({
+            categoryName: "Tools",
+        });
+
+        expect(searchResultsChanged.length).toBe(1);
+        expect(searchResultsChanged[0].description).toEqual(
+            "Invoice 934830293, laptop model VT94",
+        );
     });
 });

@@ -86,10 +86,10 @@ describe("CashFlowCalculator", () => {
             .injectClass(CashFlowCalculatorImpl);
 
         const resultFirstYear = cashflowCalculator.calculateCashFlow({
-            period: new Period(PeriodType.Year, 2020, 1),
+            period: new Period(PeriodType.Year, 2020),
         });
         const resultSecondYear = cashflowCalculator.calculateCashFlow({
-            period: new Period(PeriodType.Year, 2021, 1),
+            period: new Period(PeriodType.Year, 2021),
         });
 
         expect(resultFirstYear.income).toEqual(4000 * DECIMAL);
