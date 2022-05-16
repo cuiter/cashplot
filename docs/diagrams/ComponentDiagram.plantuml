@@ -9,20 +9,24 @@ Container_Boundary(cashplot_container, "CashPlot") {
     Container_Boundary(view_container, "View") {
         Component(ui_component, "WebUI", "HTML+CSS page and TypeScript/Vue modules", "Provides a user interface and handles UI events")
         Component(overview_tab_component, "OverviewTab", "Vue component", "Main page, showing the current balance and income/expenses of the current month")
-        Component(source_data_entry_tab_component, "SourceDataEntryTab", "Vue component", "Allows the user to enter their source transaction files")
-        Component(category_entry_tab_component, "CategoryEntryTab", "Vue component", "Allows the user to specify categories (including filters) and accounts")
         Component(budget_tab_component, "BudgetTab", "Vue component", "Shows the (total) income/expenses for a given category on a given month, compared to the configured budget")
         Component(balance_tab_component, "BalanceTab", "Vue component", "Shows the cumulative balance over time, and allows the user to select a time range to inspect balances")
+        Container_Boundary(data_tab_container, "DataTab") {
+            Component(source_data_window_component, "SourceDataWindow", "Vue component", "Allows the user to enter their source transaction files")
+            Component(category_window_component, "CategoryWindow", "Vue component", "Allows the user to specify categories (including filters) and accounts")
+        }
     }
     Container_Boundary(controller_container, "Controller") {
         Container_Boundary(collections_container, "Collections") {
             Component(source_data_collection_component, "SourceDataCollection", "TypeScript module", "Manages a collection of source transaction data. Combines transactions from multiple sources")
-            Component(category_collection_component, "CategoryCollection", "TypeScript module", "Manages a collection of categories and filters.")
-            Component(account_collection_component, "AccountCollection", "TypeScript module", "Manages a collection of (virtual) accounts.")
+            Component(category_collection_component, "CategoryCollection", "TypeScript module", "Manages a collection of categories and filters")
+            Component(account_collection_component, "AccountCollection", "TypeScript module", "Manages a collection of (virtual) accounts")
         }
         Container_Boundary(processing_container, "Processing") {
-            Component(balance_calculator_component, "BalanceCalculator", "TypeScript module", "Provides account balances over time and provides Plotly data for balance graphs.")
-            Component(transaction_searcher_component, "TransactionSearcher", "TypeScript module", "Filters and optionally sorts or sums up transactions by category, filter and/or a specific time period")
+            Component(cashflow_calculator_component, "CashFlowCalculator", "TypeScript module", "Provides total income/expenses of a category/account within a time period.")
+            Component(balance_calculator_component, "BalanceCalculator", "TypeScript module", "Provides total account balances over time")
+            Component(graph_generator_component, "GraphGenerator", "TypeScript module", "Generates Plotly data for balance graphs")
+            Component(transaction_searcher_component, "TransactionSearcher", "TypeScript module", "Filters and optionally sorts transactions by category, filter and/or a specific time period")
             Component(transaction_assigner_component, "TransactionAssigner", "TypeScript module", "Assigns categories and accounts to raw transactions")
         }
         Component(sources_component, "Sources", "TypeScript modules", "Reads raw transactions from user-provided data (for example bank CSV exports)")
@@ -33,20 +37,22 @@ Container_Boundary(cashplot_container, "CashPlot") {
     }
 
     Rel(ui_component, overview_tab_component, "Uses")
-    Rel(ui_component, source_data_entry_tab_component, "Uses")
-    Rel(ui_component, category_entry_tab_component, "Uses")
+    Rel(ui_component, source_data_window_component, "Uses")
+    Rel(ui_component, category_window_component, "Uses")
     Rel(ui_component, budget_tab_component, "Uses")
     Rel(ui_component, balance_tab_component, "Uses")
 
 
-    Rel(source_data_entry_tab_component, source_data_collection_component, "Uses")
-    Rel(category_entry_tab_component, category_collection_component, "Uses")
-    Rel(category_entry_tab_component, account_collection_component, "Uses")
-    Rel(category_entry_tab_component, transaction_assigner_component, "Uses")
+    Rel(source_data_window_component, source_data_collection_component, "Uses")
+    Rel(category_window_component, category_collection_component, "Uses")
+    Rel(category_window_component, account_collection_component, "Uses")
+    Rel(category_window_component, transaction_searcher_component, "Uses")
     Rel(balance_tab_component, balance_calculator_component, "Uses")
+    Rel(balance_tab_component, graph_generator_component, "Uses")
     Rel(budget_tab_component, transaction_searcher_component, "Uses")
+    Rel(budget_tab_component, cashflow_calculator_component, "Uses")
     Rel(overview_tab_component, balance_calculator_component, "Uses")
-    Rel(overview_tab_component, transaction_searcher_component, "Uses")
+    Rel(overview_tab_component, cashflow_calculator_component, "Uses")
 
     Rel(source_data_collection_component, storage_component, "Uses")
     Rel(source_data_collection_component, sources_component, "Uses")
@@ -56,7 +62,11 @@ Container_Boundary(cashplot_container, "CashPlot") {
     Rel(transaction_assigner_component, source_data_collection_component, "Uses")
     Rel(transaction_assigner_component, category_collection_component, "Uses")
     Rel(transaction_assigner_component, account_collection_component, "Uses")
+    Rel(cashflow_calculator_component, transaction_searcher_component, "Uses")
     Rel(balance_calculator_component, transaction_searcher_component, "Uses")
+    Rel(graph_generator_component, balance_calculator_component, "Uses")
+
+    Lay_R(graph_generator_component, balance_calculator_component)
 
     Rel(collections_container, types_component, "Uses")
     Rel(sources_component, types_component, "Uses")
