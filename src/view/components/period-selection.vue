@@ -131,7 +131,7 @@ export default Vue.extend({
             this.$props.value = new Period(
                 this.type as PeriodType,
                 Number(this.year),
-                Number(this.period),
+                Number(this.period) || undefined,
             );
             this.$emit("input", this.$props.value);
         },

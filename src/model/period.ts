@@ -16,6 +16,14 @@ export enum PeriodType {
 }
 // ===
 
+export const PeriodsPerYear = {
+    [PeriodType.Year]: 1,
+    [PeriodType.Quarter]: 4,
+    [PeriodType.Month]: 12,
+    [PeriodType.Week]: 53,
+    [PeriodType.Day]: 366,
+};
+
 /** Represents a specific period in history. For example: Week 2 of 2022 */
 export class Period {
     constructor(
@@ -23,10 +31,27 @@ export class Period {
         public year: number,
         public periodNumber?: number /* 1-53 for PeriodType.Week, 1-12 for PeriodType.Month etc. */,
     ) {
+        assert(!Number.isNaN(periodNumber), "Period number must not be NaN");
         if (type !== PeriodType.Year) {
             assert(
                 periodNumber !== undefined,
                 "Period number must be set when type is not PeriodType.Year",
+            );
+
+            assert(
+                Math.floor(periodNumber!) === periodNumber, // eslint-disable-line
+                "Period number must be a valid integer",
+            );
+            assert(
+                periodNumber! >= 1, // eslint-disable-line
+                "Period number must be greater than or equal to 1",
+            );
+            assert(
+                periodNumber! <= PeriodsPerYear[type], // eslint-disable-line
+                "Period number must be valid. Expected within range: (1, " +
+                    PeriodsPerYear[type] +
+                    "), got: " +
+                    periodNumber,
             );
         }
     }
