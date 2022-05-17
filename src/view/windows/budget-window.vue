@@ -62,14 +62,12 @@ import { DECIMAL } from "../../model/entities";
 
 const nonExistentCategoryName =
     "non-existent-category-" + new Date().getTime().toString();
+const nonExistentPeriod = new Period(PeriodType.Year, 9999);
 
 export default Vue.extend({
     data: function () {
         return {
-            filterPeriod: new Period(
-                PeriodType.Year,
-                new Date().getFullYear(),
-            ) as Period,
+            filterPeriod: null,
         };
     },
     computed: {
@@ -78,16 +76,21 @@ export default Vue.extend({
             const categoryName = ((this as any).openedWindowEntry ?? {})
                 .categoryName;
 
-            if (categoryName) {
-                return { categoryName: categoryName };
-            } else {
-                // Should not yield any results.
-                return { categoryName: nonExistentCategoryName };
-            }
+            // Should not yield any results if categoryName is not set.
+            return {
+                categoryName: categoryName
+                    ? categoryName
+                    : nonExistentCategoryName,
+            };
         },
         categoryFilteredSearchQuery: function () {
             return Object.assign(
-                { period: this.$data.filterPeriod },
+                {
+                    period:
+                        this.$data.filterPeriod !== null
+                            ? this.$data.filterPeriod
+                            : nonExistentPeriod,
+                },
                 (this as any).categorySearchQuery,
             );
         },
@@ -135,7 +138,7 @@ export default Vue.extend({
             const categoryName = ((this as any).openedWindowEntry ?? {})
                 .categoryName;
 
-            if (categoryName) {
+            if (categoryName && this.$data.filterPeriod !== null) {
                 const budget =
                     this.$root.$data.categories.getBudget(categoryName);
 
@@ -144,9 +147,7 @@ export default Vue.extend({
                 return (
                     (budget.amount *
                         PeriodsPerYear[budget.periodType as PeriodType]) /
-                    PeriodsPerYear[
-                        (this as any).filterPeriod.type as PeriodType
-                    ]
+                    PeriodsPerYear[this.$data.filterPeriod.type as PeriodType]
                 );
             } else {
                 return 0;

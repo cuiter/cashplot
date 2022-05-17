@@ -27,15 +27,14 @@
 <script lang="ts">
 import Vue from "vue";
 import { PeriodType } from "../../model/entities";
-import { Period } from "../../model/period";
+import { Period, PeriodsPerYear } from "../../model/period";
 import { range } from "../../utils";
 
 export default Vue.extend({
     props: {
         value: {
             type: Object,
-            default: () =>
-                new Period(PeriodType.Year, new Date().getFullYear(), 1),
+            default: () => null,
         },
         rangeStartDate: { type: Date, default: () => new Date() },
         rangeEndDate: { type: Date, default: () => new Date() },
@@ -53,7 +52,7 @@ export default Vue.extend({
             yearOptions: [] as string[],
             periodOptions: [] as string[],
             periodNames: [] as string[],
-            type: "year",
+            type: "month",
             year: new Date().getFullYear().toString(),
             period: "1",
         };
@@ -77,6 +76,30 @@ export default Vue.extend({
         },
     },
     created: function () {
+        if (this.$props.value === null) {
+            let endDate = this.rangeEndDate as Date;
+            let endYear = endDate.getFullYear();
+
+            this.$data.year = endYear.toString();
+            for (
+                let periodNumber =
+                    PeriodsPerYear[this.$data.type as PeriodType];
+                periodNumber >= 1;
+                periodNumber--
+            ) {
+                if (
+                    new Period(
+                        this.$data.type,
+                        endYear,
+                        periodNumber,
+                    ).containsDate(endDate)
+                ) {
+                    this.$data.period = periodNumber.toString();
+                    break;
+                }
+            }
+        }
+        this.emitPeriod();
         this.generateOptions();
     },
     methods: {
@@ -85,7 +108,7 @@ export default Vue.extend({
             let endYear = (this.rangeEndDate as Date).getFullYear();
 
             const yearOptions = [];
-            for (let year = startYear; year <= endYear; year++) {
+            for (let year = endYear; year >= startYear; year--) {
                 yearOptions.push(year.toString());
             }
             this.yearOptions = yearOptions;
