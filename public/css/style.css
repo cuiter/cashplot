@@ -614,6 +614,48 @@ a {
     transition: width 0.5s, left 0.5s;
 }
 
+.budget-results {
+    position: relative;
+}
+
+.budget-results-transactions {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    left: 0rem;
+}
+
+.budget-results-transactions span {
+    text-align: right;
+    width: 5rem;
+    font-size: 1.5rem;
+    padding-bottom: 0.05rem;
+}
+
+.budget-results-transactions-icon {
+    display: inline-block;
+    fill: var(--color-fill-icon);
+    width: 2rem;
+    height: 2rem;
+    margin-left: 0.2rem;
+}
+
+.budget-results-used {
+    font-size: 1.9rem;
+}
+
+.budget-results-used span {
+    display: inline-block;
+    width: 6rem;
+}
+
+.budget-results-used-comment {
+    position: absolute;
+    right: 0rem;
+    font-size: 1.6rem;
+    color: var(--color-primary-deselected);
+}
+
 /* Custom classes */
 
 #app {
@@ -717,6 +759,10 @@ a {
 
 .text-center {
     text-align: center;
+}
+
+.text-right {
+    text-align: right;
 }
 
 .flex-center {
