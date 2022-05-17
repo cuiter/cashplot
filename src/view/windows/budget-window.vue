@@ -1,5 +1,6 @@
 <template>
     <div class="full-size tab-contents">
+        <progress-bar-component :percentage="budgetPercentageUsed" />
         <period-selection-component
             v-if="categoryTransactions.length !== 0"
             v-model="filterPeriod"
@@ -15,8 +16,10 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import { SearchQuery } from "../../model/entities";
-import { Period, PeriodType } from "../../model/period";
+import { Period, PeriodsPerYear, PeriodType } from "../../model/period";
+
+const nonExistentCategoryName =
+    "non-existent-category-" + new Date().getTime().toString();
 
 export default Vue.extend({
     data: function () {
@@ -28,29 +31,60 @@ export default Vue.extend({
         };
     },
     computed: {
-        categoryTransactions: function () {
+        categorySearchQuery: function () {
             const categoryName = ((this as any).openedWindowEntry ?? {})
                 .categoryName;
 
             if (categoryName) {
-                return this.$root.$data.searcher.searchTransactions({
-                    categoryName: categoryName,
-                } as SearchQuery);
+                return { categoryName: categoryName };
             } else {
-                return [];
+                // Should not yield any results.
+                return { categoryName: nonExistentCategoryName };
             }
         },
+        categoryFilteredSearchQuery: function () {
+            return Object.assign(
+                { period: this.$data.filterPeriod },
+                (this as any).categorySearchQuery,
+            );
+        },
+        categoryTransactions: function () {
+            return this.$root.$data.searcher.searchTransactions(
+                (this as any).categorySearchQuery,
+            );
+        },
         categoryTransactionsFiltered: function () {
+            return this.$root.$data.searcher.searchTransactions(
+                (this as any).categoryFilteredSearchQuery,
+            );
+        },
+        budgetPercentageUsed: function () {
             const categoryName = ((this as any).openedWindowEntry ?? {})
                 .categoryName;
 
             if (categoryName) {
-                return this.$root.$data.searcher.searchTransactions({
-                    categoryName: categoryName,
-                    period: this.$data.filterPeriod,
-                } as SearchQuery);
+                const cashFlow: { income: number; expenses: number } =
+                    this.$root.$data.cashFlow.calculateCashFlow(
+                        (this as any).categoryFilteredSearchQuery,
+                    );
+                const biggestFactor =
+                    cashFlow.expenses > cashFlow.income
+                        ? cashFlow.expenses
+                        : cashFlow.income;
+
+                const budget =
+                    this.$root.$data.categories.getBudget(categoryName);
+
+                const usedFactor =
+                    ((biggestFactor / budget.amount) *
+                        PeriodsPerYear[
+                            (this as any).filterPeriod.type as PeriodType
+                        ]) /
+                    PeriodsPerYear[budget.periodType as PeriodType];
+
+                return usedFactor * 100;
             } else {
-                return [];
+                return 0;
             }
         },
     },

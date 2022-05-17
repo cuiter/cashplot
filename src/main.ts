@@ -9,6 +9,7 @@ import { CategoryCollectionImpl } from "./controller/collections/category-collec
 import { WebUI } from "./view/web-ui";
 import { TransactionAssignerImpl } from "./controller/processing/transaction-assigner";
 import { TransactionSearcherImpl } from "./controller/processing/transaction-searcher";
+import { CashFlowCalculatorImpl } from "./controller/processing/cashflow-calculator";
 
 const appInjector = createInjector()
     .provideClass("sources", SourcesImpl)
@@ -17,7 +18,8 @@ const appInjector = createInjector()
     .provideClass("sourceData", SourceDataCollectionImpl)
     .provideClass("categories", CategoryCollectionImpl)
     .provideClass("assigner", TransactionAssignerImpl)
-    .provideClass("searcher", TransactionSearcherImpl);
+    .provideClass("searcher", TransactionSearcherImpl)
+    .provideClass("cashFlow", CashFlowCalculatorImpl);
 
 const ui = appInjector.injectClass(WebUI);
 
