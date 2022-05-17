@@ -29,15 +29,15 @@ export class Period {
     constructor(
         public type: PeriodType,
         public year: number,
-        public periodNumber?: number /* 1-53 for PeriodType.Week, 1-12 for PeriodType.Month etc. */,
+        public periodNumber:
+            | number
+            | null = null /* 1-53 for PeriodType.Week, 1-12 for PeriodType.Month etc. */,
     ) {
-        assert(!Number.isNaN(periodNumber), "Period number must not be NaN");
         if (type !== PeriodType.Year) {
             assert(
-                periodNumber !== undefined,
-                "Period number must be set when type is not PeriodType.Year",
+                !Number.isNaN(periodNumber),
+                "Period number must not be NaN",
             );
-
             assert(
                 Math.floor(periodNumber!) === periodNumber, // eslint-disable-line
                 "Period number must be a valid integer",
