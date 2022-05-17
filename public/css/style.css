@@ -589,6 +589,31 @@ a {
     user-select: none;
 }
 
+.progress-bar {
+    position: relative;
+    flex: 0 0 1rem;
+    height: 1rem;
+    width: 100%;
+    border-radius: 0.4rem;
+    background-color: var(--color-background-button-light);
+    overflow: hidden;
+}
+
+.progress-bar-success-line {
+    position: absolute;
+    height: 100%;
+    left: 0rem;
+    background-color: var(--color-theme-positive);
+    transition: width 0.5s;
+}
+
+.progress-bar-overflow-line {
+    position: absolute;
+    height: 100%;
+    background-color: var(--color-theme-negative);
+    transition: width 0.5s, left 0.5s;
+}
+
 /* Custom classes */
 
 #app {
