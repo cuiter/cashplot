@@ -171,6 +171,19 @@ export default Vue.extend({
             }
         },
     },
+    watch: {
+        filterPeriod: function () {
+            const categoryName = ((this as any).openedWindowEntry ?? {})
+                .categoryName;
+
+            if (categoryName) {
+                (this as any).changeWindowEntry({
+                    categoryName: categoryName,
+                    filterPeriod: this.$data.filterPeriod,
+                });
+            }
+        },
+    },
     created: function () {
         // If the current category does not exist anymore,
         // open the first category that does exist.
@@ -182,7 +195,11 @@ export default Vue.extend({
 
         if (existingCategories.indexOf(categoryName) === -1) {
             (this as any).closeWindow();
+            return;
         }
+
+        this.$data.filterPeriod =
+            ((this as any).openedWindowEntry ?? {}).filterPeriod ?? null;
     },
 });
 </script>

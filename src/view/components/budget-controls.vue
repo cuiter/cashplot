@@ -43,9 +43,12 @@ export default Vue.extend({
                 (this as any).openedWindow === "budget" &&
                 (this as any).openedWindowEntry.categoryName !== newCategoryName
             ) {
+                const filterPeriod = (this as any).openedWindowEntry
+                    .filterPeriod;
                 (this as any).closeWindow();
                 (this as any).openWindow("budget", {
                     categoryName: newCategoryName,
+                    filterPeriod: filterPeriod, // Keep current filter period
                 });
 
                 this.loadCategoryData();

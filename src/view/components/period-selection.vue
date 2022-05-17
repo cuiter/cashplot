@@ -98,8 +98,13 @@ export default Vue.extend({
                     break;
                 }
             }
+            this.emitPeriod();
+        } else {
+            const period: Period = this.$props.value;
+            this.$data.type = period.type;
+            this.$data.year = period.year.toString();
+            this.$data.period = (period.periodNumber ?? 1).toString();
         }
-        this.emitPeriod();
         this.generateOptions();
     },
     methods: {

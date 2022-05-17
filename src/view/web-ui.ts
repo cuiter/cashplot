@@ -9,6 +9,7 @@ import {
 import Vue from "vue";
 
 import InfiniteLoading from "vue-infinite-loading";
+import { Period } from "../model/period";
 
 // Enable live reload for these files.
 require("../../public/index.html");
@@ -114,12 +115,19 @@ export class WebUI implements UI {
 
     /** Creates a Vue mixin attached to a navigation state object. This is used across the Vue components for navigation. */
     private createNavigationMixin() {
+        // Data that can be passed to a window
+        type WindowEntry = {
+            categoryName?: string;
+            filterId?: number;
+            filterPeriod?: Period;
+        };
+
         const currentTabKey = "debug/currentTab";
         const currentTabDefault = "overview";
         const tabOpenWindowsKey = "debug/tabOpenWindows";
         const tabOpenWindowsDefault: Record<
             string,
-            [string, { categoryName?: string; filterId?: number } | null][]
+            [string, WindowEntry | null][]
         > = {};
 
         const navState = {
@@ -140,6 +148,19 @@ export class WebUI implements UI {
                     navState.tabOpenWindows = JSON.parse(
                         window.localStorage.getItem(tabOpenWindowsKey) ?? "{}",
                     );
+
+                    for (const categoryName in navState.tabOpenWindows) {
+                        for (const entry of navState.tabOpenWindows[
+                            categoryName
+                        ]) {
+                            if (entry[1] !== null && entry[1].filterPeriod) {
+                                Object.setPrototypeOf(
+                                    entry[1].filterPeriod,
+                                    Period.prototype,
+                                );
+                            }
+                        }
+                    }
                 }
             }
         }, 500);
@@ -185,7 +206,7 @@ export class WebUI implements UI {
                 },
                 openWindow: (
                     windowName: string, // for example: category-edit
-                    entry: { categoryName?: string; filterId?: number } | null, // category name, filter id, etc.
+                    entry: WindowEntry | null, // category name, filter id, etc.
                 ) => {
                     if (
                         navState.tabOpenWindows[navState.currentTab] ===
@@ -205,9 +226,7 @@ export class WebUI implements UI {
 
                     storeOpenedWindows();
                 },
-                changeWindowEntry(
-                    entry: { categoryName?: string; filterId?: number } | null,
-                ) {
+                changeWindowEntry(entry: WindowEntry | null) {
                     const tabOpenWindows =
                         navState.tabOpenWindows[navState.currentTab];
                     if (
