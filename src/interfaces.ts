@@ -113,6 +113,8 @@ export interface TransactionAssigner {
  */
 export interface TransactionSearcher {
     searchTransactions(searchQuery: SearchQuery): AssignedTransaction[];
+    /** Allows another component to subscribe to any changes in this component. */
+    subscribeToChanges(callback: () => void): void;
 }
 
 /**

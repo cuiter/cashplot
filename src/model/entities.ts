@@ -4,7 +4,8 @@ import { Period, PeriodType } from "./period";
 import "reflect-metadata";
 
 const DECIMAL = 100;
-export { DECIMAL, PeriodType };
+const MAX_CACHE_ENTRIES = 5;
+export { DECIMAL, MAX_CACHE_ENTRIES, PeriodType };
 
 // ========== Note: the following types are stored persistently.              ==========
 // ========== When modifying, make sure to test for backwards-compatibility.  ==========

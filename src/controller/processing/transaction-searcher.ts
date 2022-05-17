@@ -1,9 +1,15 @@
+import { Observable } from "@daign/observable";
 import { TransactionAssigner, TransactionSearcher } from "../../interfaces";
-import { AssignedTransaction, SearchQuery } from "../../model/entities";
+import {
+    AssignedTransaction,
+    MAX_CACHE_ENTRIES,
+    SearchQuery,
+} from "../../model/entities";
 
-const MAX_CACHE_ENTRIES = 5;
-
-export class TransactionSearcherImpl implements TransactionSearcher {
+export class TransactionSearcherImpl
+    extends Observable
+    implements TransactionSearcher
+{
     public static inject = ["assigner"] as const;
 
     private searchCache: {
@@ -12,8 +18,10 @@ export class TransactionSearcherImpl implements TransactionSearcher {
     }[] = [];
 
     constructor(public assigner: TransactionAssigner) {
+        super();
         this.assigner.subscribeToChanges(() => {
             this.searchCache = []; // Invalidate cache
+            this.notifyObservers();
         });
     }
 
