@@ -18,7 +18,19 @@
                 </svg>
             </div>
             <div class="budget-results-used">
-                <span class="text-right">
+                <span
+                    :class="{
+                        'text-right': true,
+                        'color-positive':
+                            budgetUsed.type === 'income'
+                                ? budgetPercentageUsed >= 100
+                                : budgetPercentageUsed <= 100,
+                        'color-negative':
+                            budgetUsed.type === 'income'
+                                ? false
+                                : budgetPercentageUsed > 100,
+                    }"
+                >
                     €{{ Math.abs(budgetUsed.amount / DECIMAL).toFixed(0) }}
                 </span>
                 /
@@ -144,8 +156,15 @@ export default Vue.extend({
             const budgetAllowed: number = this.budgetAllowed as number;
             const budgetUsed: number = (this.budgetUsed as any)
                 .amount as number;
+            const budgetType: string = (this.budgetUsed as any).type as string;
             if (budgetAllowed !== 0) {
-                return (budgetUsed / budgetAllowed) * 100;
+                let percentageUsed = (budgetUsed / budgetAllowed) * 100;
+
+                if (percentageUsed > 100 && budgetType === "income") {
+                    percentageUsed = 100;
+                }
+
+                return percentageUsed;
             } else {
                 return 0;
             }

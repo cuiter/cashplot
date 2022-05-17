@@ -649,7 +649,7 @@ a {
     font-size: 1.9rem;
 }
 
-.budget-results-used span {
+.budget-results-used > span {
     display: inline-block;
     width: 6rem;
 }
@@ -833,6 +833,14 @@ a {
 
 .icon-ack {
     color: #229944;
+}
+
+.color-positive {
+    color: var(--color-theme-positive);
+}
+
+.color-negative {
+    color: var(--color-theme-negative);
 }
 
 .graph {
