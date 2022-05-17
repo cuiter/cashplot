@@ -24,17 +24,9 @@
                 /
                 <span>{{ Math.abs(budgetAllowed / DECIMAL).toFixed(0) }}</span>
             </div>
-            <span
-                v-if="budgetUsed.type === 'expenses'"
-                class="budget-results-used-comment"
-            >
-                Uitgegeven deze periode
-            </span>
-            <span
-                v-if="budgetUsed.type === 'income'"
-                class="budget-results-used-comment"
-            >
-                Ontvangen deze periode
+            <span class="budget-results-used-comment">
+                {{ budgetUsed.type === "income" ? "Ontvangen" : "Uitgegeven" }}
+                <span class="budget-results-period-comment">deze periode</span>
             </span>
         </div>
 

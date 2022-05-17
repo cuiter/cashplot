@@ -594,24 +594,29 @@ a {
     flex: 0 0 1rem;
     height: 1rem;
     width: 100%;
-    border-radius: 0.4rem;
+    border-radius: 0.48rem;
     background-color: var(--color-background-button-light);
     overflow: hidden;
 }
 
-.progress-bar-success-line {
-    position: absolute;
-    height: 100%;
-    left: 0rem;
-    background-color: var(--color-theme-positive);
-    transition: width 0.5s;
-}
-
+.progress-bar-success-line,
 .progress-bar-overflow-line {
     position: absolute;
     height: 100%;
+    left: 0rem;
+    transition: width 0.3s;
+    border-top-right-radius: 0.48rem;
+    border-bottom-right-radius: 0.48rem;
+}
+
+.progress-bar-success-line {
+    background-color: var(--color-theme-positive);
+    z-index: 2;
+}
+
+.progress-bar-overflow-line {
     background-color: var(--color-theme-negative);
-    transition: width 0.5s, left 0.5s;
+    z-index: 1;
 }
 
 .budget-results {
@@ -654,6 +659,12 @@ a {
     right: 0rem;
     font-size: 1.6rem;
     color: var(--color-primary-deselected);
+}
+
+@media screen and not (min-width: 35rem) {
+    .budget-results-period-comment {
+        display: none;
+    }
 }
 
 /* Custom classes */
