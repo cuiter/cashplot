@@ -76,11 +76,10 @@ export default Vue.extend({
     },
     computed: {
         manualTransactions: function () {
-            return this.$root.$data.searcher.searchTransactions(
-                this.$data.categoryName,
-                "Category",
-                "ManualFilter",
-            );
+            return this.$root.$data.searcher.searchTransactions({
+                categoryName: this.$data.categoryName,
+                filterType: "ManualFilter",
+            });
         },
         filters: function () {
             return this.$root.$data.categories.getFilters(

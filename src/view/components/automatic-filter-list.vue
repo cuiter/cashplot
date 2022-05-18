@@ -98,12 +98,10 @@ export default Vue.extend({
         },
 
         transactionsInFilter: function (filterId: number) {
-            return this.$root.$data.searcher.searchTransactions(
-                this.$props.categoryName,
-                "Category",
-                undefined,
-                filterId,
-            ).length as number;
+            return this.$root.$data.searcher.searchTransactions({
+                categoryName: this.$props.categoryName,
+                filterId: filterId,
+            }).length as number;
         },
     },
 });

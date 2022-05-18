@@ -70,12 +70,10 @@ export default Vue.extend({
         matchingTransactions: function () {
             const transactions: AssignedTransaction[] = (
                 this as any
-            ).$root.$data.searcher.searchTransactions(
-                this.categoryName,
-                "Category",
-                undefined,
-                this.filterId,
-            );
+            ).$root.$data.searcher.searchTransactions({
+                categoryName: this.categoryName,
+                filterId: this.filterId,
+            });
 
             return transactions;
         },
