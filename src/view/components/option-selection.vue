@@ -19,9 +19,17 @@
                 {{ optionNames[index] || option }}
             </span>
         </div>
-        <span class="float-left select-name">{{ selectedOptionName }}</span>
-        <span v-if="dropDown === false" class="float-right select-tick">▲</span>
-        <span v-if="dropDown === true" class="float-right select-tick">▼</span>
+        <span class="float-left option-selection-name">{{
+            selectedOptionName
+        }}</span>
+        <span
+            v-if="dropDown === false"
+            class="float-right option-selection-tick"
+            >▲</span
+        >
+        <span v-if="dropDown === true" class="float-right option-selection-tick"
+            >▼</span
+        >
     </button>
 </template>
 
