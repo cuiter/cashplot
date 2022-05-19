@@ -20,7 +20,7 @@
 }
 
 html {
-    font-size: 0.7rem;
+    font-size: 0.55rem;
 }
 
 html,
@@ -658,12 +658,6 @@ a {
     right: 0rem;
     font-size: 1.6rem;
     color: var(--color-primary-deselected);
-}
-
-@media screen and not (min-width: 38rem) {
-    .budget-results-period-comment {
-        display: none;
-    }
 }
 
 /* Custom components */

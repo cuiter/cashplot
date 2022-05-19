@@ -44,7 +44,6 @@
             </div>
             <span class="budget-results-used-comment">
                 {{ budgetUsed.type === "income" ? "Ontvangen" : "Uitgegeven" }}
-                <span class="budget-results-period-comment">deze periode</span>
             </span>
         </div>
 
