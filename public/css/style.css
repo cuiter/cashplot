@@ -19,6 +19,10 @@
     --color-theme-negative: #e96a32;
 }
 
+html {
+    font-size: 0.7rem;
+}
+
 html,
 body {
     background-color: var(--color-background);
@@ -656,7 +660,7 @@ a {
     color: var(--color-primary-deselected);
 }
 
-@media screen and not (min-width: 58rem) {
+@media screen and not (min-width: 38rem) {
     .budget-results-period-comment {
         display: none;
     }
