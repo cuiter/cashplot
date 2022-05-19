@@ -43,7 +43,7 @@
         <div class="collection-list">
             <div
                 v-for="item of allSourceDataInfo.items"
-                class="collection-item"
+                class="collection-item source-data-item"
             >
                 <span class="source-data-name">{{ item.name }}</span>
                 <!--NOTE: If the viewport gets really small, change the date format-->

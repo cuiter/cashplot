@@ -184,6 +184,11 @@ a {
     background-color: var(--color-background-nav);
 }
 
+.top-nav-button.button {
+    border: 0.15rem solid var(--color-background-light-hover);
+    border-radius: 0.4rem;
+}
+
 .top-nav .top-nav-title {
     color: var(--color-primary);
     margin-top: 0.6rem;
@@ -355,6 +360,11 @@ a {
     border-color: var(--color-background-light-hover);
 }
 
+.source-data-item {
+    border: 0.15rem solid var(--color-background-button-light);
+    background-color: var(--color-background-button);
+}
+
 .remove-button,
 .source-data-remove-button {
     min-width: 3.4rem;
@@ -362,13 +372,17 @@ a {
     transform: scale(0.75, 1);
     fill: var(--color-fill-icon);
     transition: filter 0.2s;
+    background-color: var(--color-background-button-light);
+    border: 0.15rem solid var(--color-fill-icon);
+    border-radius: 0.6rem;
+    padding: 0.2rem 0.2rem 0.4rem;
 }
 
 .source-data-remove-button {
-    min-width: 4.2rem;
-    min-height: 4.2rem;
-    right: 0.25rem;
-    bottom: 1rem;
+    min-width: 5rem;
+    min-height: 5rem;
+    right: 0rem;
+    bottom: 0.5rem;
 }
 
 .remove-button:hover {
@@ -394,13 +408,13 @@ a {
 }
 
 .source-data-accounts {
-    right: 11.4rem;
+    right: 12.3rem;
     bottom: 0.7rem;
 }
 
 .source-data-accounts-icon {
     position: absolute;
-    right: 9.7rem;
+    right: 10.6rem;
     width: 1.7rem;
     height: 1.7rem;
     bottom: 0.8rem;
@@ -408,13 +422,13 @@ a {
 }
 
 .source-data-transactions {
-    right: 5.9rem;
+    right: 6.8rem;
     bottom: 0.7rem;
 }
 
 .source-data-transactions-icon {
     position: absolute;
-    right: 4.1rem;
+    right: 4.9rem;
     width: 1.8rem;
     height: 1.8rem;
     bottom: 0.8rem;
