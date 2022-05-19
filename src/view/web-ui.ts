@@ -68,7 +68,7 @@ export class WebUI implements UI {
         // Load Vue component dependencies.
         Vue.use(InfiniteLoading, {
             slots: {
-                noResults: "-",
+                noResults: "Geen transacties beschikbaar",
                 noMore: "-",
                 error: "Error while loading data",
             },

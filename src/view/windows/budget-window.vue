@@ -1,7 +1,13 @@
 <template>
     <div class="full-size tab-contents">
-        <progress-bar-component :percentage="budgetPercentageUsed" />
-        <div class="budget-results flex-center">
+        <progress-bar-component
+            v-if="categoryTransactions.length !== 0"
+            :percentage="budgetPercentageUsed"
+        />
+        <div
+            v-if="categoryTransactions.length !== 0"
+            class="budget-results flex-center"
+        >
             <div class="budget-results-transactions">
                 <span>{{ categoryTransactionsFiltered.length }}</span>
                 <svg
