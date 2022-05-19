@@ -37,7 +37,7 @@ a {
     border-radius: 0.4rem;
     border-width: 0.15rem;
     font-size: 1.8rem;
-    line-height: 1.7rem;
+    line-height: 2.7rem;
     padding: 0rem 1rem;
     margin-bottom: 0rem;
     font-weight: initial;
@@ -394,7 +394,7 @@ a {
     left: 1rem;
     top: 0.4rem;
     font-size: 1.8rem;
-    width: calc(100% - 5rem);
+    width: calc(100% - 5.8rem);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -552,8 +552,7 @@ a {
     align-items: center;
     justify-content: center;
     text-align: center;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    white-space: normal;
     overflow: hidden;
 }
 
@@ -657,7 +656,7 @@ a {
     color: var(--color-primary-deselected);
 }
 
-@media screen and not (min-width: 35rem) {
+@media screen and not (min-width: 58rem) {
     .budget-results-period-comment {
         display: none;
     }
@@ -672,6 +671,13 @@ a {
        _without_ the browser navbar (important for mobile). */
     height: 100vh; /* Fallback for browsers that do not support Custom Properties */
     height: calc(var(--vh, 1vh) * 100);
+}
+
+.option-selection-name {
+    max-width: calc(100% - 2rem);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .option-selection-options {
