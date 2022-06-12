@@ -2,10 +2,10 @@
     "lang": "en-us",
     "name": "CashPlot",
     "short_name": "CashPlot",
-    "description": "A tool for tracking your finances.",
+    "description": "Helps finding trends in your finances.",
     "start_url": ".",
-    "background_color": "#2a2c2b",
-    "theme_color": "#fa5b0f",
+    "background_color": "#222222",
+    "theme_color": "#222222",
     "orientation": "any",
     "display": "standalone",
     "icons": [
