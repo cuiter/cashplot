@@ -6,16 +6,26 @@
     <author email="contact@cuiter.me" href="https://cuiter.me">
         Casper Uiterwijk
     </author>
-    <icon src="../public/assets/img/favicon-512x512.png" />
+
+    <icon src="../public/assets/img/favicon-512x512.png"  />
+    <platform name="android">
+        <!-- Adaptive icons generated with https://icon.kitchen/ -->
+        <icon density="xxxhdpi" foreground="../public/assets/img/adaptive-icon/mipmap-xxxhdpi/ic_launcher_foreground.png" background="../public/assets/img/adaptive-icon/mipmap-xxxhdpi/ic_launcher_background.png" />
+        <icon density="xxhdpi" foreground="../public/assets/img/adaptive-icon/mipmap-xxhdpi/ic_launcher_foreground.png" background="../public/assets/img/adaptive-icon/mipmap-xxhdpi/ic_launcher_background.png" />
+        <icon density="xhdpi" foreground="../public/assets/img/adaptive-icon/mipmap-xhdpi/ic_launcher_foreground.png" background="../public/assets/img/adaptive-icon/mipmap-xhdpi/ic_launcher_background.png" />
+        <icon density="hdpi" foreground="../public/assets/img/adaptive-icon/mipmap-hdpi/ic_launcher_foreground.png" background="../public/assets/img/adaptive-icon/mipmap-hdpi/ic_launcher_background.png" />
+        <icon density="mdpi" foreground="../public/assets/img/adaptive-icon/mipmap-mdpi/ic_launcher_foreground.png" background="../public/assets/img/adaptive-icon/mipmap-mdpi/ic_launcher_background.png" />
+    </platform>
 
     <content src="index.html" />
     <allow-intent href="https://*/*" />
-    <preference name="SplashScreenDelay" value="100" />
+
+    <preference name="AutoHideSplashScreen" value="false" />
     <preference name="FadeSplashScreen" value="true" />
     <preference name="FadeSplashScreenDuration" value="400" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="SplashScreenSpinnerColor" value="#fa5b0f" />
-    <splash src="www/assets/img/favicon-512x512.png" />
+    <splash src="www/assets/img/splash-screen.png" />
 </widget>
 
 
