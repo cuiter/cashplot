@@ -107,6 +107,12 @@ export class WebUI implements UI {
 
         this.onResize();
         window.addEventListener("resize", () => this.onResize());
+
+        /* eslint-disable */
+        // Mobile app: hide splash screen
+        if ((navigator as any).splashscreen)
+            (navigator as any).splashscreen.hide();
+        /* eslint-enable */
     }
 
     private isDebugModeEnabled(): boolean {
