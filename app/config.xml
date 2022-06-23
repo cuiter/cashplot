@@ -24,7 +24,7 @@
     <preference name="FadeSplashScreen" value="true" />
     <preference name="FadeSplashScreenDuration" value="500" />
     <preference name="SplashMaintainAspectRatio" value="true" />
-    <preference name="SplashScreenSpinnerColor" value="#fa5b0f" />
+    <preference name="ShowSplashScreenSpinner" value="false"/>
     <splash src="www/assets/img/splash-screen.png" />
 </widget>
 
