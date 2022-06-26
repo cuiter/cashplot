@@ -6,7 +6,7 @@
     "description": "Android port of the CashPlot web application",
     "scripts": {
         "configure": "cordova platform add android",
-        "build": "cordova build android"
+        "build": "cordova build --no-telemetry"
     },
     "devDependencies": {
         "cordova": "^11.0.0",

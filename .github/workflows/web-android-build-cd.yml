@@ -16,8 +16,8 @@ jobs:
                       npm i && \
                       npm run build && \
                       cd app && \
-                      cordova platform add android && \
-                      cordova build --no-telemetry && \
+                      npm run configure && \
+                      npm run build -- --versionCode=${{ github.run_number }} && \
                       cd .. && mkdir release && \
                       cp "$(find . -name '*.apk')" . && \
                       mv app-debug.apk release/CashPlot.apk && \

@@ -25,5 +25,4 @@ node_modules/
 /plugins/
 /platforms/
 
-debug.keystore
 .build-*.log
