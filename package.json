@@ -1,5 +1,7 @@
 {
     "name": "cashplot",
+    "author": "Casper Uiterwijk <contact@cuiter.me>",
+    "license": "AGPL-3.0-or-later",
     "private": true,
     "jest": {
         "preset": "ts-jest",
