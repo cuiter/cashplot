@@ -461,6 +461,17 @@ a {
     margin-right: 1.2rem;
 }
 
+.preferences-icon {
+    position: absolute;
+    right: 1.5rem;
+    top: 0.625rem;
+    width: 3.75rem;
+    height: 3.75rem;
+    padding: 0.5rem;
+    overflow: visible;
+    fill: var(--color-fill-icon);
+}
+
 /* Categories tab */
 
 .transaction-date-splitter {

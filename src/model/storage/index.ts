@@ -3,13 +3,12 @@ import { Storage, StorageDriver } from "../../interfaces";
 import { Preferences, Settings } from "../entities";
 import { assert } from "../../utils";
 
-// Each stored config section contains a version attribute,
-// which represents the version of the config format used for that specific section.
-// This can be used to perform backwards-compatible config format changes in the future.
+// === Configuration format ===
 
-// The version attribute is stored either as a .version property in case of a JSON object,
-// or a four-character base-10 representation of the version as a prefix in case of a "huge text" string.
-const hugeTextVersionPrefixLength = 4;
+// Each stored config section contains an associated version.
+
+// Whenever the config format changes in a backwards-incompatible way,
+// the version should be incremented, and converters should be added to parse configs from previous versions.
 
 // Note: version = 0 means there may be backwards-incompatible changes in the future.
 const settingsKey = "settings";
@@ -18,6 +17,10 @@ const preferencesKey = "preferences";
 const preferencesVersion = 0;
 const sourceDataPrefix = "source-data/";
 const sourceDataVersion = 0;
+
+// The version attribute is stored either as a .version property in case of a JSON object,
+// or a four-character base-10 representation of the version as a prefix in case of a "huge text" string.
+const hugeTextVersionPrefixLength = 4;
 
 export class StorageImpl implements Storage {
     public static inject = ["storageDriver"] as const;

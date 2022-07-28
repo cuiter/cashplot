@@ -27,6 +27,9 @@
             />
             <assignment-window-component v-if="openedWindow === 'assignment'" />
             <budget-window-component v-if="openedWindow === 'budget'" />
+            <preferences-edit-window-component
+                v-if="openedWindow === 'preferences-edit'"
+            />
         </div>
 
         <bottom-nav-component />
