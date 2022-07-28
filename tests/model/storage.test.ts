@@ -26,7 +26,9 @@ class StorageDriverMock implements StorageDriver {
     }
     loadHugeText(section: string): string | null {
         return Object.prototype.hasOwnProperty.call(this.valueStore, section)
-            ? this.valueStore[section]
+            ? typeof this.valueStore[section] == "string"
+                ? this.valueStore[section]
+                : JSON.stringify(this.valueStore[section])
             : null;
     }
     storeHugeText(section: string, text: string): void {
@@ -256,5 +258,40 @@ describe("StorageImpl", () => {
             "transactions1.csv",
             "transactions2.csv",
         ]);
+    });
+
+    test("should export sections to JSON", () => {
+        const storageDriver = new StorageDriverMock();
+        const storage = new StorageImpl(storageDriver);
+        storageDriver.storeHugeText("test-section-1", "test-1");
+        storageDriver.storeObject("test-section-2", {
+            "test-2": ["foo", "bar", 0.5, null],
+        });
+
+        const json = storage.exportJson();
+        const jsonObject = JSON.parse(json);
+
+        expect(jsonObject).toEqual({
+            "test-section-1": "test-1",
+            "test-section-2": '{"test-2":["foo","bar",0.5,null]}',
+        });
+    });
+
+    test("should import sections from JSON", () => {
+        const storageDriver = new StorageDriverMock();
+        const storage = new StorageImpl(storageDriver);
+        storageDriver.storeHugeText("test-section-1", "test-1");
+
+        storage.importJson(
+            '{"test-section-2": "test-2", "test-section-3": "test-3"}',
+        );
+
+        expect(storageDriver.listSections()).toEqual([
+            "test-section-2",
+            "test-section-3",
+        ]);
+
+        expect(storageDriver.loadHugeText("test-section-2")).toEqual("test-2");
+        expect(storageDriver.loadHugeText("test-section-3")).toEqual("test-3");
     });
 });

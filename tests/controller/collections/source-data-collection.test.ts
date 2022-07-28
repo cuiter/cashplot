@@ -82,6 +82,13 @@ export class StorageMock implements Storage {
     public removeSourceData(name: string) {
         delete this.sourceData[name];
     }
+
+    exportJson(): string {
+        throw new Error("Not implemented.");
+    }
+    importJson(jsonData: string) {
+        throw new Error("Not implemented.");
+    }
 }
 
 describe("SourceDataCollectionImpl", () => {

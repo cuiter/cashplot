@@ -2,6 +2,7 @@ import {
     CashFlowCalculator,
     CategoryCollection,
     SourceDataCollection,
+    Storage,
     TransactionAssigner,
     TransactionSearcher,
     UI,
@@ -34,6 +35,7 @@ export class WebUI implements UI {
         "assigner",
         "searcher",
         "cashFlow",
+        "storage",
     ] as const;
 
     constructor(
@@ -42,6 +44,7 @@ export class WebUI implements UI {
         private assigner: TransactionAssigner,
         private searcher: TransactionSearcher,
         private cashFlow: CashFlowCalculator,
+        private storage: Storage,
     ) {}
 
     public init(): void {
@@ -98,6 +101,7 @@ export class WebUI implements UI {
                 assigner: this.assigner,
                 searcher: this.searcher,
                 cashFlow: this.cashFlow,
+                storage: this.storage,
             },
             methods: {
                 handleError: handleError,

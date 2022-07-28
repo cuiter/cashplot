@@ -92,7 +92,7 @@ describe("LocalStorageDriver", () => {
         expect(sections).toEqual(["test-section-1", "test-section-2"]);
     });
 
-    test("can remove a section from localStorage", () => {
+    test("should remove section from localStorage", () => {
         const storageMock = new LocalStorageMock();
         const storageDriver = new LocalStorageDriver(storageMock);
         storageMock.setItem("test-section-1", testHugeText);

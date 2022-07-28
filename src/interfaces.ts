@@ -161,6 +161,9 @@ export interface Storage {
     storeSourceData(name: string, transactionData: string): void;
     loadSourceData(name: string): { transactionData: string };
     removeSourceData(name: string): void;
+
+    exportJson(): string;
+    importJson(jsonData: string): void;
 }
 
 export interface StorageDriver {

@@ -109,4 +109,34 @@ export class StorageImpl implements Storage {
     public removeSourceData(name: string) {
         this.storageDriver.removeSection(sourceDataPrefix + name);
     }
+
+    public exportJson(): string {
+        const exportObject: Record<string, string | null> = {};
+
+        for (const section of this.storageDriver.listSections()) {
+            exportObject[section] = this.storageDriver.loadHugeText(section);
+        }
+
+        return JSON.stringify(exportObject);
+    }
+
+    public importJson(jsonData: string) {
+        const exportObject: Record<string, string | null> =
+            JSON.parse(jsonData);
+
+        // Remove existing sections
+        for (const section of this.storageDriver.listSections()) {
+            this.storageDriver.removeSection(section);
+        }
+
+        // Load sections from JSON object
+        for (const section in exportObject) {
+            if (typeof exportObject[section] == "string") {
+                this.storageDriver.storeHugeText(
+                    section,
+                    exportObject[section] as string,
+                );
+            }
+        }
+    }
 }
