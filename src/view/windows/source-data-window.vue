@@ -2,9 +2,7 @@
     <div class="tab-contents full-size">
         <div class="sources-summary">
             <div>
-                <span class="sources-summary-stat">{{
-                    allSourceDataInfo.totalAccounts
-                }}</span>
+                <span class="sources-summary-stat">{{ allSourceDataInfo.totalAccounts }}</span>
                 <svg
                     class="sources-summary-icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -41,15 +39,10 @@
             </div>
         </div>
         <div class="collection-list">
-            <div
-                v-for="item of allSourceDataInfo.items"
-                class="collection-item source-data-item"
-            >
+            <div v-for="item of allSourceDataInfo.items" class="collection-item source-data-item">
                 <span class="source-data-name">{{ item.name }}</span>
                 <!--NOTE: If the viewport gets really small, change the date format-->
-                <span class="source-data-date">{{
-                    getInfoItemDisplayDate(item)
-                }}</span>
+                <span class="source-data-date">{{ getInfoItemDisplayDate(item) }}</span>
                 <span class="source-data-accounts">{{ item.nAccounts }}</span>
                 <svg
                     class="source-data-accounts-icon"
@@ -64,9 +57,7 @@
                     />
                 </svg>
                 <!--NOTE: Change the number format if the #items gets above 5 digits-->
-                <span class="source-data-transactions">{{
-                    item.nTransactions
-                }}</span>
+                <span class="source-data-transactions">{{ item.nTransactions }}</span>
                 <svg
                     class="source-data-transactions-icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -84,22 +75,16 @@
                     @click.native="onRemoveSourceDataPressed(item.name)"
                 />
             </div>
-            <div
-                v-if="allSourceDataInfo.length === 0"
-                class="no-source-data-message"
-            >
+            <div v-if="allSourceDataInfo.length === 0" class="no-source-data-message">
                 <span>Er zijn nog geen bronnen toegevoegd.</span>
                 <br /><br />
                 <ul>
                     <li>
-                        Selecteer een bank en druk op de "Open"-knop om naar de
-                        bankomgeving te navigeren
+                        Selecteer een bank en druk op de "Open"-knop om naar de bankomgeving te
+                        navigeren
                     </li>
                     <li>Exporteer je transacties in CSV-formaat.</li>
-                    <li>
-                        Druk vervolgens op de "Voeg Toe"-knop om dit CSV-bestand
-                        te gebruiken.
-                    </li>
+                    <li>Druk vervolgens op de "Voeg Toe"-knop om dit CSV-bestand te gebruiken.</li>
                 </ul>
             </div>
         </div>
@@ -110,10 +95,7 @@
                 :option-names="availableSourcesNames"
                 :drop-down="false"
             />
-            <button
-                class="sources-entry-open-button button"
-                @click="onOpenButtonPressed"
-            >
+            <button class="sources-entry-open-button button" @click="onOpenButtonPressed">
                 Open
             </button>
             <label class="button" for="source-data-upload">Voeg toe</label>
@@ -195,9 +177,7 @@ export default Vue.extend({
                 },
             } as Record<string, { name: string; url: string }>,
             infoDateFormat: longInfoDateFormat,
-            resizeEventHandler: null as
-                | ((this: Window, ev: UIEvent) => void)
-                | null,
+            resizeEventHandler: null as ((this: Window, ev: UIEvent) => void) | null,
         };
     },
 
@@ -209,9 +189,7 @@ export default Vue.extend({
         availableSourcesNames(): string[] {
             const sourceProperties = this.sourceProperties;
 
-            return Object.keys(sourceProperties).map(
-                (source) => sourceProperties[source].name,
-            );
+            return Object.keys(sourceProperties).map((source) => sourceProperties[source].name);
         },
 
         allSourceDataInfo() {

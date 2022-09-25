@@ -25,9 +25,7 @@ function areParsedTransactionsValid(transactions: SourceTransaction[]) {
     expect(transactions[1].amount).toBe(-1000 * DECIMAL);
     expect(transactions[1].account).toBe("NL00SNSB1234567890");
     expect(transactions[1].contraAccount).toBe("NL00SNSB1234567892");
-    expect(transactions[1].contraAccountName).toBe(
-        "Mr. G SNS Internet Savings",
-    );
+    expect(transactions[1].contraAccountName).toBe("Mr. G SNS Internet Savings");
     expect(transactions[1].description).toBe("Savings");
 
     expect(transactions[2].date).toEqual(new Date("2021-07-12"));
@@ -44,26 +42,20 @@ function areParsedTransactionsValid(transactions: SourceTransaction[]) {
     expect(transactions[3].account).toBe("NL00SNSB1234567890");
     expect(transactions[3].contraAccount).toBe(null);
     expect(transactions[3].contraAccountName).toBe(null);
-    expect(transactions[3].description).toBe(
-        "Costs usage checkings account including 1 card",
-    );
+    expect(transactions[3].description).toBe("Costs usage checkings account including 1 card");
 }
 
 describe("INGSource", () => {
     test('should recognize valid "headers" of a CSV export', () => {
         const transactionData = testTransactionsCsvFormat;
 
-        expect(new SNSBankCSVSource().hasValidHeader(transactionData)).toBe(
-            true,
-        );
+        expect(new SNSBankCSVSource().hasValidHeader(transactionData)).toBe(true);
     });
 
     test('should recognize valid "headers" of a CSV2004 export', () => {
         const transactionData = testTransactionsCsv2004Format;
 
-        expect(new SNSBankCSVSource().hasValidHeader(transactionData)).toBe(
-            true,
-        );
+        expect(new SNSBankCSVSource().hasValidHeader(transactionData)).toBe(true);
     });
 
     test('should recognize invalid "headers" of a CSV export', () => {
@@ -82,9 +74,7 @@ describe("INGSource", () => {
     test("should load transactions from a CSV export", () => {
         const transactionData = testTransactionsCsvFormat;
 
-        const transactions = new SNSBankCSVSource().parseTransactions(
-            transactionData,
-        );
+        const transactions = new SNSBankCSVSource().parseTransactions(transactionData);
 
         areParsedTransactionsValid(transactions);
     });
@@ -92,9 +82,7 @@ describe("INGSource", () => {
     test('should load transactions from a "CSV2004" export', () => {
         const transactionData = testTransactionsCsv2004Format;
 
-        const transactions = new SNSBankCSVSource().parseTransactions(
-            transactionData,
-        );
+        const transactions = new SNSBankCSVSource().parseTransactions(transactionData);
 
         areParsedTransactionsValid(transactions);
     });
@@ -103,9 +91,9 @@ describe("INGSource", () => {
         const invalidTransactionDataExamples = ["", "{}", '""'];
 
         for (const example of invalidTransactionDataExamples) {
-            expect(() =>
-                new SNSBankCSVSource().parseTransactions(example),
-            ).toThrow("Errors while parsing transaction data");
+            expect(() => new SNSBankCSVSource().parseTransactions(example)).toThrow(
+                "Errors while parsing transaction data",
+            );
         }
 
         expect(() =>
@@ -128,9 +116,7 @@ describe("INGSource", () => {
             new SNSBankCSVSource().parseTransactions(
                 "28-06-2021,NL00SNSB1234567890,NL01WORK0987654321,Company Inc.,,,,EUR,0.00,EUR,not,28-06-2021,28-06-2021,6305,IOS,5976384,,'Salary for June 2020’,1",
             ),
-        ).toThrow(
-            'Invalid transaction data on line 1: Could not determine amount from value: "not"',
-        );
+        ).toThrow('Invalid transaction data on line 1: Could not determine amount from value: "not"');
 
         expect(() =>
             new SNSBankCSVSource().parseTransactions(

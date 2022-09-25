@@ -1,9 +1,5 @@
 <template>
-    <button
-        class="button flex-item-full"
-        @click="opened = !opened"
-        @blur="opened = false"
-    >
+    <button class="button flex-item-full" @click="opened = !opened" @blur="opened = false">
         <div
             class="option-selection-options"
             :class="{
@@ -12,24 +8,13 @@
                 'drop-up': !dropDown,
             }"
         >
-            <span
-                v-for="(option, index) in options"
-                @click="onOptionSelected(option)"
-            >
+            <span v-for="(option, index) in options" @click="onOptionSelected(option)">
                 {{ optionNames[index] || option }}
             </span>
         </div>
-        <span class="float-left option-selection-name">{{
-            selectedOptionName
-        }}</span>
-        <span
-            v-if="dropDown === false"
-            class="float-right option-selection-tick"
-            >▲</span
-        >
-        <span v-if="dropDown === true" class="float-right option-selection-tick"
-            >▼</span
-        >
+        <span class="float-left option-selection-name">{{ selectedOptionName }}</span>
+        <span v-if="dropDown === false" class="float-right option-selection-tick">▲</span>
+        <span v-if="dropDown === true" class="float-right option-selection-tick">▼</span>
     </button>
 </template>
 

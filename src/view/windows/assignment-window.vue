@@ -29,10 +29,7 @@ export default Vue.extend({
         allTransactions() {
             return this.$root.$data.assigner
                 .allTransactions()
-                .filter(
-                    (transaction: AssignedTransaction) =>
-                        transaction.assignments.length === 0,
-                );
+                .filter((transaction: AssignedTransaction) => transaction.assignments.length === 0);
         },
         allCategories() {
             return this.$root.$data.categories.list();

@@ -25,26 +25,17 @@ export interface Source {
 
 export class SourcesImpl implements Sources {
     constructor() {}
-    public parseTransactions(
-        transactionsData: string,
-    ): Array<SourceTransaction> {
-        const sources: Array<Source> = [
-            new INGBankCSVSource(),
-            new SNSBankCSVSource(),
-        ];
+    public parseTransactions(transactionsData: string): Array<SourceTransaction> {
+        const sources: Array<Source> = [new INGBankCSVSource(), new SNSBankCSVSource()];
 
         for (const source of sources) {
             if (source.hasValidHeader(transactionsData)) {
                 const transactions = source.parseTransactions(transactionsData);
 
                 if (transactions.length === 0) {
-                    throw new Error(
-                        "No transactions were present in the given data",
-                    );
+                    throw new Error("No transactions were present in the given data");
                 } else {
-                    return transactions.sort(
-                        (a, b) => a.date.getTime() - b.date.getTime(),
-                    );
+                    return transactions.sort((a, b) => a.date.getTime() - b.date.getTime());
                 }
             }
         }

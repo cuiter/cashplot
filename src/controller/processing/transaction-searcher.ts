@@ -1,10 +1,6 @@
 import { Observable } from "@daign/observable";
 import { TransactionAssigner } from "./transaction-assigner";
-import {
-    AssignedTransaction,
-    MAX_CACHE_ENTRIES,
-    SearchQuery,
-} from "../../model/entities";
+import { AssignedTransaction, MAX_CACHE_ENTRIES, SearchQuery } from "../../model/entities";
 
 /**
  * Takes assigned transactions from TransactionAssigner and performs search queries.
@@ -17,10 +13,7 @@ export interface TransactionSearcher {
     subscribeToChanges(callback: () => void): void;
 }
 
-export class TransactionSearcherImpl
-    extends Observable
-    implements TransactionSearcher
-{
+export class TransactionSearcherImpl extends Observable implements TransactionSearcher {
     public static inject = ["assigner"] as const;
 
     private searchCache: {
@@ -45,8 +38,7 @@ export class TransactionSearcherImpl
                 cacheEntry.query.filterId === query.filterId &&
                 cacheEntry.query.period?.type === query.period?.type &&
                 cacheEntry.query.period?.year === query.period?.year &&
-                cacheEntry.query.period?.periodNumber ===
-                    query.period?.periodNumber
+                cacheEntry.query.period?.periodNumber === query.period?.periodNumber
             ) {
                 return cacheEntry.results;
             }
@@ -58,16 +50,12 @@ export class TransactionSearcherImpl
             (transaction) =>
                 transaction.assignments.some(
                     (filter) =>
-                        (filter.name === query.categoryName ||
-                            query.categoryName === undefined) &&
+                        (filter.name === query.categoryName || query.categoryName === undefined) &&
                         filter.type === "Category" &&
-                        (filter.filterType === query.filterType ||
-                            query.filterType === undefined) &&
-                        (filter.filterId === query.filterId ||
-                            query.filterId === undefined),
+                        (filter.filterType === query.filterType || query.filterType === undefined) &&
+                        (filter.filterId === query.filterId || query.filterId === undefined),
                 ) &&
-                (query.period === undefined ||
-                    query.period.containsDate(transaction.date)),
+                (query.period === undefined || query.period.containsDate(transaction.date)),
         );
 
         if (this.searchCache.length >= MAX_CACHE_ENTRIES) {

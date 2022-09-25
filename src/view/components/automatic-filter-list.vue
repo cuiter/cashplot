@@ -8,12 +8,8 @@
             }"
             @click="openFilter(filter.id)"
         >
-            <span class="source-data-name text-center">{{
-                filter.displayName
-            }}</span>
-            <span class="source-data-transactions">{{
-                transactionsInFilter(filter.id)
-            }}</span>
+            <span class="source-data-name text-center">{{ filter.displayName }}</span>
+            <span class="source-data-transactions">{{ transactionsInFilter(filter.id) }}</span>
             <svg
                 class="source-data-transactions-icon"
                 xmlns="http://www.w3.org/2000/svg"
@@ -49,18 +45,14 @@ export default Vue.extend({
     },
     computed: {
         textFilters: function () {
-            return this.filters.filter(
-                (filter) => filter instanceof TextFilter,
-            );
+            return this.filters.filter((filter) => filter instanceof TextFilter);
         },
     },
     methods: {
         addFilter() {
             const categoryName = this.$props.categoryName;
 
-            const existingFilters = (
-                this as any
-            ).$root.$data.categories.getFilters(categoryName);
+            const existingFilters = (this as any).$root.$data.categories.getFilters(categoryName);
             const newFilter = new TextFilter(
                 createUniqueId(),
                 findNewName(
@@ -91,10 +83,7 @@ export default Vue.extend({
         },
 
         removeFilter(filterId: number) {
-            this.$root.$data.categories.removeFilters(
-                this.$props.categoryName,
-                [filterId],
-            );
+            this.$root.$data.categories.removeFilters(this.$props.categoryName, [filterId]);
         },
 
         transactionsInFilter: function (filterId: number) {

@@ -30,11 +30,7 @@ export interface CategoryCollection {
      * Note: The budget must be multiplied by entities.DECIMAL to become an integer,
      *       to avoid floating point storage-related inconsistencies.
      */
-    setBudget(
-        name: string,
-        budgetAmount: number | null,
-        budgetPeriodType: PeriodType,
-    ): void;
+    setBudget(name: string, budgetAmount: number | null, budgetPeriodType: PeriodType): void;
 
     /**
      * Returns the budget for the specified category.
@@ -61,10 +57,7 @@ export interface CategoryCollection {
     subscribeToChanges(callback: () => void): void;
 }
 
-export class CategoryCollectionImpl
-    extends Observable
-    implements CategoryCollection
-{
+export class CategoryCollectionImpl extends Observable implements CategoryCollection {
     public static inject = ["storage"] as const;
 
     private settings: Settings;
@@ -115,9 +108,7 @@ export class CategoryCollectionImpl
     public rename(name: string, newName: string): boolean {
         if (name === newName) return true;
 
-        const existingNames = this.settings.categories.map(
-            (category) => category.name,
-        );
+        const existingNames = this.settings.categories.map((category) => category.name);
         if (existingNames.indexOf(newName) !== -1) {
             return false;
         }
@@ -134,9 +125,7 @@ export class CategoryCollectionImpl
     }
 
     private get(name: string): Category {
-        const category = this.settings.categories.filter(
-            (category) => category.name == name,
-        )[0];
+        const category = this.settings.categories.filter((category) => category.name == name)[0];
         if (category === undefined) {
             throw new Error('Could not find category named "' + name + '"');
         }
@@ -144,11 +133,7 @@ export class CategoryCollectionImpl
         return category;
     }
 
-    public setBudget(
-        name: string,
-        budgetAmount: number | null,
-        budgetPeriodType: PeriodType,
-    ): void {
+    public setBudget(name: string, budgetAmount: number | null, budgetPeriodType: PeriodType): void {
         const category = this.get(name);
         category.budgetAmount = budgetAmount;
         category.budgetPeriodType = budgetPeriodType;

@@ -37,9 +37,7 @@ function areParsedTransactionsValid(transactions: SourceTransaction[]) {
     expect(transactions[1].account).toBe("NL00MAIN1234567890");
     expect(transactions[1].contraAccount).toBe("NL00MAIN1234567890");
     expect(transactions[1].contraAccountName).toBe("Mr. G");
-    expect(transactions[1].description).toBe(
-        "To Orange Savings Account ABC123456",
-    );
+    expect(transactions[1].description).toBe("To Orange Savings Account ABC123456");
 
     expect(transactions[2].date).toEqual(new Date("2021-06-28"));
     expect(transactions[2].amount).toBe(4000 * DECIMAL);
@@ -53,17 +51,13 @@ describe("INGSource", () => {
     test("should recognize valid headers of a Dutch CSV export", () => {
         const transactionData = testTransactionsNlNewFormat;
 
-        expect(new INGBankCSVSource().hasValidHeader(transactionData)).toBe(
-            true,
-        );
+        expect(new INGBankCSVSource().hasValidHeader(transactionData)).toBe(true);
     });
 
     test("should recognize valid headers of an English CSV export", () => {
         const transactionData = testTransactionsEnOldFormat;
 
-        expect(new INGBankCSVSource().hasValidHeader(transactionData)).toBe(
-            true,
-        );
+        expect(new INGBankCSVSource().hasValidHeader(transactionData)).toBe(true);
     });
 
     test("should recognize invalid headers of a CSV export", () => {
@@ -75,9 +69,7 @@ describe("INGSource", () => {
     test("should load transactions from a Dutch CSV export", () => {
         const transactionData = testTransactionsNlNewFormat;
 
-        const transactions = new INGBankCSVSource().parseTransactions(
-            transactionData,
-        );
+        const transactions = new INGBankCSVSource().parseTransactions(transactionData);
 
         areParsedTransactionsValid(transactions);
     });
@@ -85,35 +77,29 @@ describe("INGSource", () => {
     test("should load transactions from an English CSV export", () => {
         const transactionData = testTransactionsEnOldFormat;
 
-        const transactions = new INGBankCSVSource().parseTransactions(
-            transactionData,
-        );
+        const transactions = new INGBankCSVSource().parseTransactions(transactionData);
 
         areParsedTransactionsValid(transactions);
     });
 
     test("should signal an error if an invalid CSV export is given", () => {
         for (const example of invalidTransactionDataExamples) {
-            expect(() =>
-                new INGBankCSVSource().parseTransactions(example),
-            ).toThrow("Errors while parsing transaction data");
+            expect(() => new INGBankCSVSource().parseTransactions(example)).toThrow(
+                "Errors while parsing transaction data",
+            );
         }
 
         expect(() =>
             new INGBankCSVSource().parseTransactions(
                 '"Date","Name / Description","Account","Counterparty","Code","Debit/credit","Amount (EUR)","Transaction type","Notifications"\n,bol.com b.v.,NL00MAIN1234567890,NL27INGB0000026500,ID,Debit,50,iDEAL,Name: bol.com b.v. Description: 90340932902 2492049402',
             ),
-        ).toThrow(
-            "Invalid transaction data on line 2: Could not determine date (empty column)",
-        );
+        ).toThrow("Invalid transaction data on line 2: Could not determine date (empty column)");
 
         expect(() =>
             new INGBankCSVSource().parseTransactions(
                 '"Date","Name / Description","Account","Counterparty","Code","Debit/credit","Amount (EUR)","Transaction type","Notifications"\nabcd,bol.com b.v.,NL00MAIN1234567890,NL27INGB0000026500,ID,Debit,50,iDEAL,Name: bol.com b.v. Description: 90340932902 2492049402',
             ),
-        ).toThrow(
-            'Invalid transaction data on line 2: Could not determine date from value: "abcd"',
-        );
+        ).toThrow('Invalid transaction data on line 2: Could not determine date from value: "abcd"');
 
         expect(() =>
             new INGBankCSVSource().parseTransactions(

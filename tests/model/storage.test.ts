@@ -117,18 +117,15 @@ describe("StorageImpl", () => {
 
         storage.storeSettings(testSettings);
 
-        expect(
-            JSON.parse(storageDriver.loadHugeText("settings") ?? "null"),
-        ).toEqual(testStoredSettings);
+        expect(JSON.parse(storageDriver.loadHugeText("settings") ?? "null")).toEqual(
+            testStoredSettings,
+        );
     });
 
     test("should load settings from persistent storage", () => {
         const storageDriver = new StorageDriverMock();
         const storage = new StorageImpl(storageDriver);
-        storageDriver.storeHugeText(
-            "settings",
-            JSON.stringify(testStoredSettings),
-        );
+        storageDriver.storeHugeText("settings", JSON.stringify(testStoredSettings));
 
         const settings = storage.loadSettings();
 
@@ -150,18 +147,15 @@ describe("StorageImpl", () => {
 
         storage.storePreferences(testPreferences);
 
-        expect(
-            JSON.parse(storageDriver.loadHugeText("preferences") ?? "null"),
-        ).toEqual(testStoredPreferences);
+        expect(JSON.parse(storageDriver.loadHugeText("preferences") ?? "null")).toEqual(
+            testStoredPreferences,
+        );
     });
 
     test("should load preferences from persistent storage", () => {
         const storageDriver = new StorageDriverMock();
         const storage = new StorageImpl(storageDriver);
-        storageDriver.storeHugeText(
-            "preferences",
-            JSON.stringify(testStoredPreferences),
-        );
+        storageDriver.storeHugeText("preferences", JSON.stringify(testStoredPreferences));
 
         const preferences = storage.loadPreferences();
 
@@ -181,21 +175,15 @@ describe("StorageImpl", () => {
         const storageDriver = new StorageDriverMock();
         const storage = new StorageImpl(storageDriver);
 
-        storage.storeSourceData(
-            "transactions1.csv",
-            "test,transactions,data\n1,2,3",
-        );
-        storage.storeSourceData(
-            "transactions2.csv",
-            "transactions,data,test\n9,8,7",
-        );
+        storage.storeSourceData("transactions1.csv", "test,transactions,data\n1,2,3");
+        storage.storeSourceData("transactions2.csv", "transactions,data,test\n9,8,7");
 
-        expect(
-            storageDriver.loadHugeText("source-data/transactions1.csv"),
-        ).toEqual("0000test,transactions,data\n1,2,3");
-        expect(
-            storageDriver.loadHugeText("source-data/transactions2.csv"),
-        ).toEqual("0000transactions,data,test\n9,8,7");
+        expect(storageDriver.loadHugeText("source-data/transactions1.csv")).toEqual(
+            "0000test,transactions,data\n1,2,3",
+        );
+        expect(storageDriver.loadHugeText("source-data/transactions2.csv")).toEqual(
+            "0000transactions,data,test\n9,8,7",
+        );
     });
 
     test("should load source data from persistent storage", () => {
@@ -208,9 +196,7 @@ describe("StorageImpl", () => {
 
         const sourceData = storage.loadSourceData("transactions1.csv");
 
-        expect(sourceData.transactionData).toEqual(
-            "test,transactions,data\n1,2,3",
-        );
+        expect(sourceData.transactionData).toEqual("test,transactions,data\n1,2,3");
     });
 
     test("should signal an error when requested source data isn't available in persistent storage", () => {
@@ -232,9 +218,7 @@ describe("StorageImpl", () => {
 
         storage.removeSourceData("transactions1.csv");
 
-        expect(
-            storageDriver.loadHugeText("source-data/transactions1.csv"),
-        ).toBeNull();
+        expect(storageDriver.loadHugeText("source-data/transactions1.csv")).toBeNull();
     });
 
     test("should list available source data entries from storage", () => {
@@ -251,20 +235,14 @@ describe("StorageImpl", () => {
 
         const sourceDataNames = storage.listSourceDataNames();
 
-        expect(sourceDataNames).toEqual([
-            "transactions1.csv",
-            "transactions2.csv",
-        ]);
+        expect(sourceDataNames).toEqual(["transactions1.csv", "transactions2.csv"]);
     });
 
     test("should export sections to JSON", () => {
         const storageDriver = new StorageDriverMock();
         const storage = new StorageImpl(storageDriver);
         storageDriver.storeHugeText("test-section-1", "test-1");
-        storageDriver.storeHugeText(
-            "test-section-2",
-            '{"test-2":["foo","bar",0.5,null]}',
-        );
+        storageDriver.storeHugeText("test-section-2", '{"test-2":["foo","bar",0.5,null]}');
 
         const json = storage.exportJson();
         const jsonObject = JSON.parse(json);
@@ -280,14 +258,9 @@ describe("StorageImpl", () => {
         const storage = new StorageImpl(storageDriver);
         storageDriver.storeHugeText("test-section-1", "test-1");
 
-        storage.importJson(
-            '{"test-section-2": "test-2", "test-section-3": "test-3"}',
-        );
+        storage.importJson('{"test-section-2": "test-2", "test-section-3": "test-3"}');
 
-        expect(storageDriver.listSections()).toEqual([
-            "test-section-2",
-            "test-section-3",
-        ]);
+        expect(storageDriver.listSections()).toEqual(["test-section-2", "test-section-3"]);
 
         expect(storageDriver.loadHugeText("test-section-2")).toEqual("test-2");
         expect(storageDriver.loadHugeText("test-section-3")).toEqual("test-3");

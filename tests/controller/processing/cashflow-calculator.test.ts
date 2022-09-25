@@ -47,19 +47,13 @@ const testTransactions = [
     ),
 ];
 
-class TransactionSearcherMock
-    extends Observable
-    implements TransactionSearcher
-{
+class TransactionSearcherMock extends Observable implements TransactionSearcher {
     // Limited version of searchTransactions, used for testing whether search queries are passed correctly.
     searchTransactions(searchQuery: SearchQuery): AssignedTransaction[] {
         let assignedTransactions = testTransactions;
 
         if (searchQuery.period?.year === 2021) {
-            assignedTransactions = [
-                assignedTransactions[0],
-                assignedTransactions[1],
-            ];
+            assignedTransactions = [assignedTransactions[0], assignedTransactions[1]];
         } else if (searchQuery.period?.year === 2020) {
             assignedTransactions = [assignedTransactions[2]];
         }
@@ -67,8 +61,7 @@ class TransactionSearcherMock
         if (searchQuery.categoryName) {
             assignedTransactions = assignedTransactions.filter((transaction) =>
                 transaction.assignments.some(
-                    (assignment) =>
-                        assignment.name === searchQuery.categoryName,
+                    (assignment) => assignment.name === searchQuery.categoryName,
                 ),
             );
         }

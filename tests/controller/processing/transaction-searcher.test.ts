@@ -63,10 +63,7 @@ const testTransactions = [
     ),
 ];
 
-class TransactionAssignerMock
-    extends Observable
-    implements TransactionAssigner
-{
+class TransactionAssignerMock extends Observable implements TransactionAssigner {
     constructor(private transactions: AssignedTransaction[]) {
         super();
     }
@@ -86,10 +83,7 @@ describe("TransactionSearcher", () => {
 
     test("should search for category-specific transactions", () => {
         const transactionSearcher = injector
-            .provideValue(
-                "assigner",
-                new TransactionAssignerMock(testTransactions),
-            )
+            .provideValue("assigner", new TransactionAssignerMock(testTransactions))
             .injectClass(TransactionSearcherImpl);
 
         const transactions = transactionSearcher.searchTransactions({
@@ -97,12 +91,8 @@ describe("TransactionSearcher", () => {
         });
 
         expect(transactions.length).toBe(2);
-        expect(transactions[0].description).toEqual(
-            "Invoice 934830293, laptop model VT94",
-        );
-        expect(transactions[1].description).toEqual(
-            "13th of November tire sale, 4x sports tires",
-        );
+        expect(transactions[0].description).toEqual("Invoice 934830293, laptop model VT94");
+        expect(transactions[1].description).toEqual("13th of November tire sale, 4x sports tires");
 
         const transactionsEmpty = transactionSearcher.searchTransactions({
             categoryName: "NonexistentCategory",
@@ -113,10 +103,7 @@ describe("TransactionSearcher", () => {
 
     test("should search for filter type-specific transactions", () => {
         const transactionSearcher = injector
-            .provideValue(
-                "assigner",
-                new TransactionAssignerMock(testTransactions),
-            )
+            .provideValue("assigner", new TransactionAssignerMock(testTransactions))
             .injectClass(TransactionSearcherImpl);
 
         const transactionsManual = transactionSearcher.searchTransactions({
@@ -124,9 +111,7 @@ describe("TransactionSearcher", () => {
         });
 
         expect(transactionsManual.length).toBe(3);
-        expect(transactionsManual[0].description).toEqual(
-            "Invoice 934830293, laptop model VT94",
-        );
+        expect(transactionsManual[0].description).toEqual("Invoice 934830293, laptop model VT94");
         expect(transactionsManual[1].description).toEqual("Lunch");
         expect(transactionsManual[2].description).toEqual(
             "13th of November tire sale, 4x sports tires",
@@ -137,9 +122,7 @@ describe("TransactionSearcher", () => {
         });
 
         expect(transactionsAutomatic.length).toBe(2);
-        expect(transactionsAutomatic[0].description).toEqual(
-            "Ticket 2022-293302",
-        );
+        expect(transactionsAutomatic[0].description).toEqual("Ticket 2022-293302");
         expect(transactionsAutomatic[1].description).toEqual(
             "13th of November tire sale, 4x sports tires",
         );
@@ -147,10 +130,7 @@ describe("TransactionSearcher", () => {
 
     test("should search for filter-specific transactions", () => {
         const transactionSearcher = injector
-            .provideValue(
-                "assigner",
-                new TransactionAssignerMock(testTransactions),
-            )
+            .provideValue("assigner", new TransactionAssignerMock(testTransactions))
             .injectClass(TransactionSearcherImpl);
 
         const transactionsFirst = transactionSearcher.searchTransactions({
@@ -172,10 +152,7 @@ describe("TransactionSearcher", () => {
 
     test("should search for transactions within a specific period", () => {
         const transactionSearcher = injector
-            .provideValue(
-                "assigner",
-                new TransactionAssignerMock(testTransactions),
-            )
+            .provideValue("assigner", new TransactionAssignerMock(testTransactions))
             .injectClass(TransactionSearcherImpl);
 
         const expectedSearchResults = [
@@ -191,10 +168,7 @@ describe("TransactionSearcher", () => {
                 new Period(PeriodType.Quarter, 2021, 4),
                 ["Invoice 934830293, laptop model VT94", "Lunch"],
             ],
-            [
-                new Period(PeriodType.Month, 2021, 11),
-                ["Invoice 934830293, laptop model VT94"],
-            ],
+            [new Period(PeriodType.Month, 2021, 11), ["Invoice 934830293, laptop model VT94"]],
             [new Period(PeriodType.Week, 2022, 8), ["Ticket 2022-293302"]],
             [new Period(PeriodType.Day, 2021, 286), ["Lunch"]],
         ];
@@ -214,9 +188,7 @@ describe("TransactionSearcher", () => {
     });
 
     test("should recalculate its results when the underlying data is changed", () => {
-        const transactionAssigner = new TransactionAssignerMock(
-            testTransactions,
-        );
+        const transactionAssigner = new TransactionAssignerMock(testTransactions);
         const transactionSearcher = injector
             .provideValue("assigner", transactionAssigner)
             .injectClass(TransactionSearcherImpl);
@@ -226,12 +198,8 @@ describe("TransactionSearcher", () => {
         });
 
         expect(searchResults.length).toBe(2);
-        expect(searchResults[0].description).toEqual(
-            "Invoice 934830293, laptop model VT94",
-        );
-        expect(searchResults[1].description).toEqual(
-            "13th of November tire sale, 4x sports tires",
-        );
+        expect(searchResults[0].description).toEqual("Invoice 934830293, laptop model VT94");
+        expect(searchResults[1].description).toEqual("13th of November tire sale, 4x sports tires");
 
         transactionAssigner.changeTransactions(testTransactions.slice(0, 2));
 
@@ -240,8 +208,6 @@ describe("TransactionSearcher", () => {
         });
 
         expect(searchResultsChanged.length).toBe(1);
-        expect(searchResultsChanged[0].description).toEqual(
-            "Invoice 934830293, laptop model VT94",
-        );
+        expect(searchResultsChanged[0].description).toEqual("Invoice 934830293, laptop model VT94");
     });
 });

@@ -39,10 +39,7 @@ self.addEventListener("install", (event) => {
                         cache
                             .add(url)
                             .catch((err) =>
-                                console.log(
-                                    "Install: failed to fetch " + url + ": ",
-                                    err,
-                                ),
+                                console.log("Install: failed to fetch " + url + ": ", err),
                             ),
                     ),
                 ),
@@ -82,12 +79,7 @@ self.addEventListener("fetch", function (event) {
             // Start fetching the latest content from the server
             const fetchContent = fetch(event.request)
                 // Then we open our cache
-                .then((response) =>
-                    Promise.all([
-                        caches.open(CACHE_NAME),
-                        Promise.resolve(response),
-                    ]),
-                )
+                .then((response) => Promise.all([caches.open(CACHE_NAME), Promise.resolve(response)]))
                 // Then we put the request into the cache, so we have it offline next time
                 .then(([cache, response]) => {
                     // We have to clone the response as response streams can only be read once
@@ -96,10 +88,7 @@ self.addEventListener("fetch", function (event) {
                     return response;
                 })
                 .catch((err) => {
-                    console.log(
-                        "Failed to fetch " + event.request.url + ": ",
-                        err,
-                    );
+                    console.log("Failed to fetch " + event.request.url + ": ", err);
                 });
 
             // Check whether we have a matching response for this request in our cache

@@ -85,10 +85,7 @@ export class TextFilter extends Filter {
             "filterType must be either 'wildcard' or 'regexp'",
         );
 
-        if (
-            this.matchPatterns.contraAccount !== "" ||
-            this.matchPatterns.description !== ""
-        ) {
+        if (this.matchPatterns.contraAccount !== "" || this.matchPatterns.description !== "") {
             this.matchers = {
                 contraAccount: new RegExp(
                     this.matchType === "wildcard"
@@ -188,9 +185,7 @@ export class Assignment {
         public filterType: string, // Name of the filter type (e.g. TextFilter)
     ) {
         assert(
-            type === "Category" ||
-                type === "Account" ||
-                type === "ContraAccount",
+            type === "Category" || type === "Account" || type === "ContraAccount",
             "Assignment.type must be one of: Category, Account, ContraAccount",
         );
         assert(
@@ -201,10 +196,7 @@ export class Assignment {
 }
 
 export class AssignedTransaction extends SourceTransaction {
-    constructor(
-        transaction: SourceTransaction,
-        public readonly assignments: Assignment[] = [],
-    ) {
+    constructor(transaction: SourceTransaction, public readonly assignments: Assignment[] = []) {
         super(
             transaction.date,
             transaction.amount,

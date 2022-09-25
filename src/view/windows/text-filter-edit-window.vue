@@ -28,9 +28,7 @@
         <div class="tab-splitter"></div>
 
         <div class="full-width flex-center position-relative">
-            <span class="sub-tab-heading margin-top-small"
-                >Overeenkomende transacties</span
-            >
+            <span class="sub-tab-heading margin-top-small">Overeenkomende transacties</span>
             <button
                 v-if="matchingTransactionsExpanded === false"
                 class="button expand-button"
@@ -93,12 +91,10 @@ export default Vue.extend({
         this.categoryName = (this as any).openedWindowEntry.categoryName;
         this.filterId = (this as any).openedWindowEntry.filterId;
 
-        const categoryFilters: TextFilter[] = (
-            this as any
-        ).$root.$data.categories.getFilters(this.categoryName);
-        const filter = categoryFilters.filter(
-            (filter) => filter.id === this.filterId,
-        )[0];
+        const categoryFilters: TextFilter[] = (this as any).$root.$data.categories.getFilters(
+            this.categoryName,
+        );
+        const filter = categoryFilters.filter((filter) => filter.id === this.filterId)[0];
 
         if (filter === undefined) {
             // Filter does not exist anymore.
@@ -113,31 +109,21 @@ export default Vue.extend({
     },
     methods: {
         removeFilter: function () {
-            this.$root.$data.categories.removeFilters(this.categoryName, [
-                this.filterId,
-            ]);
+            this.$root.$data.categories.removeFilters(this.categoryName, [this.filterId]);
             (this as any).closeWindow();
         },
         updateFilter: function () {
             if (this.filterId !== null) {
-                let changedFilter = new TextFilter(
-                    this.filterId,
-                    this.displayName,
-                    this.matchType,
-                    {
-                        contraAccount: this.contraAccountPattern,
-                        description: this.descriptionPattern,
-                    },
-                );
+                let changedFilter = new TextFilter(this.filterId, this.displayName, this.matchType, {
+                    contraAccount: this.contraAccountPattern,
+                    description: this.descriptionPattern,
+                });
 
-                this.$root.$data.categories.addFilters(this.categoryName, [
-                    changedFilter,
-                ]);
+                this.$root.$data.categories.addFilters(this.categoryName, [changedFilter]);
             }
         },
         toggleMatchingTransactionsExpanded: function () {
-            this.matchingTransactionsExpanded =
-                !this.matchingTransactionsExpanded;
+            this.matchingTransactionsExpanded = !this.matchingTransactionsExpanded;
         },
     },
 });

@@ -42,13 +42,7 @@ export default Vue.extend({
     data: () => {
         return {
             typeOptions: Object.values(PeriodType) as string[],
-            typeDisplayOptions: [
-                "Jaar",
-                "Kwartaal",
-                "Maand",
-                "Week",
-                "Dag",
-            ] as string[],
+            typeDisplayOptions: ["Jaar", "Kwartaal", "Maand", "Week", "Dag"] as string[],
             yearOptions: [] as string[],
             periodOptions: [] as string[],
             periodNames: [] as string[],
@@ -82,18 +76,11 @@ export default Vue.extend({
 
             this.$data.year = endYear.toString();
             for (
-                let periodNumber =
-                    PeriodsPerYear[this.$data.type as PeriodType];
+                let periodNumber = PeriodsPerYear[this.$data.type as PeriodType];
                 periodNumber >= 1;
                 periodNumber--
             ) {
-                if (
-                    new Period(
-                        this.$data.type,
-                        endYear,
-                        periodNumber,
-                    ).containsDate(endDate)
-                ) {
+                if (new Period(this.$data.type, endYear, periodNumber).containsDate(endDate)) {
                     this.$data.period = periodNumber.toString();
                     break;
                 }
@@ -140,14 +127,10 @@ export default Vue.extend({
                 ];
             } else if (this.type === PeriodType.Week) {
                 this.periodOptions = range(1, 53).map((num) => num.toString());
-                this.periodNames = range(1, 53).map(
-                    (weekNumber) => "Week " + weekNumber.toString(),
-                );
+                this.periodNames = range(1, 53).map((weekNumber) => "Week " + weekNumber.toString());
             } else if (this.type === PeriodType.Day) {
                 this.periodOptions = range(1, 366).map((num) => num.toString());
-                this.periodNames = range(1, 366).map(
-                    (dayNumber) => "Dag " + dayNumber.toString(),
-                );
+                this.periodNames = range(1, 366).map((dayNumber) => "Dag " + dayNumber.toString());
             }
 
             if (this.periodOptions.indexOf(this.period) === -1) {

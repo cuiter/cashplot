@@ -1,12 +1,6 @@
 import { createInjector } from "typed-inject";
 import { CategoryCollectionImpl } from "../../../src/controller/collections/category-collection";
-import {
-    Category,
-    DECIMAL,
-    ManualFilter,
-    PeriodType,
-    Settings,
-} from "../../../src/model/entities";
+import { Category, DECIMAL, ManualFilter, PeriodType, Settings } from "../../../src/model/entities";
 import { StorageMock } from "./source-data-collection.test";
 
 describe("CategoryCollectionImpl", () => {
@@ -59,14 +53,8 @@ describe("CategoryCollectionImpl", () => {
         expect(categories[0]).toBe("Category 1");
         expect(categories[1]).toBe("Category Test");
 
-        const notFoundResult = categoryCollection.rename(
-            "Category 99",
-            "Category Test 2",
-        );
-        const alreadyExistsResult = categoryCollection.rename(
-            "Category 1",
-            "Category Test",
-        );
+        const notFoundResult = categoryCollection.rename("Category 99", "Category Test 2");
+        const alreadyExistsResult = categoryCollection.rename("Category 1", "Category Test");
 
         expect(notFoundResult).toBe(false);
         expect(alreadyExistsResult).toBe(false);
@@ -94,11 +82,7 @@ describe("CategoryCollectionImpl", () => {
         categoryCollection.add("Category 1");
         categoryCollection.add("Category 2");
 
-        categoryCollection.setBudget(
-            "Category 1",
-            200 * DECIMAL,
-            PeriodType.Week,
-        );
+        categoryCollection.setBudget("Category 1", 200 * DECIMAL, PeriodType.Week);
         categoryCollection.setBudget("Category 2", null, PeriodType.Year);
 
         const categories = categoryCollection.all();
@@ -118,20 +102,16 @@ describe("CategoryCollectionImpl", () => {
             .injectClass(CategoryCollectionImpl);
         categoryCollection.add("Category 1");
 
-        categoryCollection.setBudget(
-            "Category 1",
-            200 * DECIMAL,
-            PeriodType.Week,
-        );
+        categoryCollection.setBudget("Category 1", 200 * DECIMAL, PeriodType.Week);
 
         const budget = categoryCollection.getBudget("Category 1");
 
         expect(budget.amount).toBe(200 * DECIMAL);
         expect(budget.periodType).toBe(PeriodType.Week);
 
-        expect(() =>
-            categoryCollection.getBudget("Non-Existent Category"),
-        ).toThrowError('Could not find category named "Non-Existent Category"');
+        expect(() => categoryCollection.getBudget("Non-Existent Category")).toThrowError(
+            'Could not find category named "Non-Existent Category"',
+        );
     });
 
     test("should add filters to a category", () => {
@@ -160,17 +140,13 @@ describe("CategoryCollectionImpl", () => {
         expect((filters[1] as ManualFilter).transactionHash).toBe(0x2393803);
 
         // Override filter with new filter
-        categoryCollection.addFilters("New category", [
-            new ManualFilter(0x3528, 0x10239234),
-        ]);
+        categoryCollection.addFilters("New category", [new ManualFilter(0x3528, 0x10239234)]);
 
         const overriddenFilters = categoryCollection.getFilters("New category");
         expect(overriddenFilters.length).toBe(2);
         expect(overriddenFilters[0]).toBeInstanceOf(ManualFilter);
         expect(overriddenFilters[0].id).toBe(0x3528);
-        expect((overriddenFilters[0] as ManualFilter).transactionHash).toBe(
-            0x10239234,
-        );
+        expect((overriddenFilters[0] as ManualFilter).transactionHash).toBe(0x10239234);
         expect(overriddenFilters[1].id).toBe(0x6934);
     });
 
@@ -194,9 +170,7 @@ describe("CategoryCollectionImpl", () => {
         expect(filters[0].id).toBe(0x6934);
         expect((filters[0] as ManualFilter).transactionHash).toBe(0x2393803);
 
-        expect(() =>
-            categoryCollection.removeFilters("New category", [0x0005]),
-        ).toThrowError(
+        expect(() => categoryCollection.removeFilters("New category", [0x0005])).toThrowError(
             'Could not find filter with id 5 inside category "New category"',
         );
     });
@@ -207,18 +181,8 @@ describe("CategoryCollectionImpl", () => {
             new Settings(
                 [],
                 [
-                    new Category(
-                        "Category 1",
-                        100 * DECIMAL,
-                        PeriodType.Month,
-                        [],
-                    ),
-                    new Category(
-                        "Category 2",
-                        100 * DECIMAL,
-                        PeriodType.Month,
-                        [],
-                    ),
+                    new Category("Category 1", 100 * DECIMAL, PeriodType.Month, []),
+                    new Category("Category 2", 100 * DECIMAL, PeriodType.Month, []),
                 ],
             ),
         );

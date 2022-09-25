@@ -4,10 +4,7 @@
             v-if="categoryTransactions.length !== 0"
             :percentage="budgetPercentageUsed"
         />
-        <div
-            v-if="categoryTransactions.length !== 0"
-            class="budget-results flex-center"
-        >
+        <div v-if="categoryTransactions.length !== 0" class="budget-results flex-center">
             <div class="budget-results-transactions">
                 <span>{{ categoryTransactionsFiltered.length }}</span>
                 <svg
@@ -32,9 +29,7 @@
                                 ? budgetPercentageUsed >= 100
                                 : budgetPercentageUsed <= 100,
                         'color-negative':
-                            budgetUsed.type === 'income'
-                                ? false
-                                : budgetPercentageUsed > 100,
+                            budgetUsed.type === 'income' ? false : budgetPercentageUsed > 100,
                     }"
                 >
                     €{{ Math.abs(budgetUsed.amount / DECIMAL).toFixed(0) }}
@@ -51,13 +46,9 @@
             v-if="categoryTransactions.length !== 0"
             v-model="filterPeriod"
             :range-start-date="categoryTransactions[0].date"
-            :range-end-date="
-                categoryTransactions[categoryTransactions.length - 1].date
-            "
+            :range-end-date="categoryTransactions[categoryTransactions.length - 1].date"
         />
-        <transaction-list-component
-            :transactions="categoryTransactionsFiltered"
-        />
+        <transaction-list-component :transactions="categoryTransactionsFiltered" />
     </div>
 </template>
 <script lang="ts">
@@ -65,8 +56,7 @@ import Vue from "vue";
 import { Period, PeriodsPerYear, PeriodType } from "../../model/period";
 import { DECIMAL } from "../../model/entities";
 
-const nonExistentCategoryName =
-    "non-existent-category-" + new Date().getTime().toString();
+const nonExistentCategoryName = "non-existent-category-" + new Date().getTime().toString();
 const nonExistentPeriod = new Period(PeriodType.Year, 9999);
 
 export default Vue.extend({
@@ -78,14 +68,11 @@ export default Vue.extend({
     computed: {
         DECIMAL: () => DECIMAL,
         categorySearchQuery: function () {
-            const categoryName = ((this as any).openedWindowEntry ?? {})
-                .categoryName;
+            const categoryName = ((this as any).openedWindowEntry ?? {}).categoryName;
 
             // Should not yield any results if categoryName is not set.
             return {
-                categoryName: categoryName
-                    ? categoryName
-                    : nonExistentCategoryName,
+                categoryName: categoryName ? categoryName : nonExistentCategoryName,
             };
         },
         categoryFilteredSearchQuery: function () {
@@ -100,9 +87,7 @@ export default Vue.extend({
             );
         },
         categoryTransactions: function () {
-            return this.$root.$data.searcher.searchTransactions(
-                (this as any).categorySearchQuery,
-            );
+            return this.$root.$data.searcher.searchTransactions((this as any).categorySearchQuery);
         },
         categoryTransactionsFiltered: function () {
             return this.$root.$data.searcher.searchTransactions(
@@ -110,8 +95,7 @@ export default Vue.extend({
             );
         },
         budgetUsed: function (): { amount: number; type: string } {
-            const categoryName = ((this as any).openedWindowEntry ?? {})
-                .categoryName;
+            const categoryName = ((this as any).openedWindowEntry ?? {}).categoryName;
 
             if (categoryName) {
                 const cashFlow: { income: number; expenses: number } =
@@ -140,18 +124,15 @@ export default Vue.extend({
             }
         },
         budgetAllowed: function () {
-            const categoryName = ((this as any).openedWindowEntry ?? {})
-                .categoryName;
+            const categoryName = ((this as any).openedWindowEntry ?? {}).categoryName;
 
             if (categoryName && this.$data.filterPeriod !== null) {
-                const budget =
-                    this.$root.$data.categories.getBudget(categoryName);
+                const budget = this.$root.$data.categories.getBudget(categoryName);
 
                 if (budget === null) return 0;
 
                 return (
-                    (budget.amount *
-                        PeriodsPerYear[budget.periodType as PeriodType]) /
+                    (budget.amount * PeriodsPerYear[budget.periodType as PeriodType]) /
                     PeriodsPerYear[this.$data.filterPeriod.type as PeriodType]
                 );
             } else {
@@ -160,8 +141,7 @@ export default Vue.extend({
         },
         budgetPercentageUsed: function () {
             const budgetAllowed: number = this.budgetAllowed as number;
-            const budgetUsed: number = (this.budgetUsed as any)
-                .amount as number;
+            const budgetUsed: number = (this.budgetUsed as any).amount as number;
             const budgetType: string = (this.budgetUsed as any).type as string;
             if (budgetAllowed !== 0) {
                 let percentageUsed = (budgetUsed / budgetAllowed) * 100;
@@ -178,8 +158,7 @@ export default Vue.extend({
     },
     watch: {
         filterPeriod: function () {
-            const categoryName = ((this as any).openedWindowEntry ?? {})
-                .categoryName;
+            const categoryName = ((this as any).openedWindowEntry ?? {}).categoryName;
 
             if (categoryName) {
                 (this as any).changeWindowEntry({
@@ -192,19 +171,15 @@ export default Vue.extend({
     created: function () {
         // If the current category does not exist anymore,
         // open the first category that does exist.
-        const categoryName = ((this as any).openedWindowEntry ?? {})
-            .categoryName;
-        const existingCategories: string[] = (
-            this as any
-        ).$root.$data.categories.list();
+        const categoryName = ((this as any).openedWindowEntry ?? {}).categoryName;
+        const existingCategories: string[] = (this as any).$root.$data.categories.list();
 
         if (existingCategories.indexOf(categoryName) === -1) {
             (this as any).closeWindow();
             return;
         }
 
-        this.$data.filterPeriod =
-            ((this as any).openedWindowEntry ?? {}).filterPeriod ?? null;
+        this.$data.filterPeriod = ((this as any).openedWindowEntry ?? {}).filterPeriod ?? null;
     },
 });
 </script>

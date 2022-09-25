@@ -9,13 +9,8 @@ const testTransactionsIngCsvFormat = `"Date","Name / Description","Account","Cou
 
 describe("Sources", () => {
     test("should automatically detect the type of transactions data and load transactions", () => {
-        for (const transactionsData of [
-            testTransactionsIngCsvFormat,
-            testTransactionsSnsCsvFormat,
-        ]) {
-            const transactions = new SourcesImpl().parseTransactions(
-                transactionsData,
-            );
+        for (const transactionsData of [testTransactionsIngCsvFormat, testTransactionsSnsCsvFormat]) {
+            const transactions = new SourcesImpl().parseTransactions(transactionsData);
 
             expect(transactions[0].date).toEqual(new Date("2021-06-28"));
             expect(transactions[0].amount).toBe(4000 * DECIMAL);
@@ -51,8 +46,8 @@ describe("Sources", () => {
     test("should signal an error if there were no transactions in the given data", () => {
         const transactionsData = testTransactionsIngCsvFormat.split("\n")[0];
 
-        expect(() =>
-            new SourcesImpl().parseTransactions(transactionsData),
-        ).toThrow("No transactions were present in the given data");
+        expect(() => new SourcesImpl().parseTransactions(transactionsData)).toThrow(
+            "No transactions were present in the given data",
+        );
     });
 });

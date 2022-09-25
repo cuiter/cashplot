@@ -42,10 +42,7 @@ const testTransactions = [
     ).overrideHash(0x1003),
 ];
 
-class SourceDataCollectionMock
-    extends Observable
-    implements SourceDataCollection
-{
+class SourceDataCollectionMock extends Observable implements SourceDataCollection {
     constructor(private transactions: SourceTransaction[]) {
         super();
     }
@@ -88,11 +85,7 @@ class CategoryCollectionMock extends Observable implements CategoryCollection {
     rename(_name: string, _newName: string): boolean {
         throw new Error("Method not implemented.");
     }
-    setBudget(
-        _name: string,
-        _budgetAmount: number,
-        _budgetPeriodType: PeriodType,
-    ): void {
+    setBudget(_name: string, _budgetAmount: number, _budgetPeriodType: PeriodType): void {
         throw new Error("Method not implemented.");
     }
     getBudget(_name: string): {
@@ -130,13 +123,9 @@ describe("TransactionAssigner", () => {
                 new ManualFilter(0x02, 0x1001),
                 new ManualFilter(0x03, 0x1003),
             ]),
-            new Category("Food", 400 * DECIMAL, PeriodType.Month, [
-                new ManualFilter(0x04, 0x1002),
-            ]),
+            new Category("Food", 400 * DECIMAL, PeriodType.Month, [new ManualFilter(0x04, 0x1002)]),
         ];
-        const sourceDataCollection = new SourceDataCollectionMock(
-            testTransactions,
-        );
+        const sourceDataCollection = new SourceDataCollectionMock(testTransactions);
         const categoryCollection = new CategoryCollectionMock(categories);
         const transactionAssigner = injector
             .provideValue("sourceData", sourceDataCollection)
@@ -182,8 +171,7 @@ describe("TransactionAssigner", () => {
                     description: ".*",
                 }),
                 new TextFilter(0x12, "", "regexp", {
-                    contraAccount:
-                        "^(Robot Computer Shop|non-existent-number)$",
+                    contraAccount: "^(Robot Computer Shop|non-existent-number)$",
                     description: ".*",
                 }),
             ]),
@@ -207,9 +195,7 @@ describe("TransactionAssigner", () => {
             ]),
         ];
 
-        const sourceDataCollection = new SourceDataCollectionMock(
-            testTransactions,
-        );
+        const sourceDataCollection = new SourceDataCollectionMock(testTransactions);
         const categoryCollection = new CategoryCollectionMock(categories);
         const transactionAssigner = injector
             .provideValue("sourceData", sourceDataCollection)

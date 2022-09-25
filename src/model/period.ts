@@ -34,10 +34,7 @@ export class Period {
             | null = null /* 1-53 for PeriodType.Week, 1-12 for PeriodType.Month etc. */,
     ) {
         if (type !== PeriodType.Year) {
-            assert(
-                !Number.isNaN(periodNumber),
-                "Period number must not be NaN",
-            );
+            assert(!Number.isNaN(periodNumber), "Period number must not be NaN");
             assert(
                 Math.floor(periodNumber!) === periodNumber, // eslint-disable-line
                 "Period number must be a valid integer",
@@ -65,20 +62,11 @@ export class Period {
                 Math.floor(date.getMonth() / 3) + 1 === this.periodNumber
             );
         } else if (this.type === PeriodType.Month) {
-            return (
-                date.getFullYear() === this.year &&
-                date.getMonth() + 1 === this.periodNumber
-            );
+            return date.getFullYear() === this.year && date.getMonth() + 1 === this.periodNumber;
         } else if (this.type === PeriodType.Week) {
-            return (
-                date.getFullYear() === this.year &&
-                dayjs(date).isoWeek() === this.periodNumber
-            );
+            return date.getFullYear() === this.year && dayjs(date).isoWeek() === this.periodNumber;
         } else if (this.type === PeriodType.Day) {
-            return (
-                date.getFullYear() === this.year &&
-                dayjs(date).dayOfYear() === this.periodNumber
-            );
+            return date.getFullYear() === this.year && dayjs(date).dayOfYear() === this.periodNumber;
         } else {
             throw new Error('Unknown period type "' + this.type + '"');
         }

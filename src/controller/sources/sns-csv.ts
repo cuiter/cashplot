@@ -20,13 +20,8 @@ export class SNSBankCSVSource implements Source {
         }
     }
 
-    private transactionFromRow(
-        row: Record<number, string>,
-        line: number | null,
-    ): SourceTransaction {
-        const errorPrefix = `Invalid transaction data${
-            line !== null ? ` on line ${line}` : ""
-        }: `;
+    private transactionFromRow(row: Record<number, string>, line: number | null): SourceTransaction {
+        const errorPrefix = `Invalid transaction data${line !== null ? ` on line ${line}` : ""}: `;
 
         function useColumn(
             description: string,
@@ -70,11 +65,7 @@ export class SNSBankCSVSource implements Source {
         const rawAmount = useRequiredColumn("amount", 10, true);
         const rawDescription = useRequiredColumn("description", 17);
         const date = new Date(
-            rawDate.substr(6, 4) +
-                "-" +
-                rawDate.substr(3, 2) +
-                "-" +
-                rawDate.substr(0, 2),
+            rawDate.substr(6, 4) + "-" + rawDate.substr(3, 2) + "-" + rawDate.substr(0, 2),
         );
         assert(
             date instanceof Date && !isNaN(date.valueOf()),
@@ -103,19 +94,13 @@ export class SNSBankCSVSource implements Source {
         });
 
         if (parsedCsv.errors.length !== 0) {
-            const errorsJoined = parsedCsv.errors
-                .map((error) => JSON.stringify(error))
-                .join("\n");
-            throw new Error(
-                "Errors while parsing transaction data:\n" + errorsJoined,
-            );
+            const errorsJoined = parsedCsv.errors.map((error) => JSON.stringify(error)).join("\n");
+            throw new Error("Errors while parsing transaction data:\n" + errorsJoined);
         }
 
         const rows = parsedCsv.data as Record<number, string>[];
 
-        const transactions = rows.map((row, index) =>
-            this.transactionFromRow(row, index + 1),
-        );
+        const transactions = rows.map((row, index) => this.transactionFromRow(row, index + 1));
 
         return transactions;
     }

@@ -43,8 +43,7 @@ export default Vue.extend({
                 (this as any).openedWindow === "budget" &&
                 (this as any).openedWindowEntry.categoryName !== newCategoryName
             ) {
-                const filterPeriod = (this as any).openedWindowEntry
-                    .filterPeriod;
+                const filterPeriod = (this as any).openedWindowEntry.filterPeriod;
                 (this as any).closeWindow();
                 (this as any).openWindow("budget", {
                     categoryName: newCategoryName,
@@ -60,8 +59,7 @@ export default Vue.extend({
     },
     methods: {
         loadCategoryData: function () {
-            const categoryName =
-                ((this as any).openedWindowEntry ?? {}).categoryName ?? null;
+            const categoryName = ((this as any).openedWindowEntry ?? {}).categoryName ?? null;
 
             if (categoryName !== null) {
                 this.categoryName = categoryName;
@@ -89,11 +87,7 @@ export default Vue.extend({
                     PeriodType.Month,
                 );
             } else {
-                this.$root.$data.categories.setBudget(
-                    categoryName,
-                    null,
-                    PeriodType.Month,
-                );
+                this.$root.$data.categories.setBudget(categoryName, null, PeriodType.Month);
             }
         },
     },

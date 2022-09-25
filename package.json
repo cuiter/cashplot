@@ -16,12 +16,6 @@
             }
         }
     },
-    "prettier": {
-        "trailingComma": "all",
-        "tabWidth": 4,
-        "semi": true,
-        "singleQuote": false
-    },
     "scripts": {
         "dev": "webpack && xdg-open ./public/index.html",
         "build": "webpack",

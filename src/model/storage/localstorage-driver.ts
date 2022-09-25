@@ -18,9 +18,7 @@ export class LocalStorageDriver implements StorageDriver {
         for (let i = 0; i < this.storage.length; i++) {
             const section = this.storage.key(i);
             if (section === null) {
-                console.warn(
-                    `Localstorage section ${i} unexpectedly disappeared while querying`,
-                );
+                console.warn(`Localstorage section ${i} unexpectedly disappeared while querying`);
                 continue;
             }
             sections.push(section);

@@ -1,12 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createInjector } from "typed-inject";
 import { SourceDataCollectionImpl } from "../../../src/controller/collections/source-data-collection";
-import {
-    DECIMAL,
-    Preferences,
-    Settings,
-    SourceTransaction,
-} from "../../../src/model/entities";
+import { DECIMAL, Preferences, Settings, SourceTransaction } from "../../../src/model/entities";
 import { Storage } from "../../../src/model/storage";
 import { Sources } from "../../../src/controller/sources";
 
@@ -87,7 +82,7 @@ export class StorageMock implements Storage {
     exportJson(): string {
         throw new Error("Not implemented.");
     }
-    importJson(jsonData: string) {
+    importJson(_jsonData: string) {
         throw new Error("Not implemented.");
     }
 }
@@ -106,18 +101,10 @@ describe("SourceDataCollectionImpl", () => {
         sourceDataCollection.init();
 
         expect((sourceDataCollection as any).sourceDatas.length).toBe(2);
-        expect((sourceDataCollection as any).sourceDatas[0].name).toBe(
-            "data1.csv",
-        );
-        expect(
-            (sourceDataCollection as any).sourceDatas[0].transactions.length,
-        ).toBe(3);
-        expect((sourceDataCollection as any).sourceDatas[1].name).toBe(
-            "data2.csv",
-        );
-        expect(
-            (sourceDataCollection as any).sourceDatas[1].transactions.length,
-        ).toBe(1);
+        expect((sourceDataCollection as any).sourceDatas[0].name).toBe("data1.csv");
+        expect((sourceDataCollection as any).sourceDatas[0].transactions.length).toBe(3);
+        expect((sourceDataCollection as any).sourceDatas[1].name).toBe("data2.csv");
+        expect((sourceDataCollection as any).sourceDatas[1].transactions.length).toBe(1);
     });
 
     test("should merge transactions from multiple sources", () => {
@@ -165,23 +152,12 @@ describe("SourceDataCollectionImpl", () => {
         sourceDataCollection.add("data2.csv", "<mock2>");
 
         expect((sourceDataCollection as any).sourceDatas.length).toBe(2);
-        expect((sourceDataCollection as any).sourceDatas[0].name).toBe(
-            "data1.csv",
-        );
-        expect(
-            (sourceDataCollection as any).sourceDatas[0].transactions.length,
-        ).toBe(3);
-        expect((sourceDataCollection as any).sourceDatas[1].name).toBe(
-            "data2.csv",
-        );
-        expect(
-            (sourceDataCollection as any).sourceDatas[1].transactions.length,
-        ).toBe(1);
+        expect((sourceDataCollection as any).sourceDatas[0].name).toBe("data1.csv");
+        expect((sourceDataCollection as any).sourceDatas[0].transactions.length).toBe(3);
+        expect((sourceDataCollection as any).sourceDatas[1].name).toBe("data2.csv");
+        expect((sourceDataCollection as any).sourceDatas[1].transactions.length).toBe(1);
 
-        expect(storageMock.listSourceDataNames()).toEqual([
-            "data1.csv",
-            "data2.csv",
-        ]);
+        expect(storageMock.listSourceDataNames()).toEqual(["data1.csv", "data2.csv"]);
     });
 
     test("should select a new name when adding source data if necessary", () => {
@@ -194,24 +170,12 @@ describe("SourceDataCollectionImpl", () => {
         sourceDataCollection.add("data1.csv", "<mock1>");
 
         expect((sourceDataCollection as any).sourceDatas.length).toBe(3);
-        expect((sourceDataCollection as any).sourceDatas[0].name).toBe(
-            "data1.csv",
-        );
-        expect((sourceDataCollection as any).sourceDatas[1].name).toBe(
-            "data1.csv (1)",
-        );
-        expect((sourceDataCollection as any).sourceDatas[2].name).toBe(
-            "data1.csv (2)",
-        );
-        expect(
-            (sourceDataCollection as any).sourceDatas[0].transactions.length,
-        ).toBe(3);
-        expect(
-            (sourceDataCollection as any).sourceDatas[1].transactions.length,
-        ).toBe(3);
-        expect(
-            (sourceDataCollection as any).sourceDatas[2].transactions.length,
-        ).toBe(3);
+        expect((sourceDataCollection as any).sourceDatas[0].name).toBe("data1.csv");
+        expect((sourceDataCollection as any).sourceDatas[1].name).toBe("data1.csv (1)");
+        expect((sourceDataCollection as any).sourceDatas[2].name).toBe("data1.csv (2)");
+        expect((sourceDataCollection as any).sourceDatas[0].transactions.length).toBe(3);
+        expect((sourceDataCollection as any).sourceDatas[1].transactions.length).toBe(3);
+        expect((sourceDataCollection as any).sourceDatas[2].transactions.length).toBe(3);
     });
 
     test("should remove source source data from its collection", () => {
@@ -226,9 +190,7 @@ describe("SourceDataCollectionImpl", () => {
         sourceDataCollection.remove("data1.csv");
 
         expect((sourceDataCollection as any).sourceDatas.length).toBe(1);
-        expect((sourceDataCollection as any).sourceDatas[0].name).toBe(
-            "data2.csv",
-        );
+        expect((sourceDataCollection as any).sourceDatas[0].name).toBe("data2.csv");
 
         sourceDataCollection.remove("data2.csv");
 

@@ -44,21 +44,14 @@ export class INGBankCSVSource implements Source {
             const csvHeaders = parsedCsv.meta.fields ?? [];
 
             return (
-                !nlHeaders.some(
-                    (header) => csvHeaders.indexOf(header) === -1,
-                ) ||
+                !nlHeaders.some((header) => csvHeaders.indexOf(header) === -1) ||
                 !enHeaders.some((header) => csvHeaders.indexOf(header) === -1)
             );
         }
     }
 
-    private transactionFromRow(
-        row: Record<string, string>,
-        line: number | null,
-    ): SourceTransaction {
-        const errorPrefix = `Invalid transaction data${
-            line !== null ? ` on line ${line}` : ""
-        }: `;
+    private transactionFromRow(row: Record<string, string>, line: number | null): SourceTransaction {
+        const errorPrefix = `Invalid transaction data${line !== null ? ` on line ${line}` : ""}: `;
 
         function useColumn(
             description: string,
@@ -67,25 +60,18 @@ export class INGBankCSVSource implements Source {
         ): string | null {
             const values = columnNames
                 .map((name) => row[name])
-                .filter(
-                    (value) => typeof value === "string" && value.length > 0,
-                );
+                .filter((value) => typeof value === "string" && value.length > 0);
 
             if (values.length > 0) {
                 return values[0];
             } else if (required) {
-                throw new Error(
-                    `${errorPrefix}Could not determine ${description} (empty column)`,
-                );
+                throw new Error(`${errorPrefix}Could not determine ${description} (empty column)`);
             } else {
                 return null;
             }
         }
 
-        function useRequiredColumn(
-            description: string,
-            columnNames: string[],
-        ): string {
+        function useRequiredColumn(description: string, columnNames: string[]): string {
             return useColumn(description, columnNames, true) ?? "";
         }
 
@@ -95,27 +81,13 @@ export class INGBankCSVSource implements Source {
             "Naam / Omschrijving",
         ]);
         const account = useRequiredColumn("account", ["Account", "Rekening"]);
-        const contraAccount = useColumn("contra-account", [
-            "Counterparty",
-            "Tegenrekening",
-        ]);
-        const rawDirection = useRequiredColumn("direction", [
-            "Debit/credit",
-            "Af Bij",
-        ]);
-        const rawAmount = useRequiredColumn("amount", [
-            "Amount (EUR)",
-            "Bedrag (EUR)",
-        ]);
-        const description =
-            useColumn("description", ["Notifications", "Mededelingen"]) ?? "";
+        const contraAccount = useColumn("contra-account", ["Counterparty", "Tegenrekening"]);
+        const rawDirection = useRequiredColumn("direction", ["Debit/credit", "Af Bij"]);
+        const rawAmount = useRequiredColumn("amount", ["Amount (EUR)", "Bedrag (EUR)"]);
+        const description = useColumn("description", ["Notifications", "Mededelingen"]) ?? "";
 
         const date = new Date(
-            rawDate.substr(0, 4) +
-                "-" +
-                rawDate.substr(4, 2) +
-                "-" +
-                rawDate.substr(6, 2),
+            rawDate.substr(0, 4) + "-" + rawDate.substr(4, 2) + "-" + rawDate.substr(6, 2),
         );
         assert(
             date instanceof Date && !isNaN(date.valueOf()),
@@ -131,9 +103,7 @@ export class INGBankCSVSource implements Source {
             direction !== null,
             `${errorPrefix}Could not determine direction from value: "${rawDirection}"`,
         );
-        const amount =
-            Number(rawAmount.replace(",", ".")) *
-            (direction ? DECIMAL : -DECIMAL);
+        const amount = Number(rawAmount.replace(",", ".")) * (direction ? DECIMAL : -DECIMAL);
 
         return new SourceTransaction(
             date,
@@ -149,19 +119,13 @@ export class INGBankCSVSource implements Source {
         const parsedCsv = Papa.parse(transactionData, csvConfig);
 
         if (parsedCsv.errors.length !== 0) {
-            const errorsJoined = parsedCsv.errors
-                .map((error) => JSON.stringify(error))
-                .join("\n");
-            throw new Error(
-                "Errors while parsing transaction data:\n" + errorsJoined,
-            );
+            const errorsJoined = parsedCsv.errors.map((error) => JSON.stringify(error)).join("\n");
+            throw new Error("Errors while parsing transaction data:\n" + errorsJoined);
         }
 
         const rows = parsedCsv.data as Record<string, string>[];
 
-        const transactions = rows.map((row, index) =>
-            this.transactionFromRow(row, index + 2),
-        );
+        const transactions = rows.map((row, index) => this.transactionFromRow(row, index + 2));
 
         return transactions;
     }

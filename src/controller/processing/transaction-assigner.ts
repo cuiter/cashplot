@@ -22,19 +22,13 @@ export interface TransactionAssigner {
     subscribeToChanges(callback: () => void): void;
 }
 
-export class TransactionAssignerImpl
-    extends Observable
-    implements TransactionAssigner
-{
+export class TransactionAssignerImpl extends Observable implements TransactionAssigner {
     public static inject = ["sourceData", "categories"] as const;
 
     private assignedTransactions: AssignedTransaction[] = [];
     private updateRequired = false;
 
-    constructor(
-        private sourceData: SourceDataCollection,
-        private categories: CategoryCollection,
-    ) {
+    constructor(private sourceData: SourceDataCollection, private categories: CategoryCollection) {
         super();
         this.sourceData.subscribeToChanges(() => {
             this.updateRequired = true;
@@ -59,10 +53,7 @@ export class TransactionAssignerImpl
         const transactions = this.sourceData.allTransactions();
         const categories = this.categories.all();
 
-        this.assignedTransactions = this.assignTransactions(
-            transactions,
-            categories,
-        );
+        this.assignedTransactions = this.assignTransactions(transactions, categories);
     }
 
     private assignTransactions(
@@ -86,33 +77,19 @@ export class TransactionAssignerImpl
 
                     addToMatches(
                         manualFilter.transactionHash,
-                        new Assignment(
-                            category.name,
-                            "Category",
-                            manualFilter.id,
-                            "ManualFilter",
-                        ),
+                        new Assignment(category.name, "Category", manualFilter.id, "ManualFilter"),
                     );
                 } else if (filter instanceof TextFilter) {
                     const matchers = filter.getMatchers();
                     for (const transaction of transactions) {
                         if (
-                            (matchers.contraAccount.test(
-                                transaction.contraAccount ?? "",
-                            ) ||
-                                matchers.contraAccount.test(
-                                    transaction.contraAccountName ?? "",
-                                )) &&
+                            (matchers.contraAccount.test(transaction.contraAccount ?? "") ||
+                                matchers.contraAccount.test(transaction.contraAccountName ?? "")) &&
                             matchers.description.test(transaction.description)
                         ) {
                             addToMatches(
                                 transaction.hash,
-                                new Assignment(
-                                    category.name,
-                                    "Category",
-                                    filter.id,
-                                    "TextFilter",
-                                ),
+                                new Assignment(category.name, "Category", filter.id, "TextFilter"),
                             );
                         }
                     }
@@ -124,10 +101,7 @@ export class TransactionAssignerImpl
 
         for (const transaction of transactions) {
             assignedTransactions.push(
-                new AssignedTransaction(
-                    transaction,
-                    matches[transaction.hash] || [],
-                ),
+                new AssignedTransaction(transaction, matches[transaction.hash] || []),
             );
         }
 

@@ -19,9 +19,7 @@ describe("utils", () => {
             "",
         ];
 
-        const generatedPatterns = wildcardPatterns.map((pattern) =>
-            wildcardToRegExp(pattern),
-        );
+        const generatedPatterns = wildcardPatterns.map((pattern) => wildcardToRegExp(pattern));
 
         expect(generatedPatterns).toEqual(regExpPatterns);
     });

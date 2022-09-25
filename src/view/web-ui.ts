@@ -114,8 +114,7 @@ export class WebUI implements UI {
 
         /* eslint-disable */
         function hideSplashScreen() {
-            if ((navigator as any).splashscreen)
-                (navigator as any).splashscreen.hide();
+            if ((navigator as any).splashscreen) (navigator as any).splashscreen.hide();
         }
 
         if ((window as any).deviceReadyCalled === true) {
@@ -142,10 +141,7 @@ export class WebUI implements UI {
         const currentTabKey = "debug/currentTab";
         const currentTabDefault = "overview";
         const tabOpenWindowsKey = "debug/tabOpenWindows";
-        const tabOpenWindowsDefault: Record<
-            string,
-            [string, WindowEntry | null][]
-        > = {};
+        const tabOpenWindowsDefault: Record<string, [string, WindowEntry | null][]> = {};
 
         const navState = {
             currentTab: currentTabDefault,
@@ -158,8 +154,7 @@ export class WebUI implements UI {
             if (this.isDebugModeEnabled()) {
                 if (window.localStorage.getItem(currentTabKey) !== null) {
                     navState.currentTab =
-                        window.localStorage.getItem(currentTabKey) ??
-                        currentTabDefault;
+                        window.localStorage.getItem(currentTabKey) ?? currentTabDefault;
                 }
                 if (window.localStorage.getItem(tabOpenWindowsKey) !== null) {
                     navState.tabOpenWindows = JSON.parse(
@@ -167,14 +162,9 @@ export class WebUI implements UI {
                     );
 
                     for (const categoryName in navState.tabOpenWindows) {
-                        for (const entry of navState.tabOpenWindows[
-                            categoryName
-                        ]) {
+                        for (const entry of navState.tabOpenWindows[categoryName]) {
                             if (entry[1] !== null && entry[1].filterPeriod) {
-                                Object.setPrototypeOf(
-                                    entry[1].filterPeriod,
-                                    Period.prototype,
-                                );
+                                Object.setPrototypeOf(entry[1].filterPeriod, Period.prototype);
                             }
                         }
                     }
@@ -183,8 +173,7 @@ export class WebUI implements UI {
         }, 500);
 
         const windowInFront = () => {
-            const tabOpenedWindows =
-                navState.tabOpenWindows[navState.currentTab] || [];
+            const tabOpenedWindows = navState.tabOpenWindows[navState.currentTab] || [];
 
             if (tabOpenedWindows.length !== 0) {
                 return tabOpenedWindows[tabOpenedWindows.length - 1];
@@ -225,43 +214,25 @@ export class WebUI implements UI {
                     windowName: string, // for example: category-edit
                     entry: WindowEntry | null, // category name, filter id, etc.
                 ) => {
-                    if (
-                        navState.tabOpenWindows[navState.currentTab] ===
-                        undefined
-                    ) {
-                        Vue.set(
-                            navState.tabOpenWindows,
-                            navState.currentTab,
-                            [],
-                        );
+                    if (navState.tabOpenWindows[navState.currentTab] === undefined) {
+                        Vue.set(navState.tabOpenWindows, navState.currentTab, []);
                     }
 
-                    navState.tabOpenWindows[navState.currentTab].push([
-                        windowName,
-                        entry,
-                    ]);
+                    navState.tabOpenWindows[navState.currentTab].push([windowName, entry]);
 
                     storeOpenedWindows();
                 },
                 changeWindowEntry(entry: WindowEntry | null) {
-                    const tabOpenWindows =
-                        navState.tabOpenWindows[navState.currentTab];
-                    if (
-                        tabOpenWindows !== undefined &&
-                        tabOpenWindows.length !== 0
-                    ) {
+                    const tabOpenWindows = navState.tabOpenWindows[navState.currentTab];
+                    if (tabOpenWindows !== undefined && tabOpenWindows.length !== 0) {
                         tabOpenWindows[tabOpenWindows.length - 1][1] = entry;
                         storeOpenedWindows();
                     }
                 },
                 closeWindow: () => {
-                    const windowIndex =
-                        navState.tabOpenWindows[navState.currentTab].length - 1;
+                    const windowIndex = navState.tabOpenWindows[navState.currentTab].length - 1;
                     if (windowIndex !== -1) {
-                        navState.tabOpenWindows[navState.currentTab].splice(
-                            windowIndex,
-                            1,
-                        );
+                        navState.tabOpenWindows[navState.currentTab].splice(windowIndex, 1);
 
                         storeOpenedWindows();
                     }

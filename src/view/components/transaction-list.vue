@@ -19,20 +19,12 @@
                             .replace(".", ",")
                     }}</span
                 >
-                <div
-                    v-if="transaction.amount < 0"
-                    class="transaction-direction-down"
-                />
-                <div
-                    v-if="transaction.amount >= 0"
-                    class="transaction-direction-up"
-                />
+                <div v-if="transaction.amount < 0" class="transaction-direction-down" />
+                <div v-if="transaction.amount >= 0" class="transaction-direction-up" />
                 <span class="transaction-title">{{
                     transaction.contraAccountName || transaction.contraAccount
                 }}</span>
-                <span class="transaction-description">{{
-                    transaction.description
-                }}</span>
+                <span class="transaction-description">{{ transaction.description }}</span>
             </div>
         </div>
 
@@ -72,12 +64,7 @@ export default Vue.extend({
                 .forEach((transaction) => {
                     var timeStr = transaction.date.getTime().toString();
 
-                    if (
-                        !Object.prototype.hasOwnProperty.call(
-                            transactionsByDate,
-                            timeStr,
-                        )
-                    ) {
+                    if (!Object.prototype.hasOwnProperty.call(transactionsByDate, timeStr)) {
                         transactionsByDate[timeStr] = [];
                     }
                     transactionsByDate[timeStr].push(transaction);
@@ -85,9 +72,7 @@ export default Vue.extend({
 
             return Object.keys(transactionsByDate).map((timeStr) => {
                 return {
-                    date: dayjs(new Date(Number(timeStr))).format(
-                        transactionDateFormat,
-                    ),
+                    date: dayjs(new Date(Number(timeStr))).format(transactionDateFormat),
                     transactions: transactionsByDate[timeStr],
                 };
             });
@@ -98,19 +83,13 @@ export default Vue.extend({
             const selectedTransactionHashes: number[] = this.$props.value;
             const transactions: SourceTransaction[] = this.$props.transactions;
 
-            const existingHashes = new Set(
-                transactions.map((transaction) => transaction.hash),
+            const existingHashes = new Set(transactions.map((transaction) => transaction.hash));
+
+            const existingSelectedTransactionHashes = selectedTransactionHashes.filter((hash) =>
+                existingHashes.has(hash),
             );
 
-            const existingSelectedTransactionHashes =
-                selectedTransactionHashes.filter((hash) =>
-                    existingHashes.has(hash),
-                );
-
-            if (
-                existingSelectedTransactionHashes.length !==
-                selectedTransactionHashes.length
-            ) {
+            if (existingSelectedTransactionHashes.length !== selectedTransactionHashes.length) {
                 this.$props.value = existingSelectedTransactionHashes;
                 this.$emit("input", this.$props.value);
             }
@@ -127,8 +106,7 @@ export default Vue.extend({
         },
 
         selectTransaction(transactionHash: number) {
-            const selectedTransactionIndex =
-                this.$props.value.indexOf(transactionHash);
+            const selectedTransactionIndex = this.$props.value.indexOf(transactionHash);
             if (selectedTransactionIndex === -1) {
                 this.$props.value.push(transactionHash);
             } else {

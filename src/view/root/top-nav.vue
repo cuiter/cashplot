@@ -1,9 +1,7 @@
 <template>
     <div v-if="openedWindow !== null" class="top-nav">
         <div
-            v-if="
-                openedWindow === 'source-data' || openedWindow === 'assignment'
-            "
+            v-if="openedWindow === 'source-data' || openedWindow === 'assignment'"
             class="full-size view-width position-relative flex-center"
         >
             <span
@@ -52,11 +50,7 @@
             class="full-size view-width flex-space-between"
         >
             <div class="top-nav-edge flex-center">
-                <span
-                    class="top-nav-button"
-                    :class="{ selected: true }"
-                    @click="closeWindow()"
-                >
+                <span class="top-nav-button" :class="{ selected: true }" @click="closeWindow()">
                     &#60;&nbsp;
                 </span>
             </div>
@@ -65,16 +59,10 @@
             <span v-if="openedWindow === 'category-edit'" class="top-nav-title">
                 Categorie bewerken
             </span>
-            <span
-                v-if="openedWindow === 'text-filter-edit'"
-                class="top-nav-title"
-            >
+            <span v-if="openedWindow === 'text-filter-edit'" class="top-nav-title">
                 Filter bewerken
             </span>
-            <span
-                v-if="openedWindow === 'preferences-edit'"
-                class="top-nav-title"
-            >
+            <span v-if="openedWindow === 'preferences-edit'" class="top-nav-title">
                 Instellingen
             </span>
 

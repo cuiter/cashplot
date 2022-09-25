@@ -10,10 +10,7 @@ export default Vue.extend({
     created: function () {
         const existingCategories: string[] = this.$root.$data.categories.list();
 
-        if (
-            (this as any).openedWindow === null &&
-            existingCategories.length !== 0
-        ) {
+        if ((this as any).openedWindow === null && existingCategories.length !== 0) {
             (this as any).openWindow("budget", {
                 categoryName: existingCategories[0],
             });

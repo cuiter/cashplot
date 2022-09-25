@@ -37,10 +37,8 @@
                     <remove-button-component
                         :class="{
                             invisible:
-                                currentFilterType !== 'manual' ||
-                                manualTransactions.length === 0,
-                            inactive:
-                                selectedManualTransactionHashes.length === 0,
+                                currentFilterType !== 'manual' || manualTransactions.length === 0,
+                            inactive: selectedManualTransactionHashes.length === 0,
                         }"
                         @click.native="removeSelectedManualTransactions"
                     />
@@ -82,9 +80,7 @@ export default Vue.extend({
             });
         },
         filters: function () {
-            return this.$root.$data.categories.getFilters(
-                this.$data.categoryName,
-            );
+            return this.$root.$data.categories.getFilters(this.$data.categoryName);
         },
     },
     created: function () {
@@ -101,10 +97,7 @@ export default Vue.extend({
             let newCategoryName = this.newCategoryName;
 
             if (newCategoryName !== categoryName) {
-                this.$root.$data.categories.rename(
-                    categoryName,
-                    newCategoryName,
-                );
+                this.$root.$data.categories.rename(categoryName, newCategoryName);
                 this.categoryName = newCategoryName;
                 (this as any).changeWindowEntry({
                     categoryName: newCategoryName,
@@ -115,25 +108,16 @@ export default Vue.extend({
             this.currentFilterType = type;
         },
         removeSelectedManualTransactions: function () {
-            const selectedManualTransactionHashes =
-                this.selectedManualTransactionHashes;
-            const manualTransactions: AssignedTransaction[] =
-                this.manualTransactions;
+            const selectedManualTransactionHashes = this.selectedManualTransactionHashes;
+            const manualTransactions: AssignedTransaction[] = this.manualTransactions;
             const selectedTransactions = manualTransactions.filter(
-                (transaction) =>
-                    selectedManualTransactionHashes.indexOf(
-                        transaction.hash,
-                    ) !== -1,
+                (transaction) => selectedManualTransactionHashes.indexOf(transaction.hash) !== -1,
             );
 
-            const transactionManualFilterIds = selectedTransactions.map(
-                (transaction) =>
-                    transaction.assignments
-                        .filter(
-                            (assignment) =>
-                                assignment.filterType === "ManualFilter",
-                        )
-                        .map((assignment) => assignment.filterId),
+            const transactionManualFilterIds = selectedTransactions.map((transaction) =>
+                transaction.assignments
+                    .filter((assignment) => assignment.filterType === "ManualFilter")
+                    .map((assignment) => assignment.filterId),
             );
 
             this.$root.$data.categories.removeFilters(

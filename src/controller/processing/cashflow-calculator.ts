@@ -14,10 +14,7 @@ export interface CashFlowCalculator {
     };
 }
 
-export class CashFlowCalculatorImpl
-    extends Observable
-    implements CashFlowCalculator
-{
+export class CashFlowCalculatorImpl extends Observable implements CashFlowCalculator {
     public static inject = ["searcher"] as const;
 
     private searchCache: {
@@ -44,8 +41,7 @@ export class CashFlowCalculatorImpl
                 cacheEntry.query.filterId === query.filterId &&
                 cacheEntry.query.period?.type === query.period?.type &&
                 cacheEntry.query.period?.year === query.period?.year &&
-                cacheEntry.query.period?.periodNumber ===
-                    query.period?.periodNumber
+                cacheEntry.query.period?.periodNumber === query.period?.periodNumber
             ) {
                 return cacheEntry.result;
             }

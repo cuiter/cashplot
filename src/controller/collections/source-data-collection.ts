@@ -1,8 +1,4 @@
-import {
-    SourceDataInfo,
-    SourceDataInfoItem,
-    SourceTransaction,
-} from "../../model/entities";
+import { SourceDataInfo, SourceDataInfoItem, SourceTransaction } from "../../model/entities";
 import { Storage } from "../../model/storage";
 import { Sources } from "../../controller/sources";
 import { findNewName } from "../../utils";
@@ -31,16 +27,10 @@ export interface SourceDataCollection {
 }
 
 class SourceData {
-    constructor(
-        public name: string,
-        public transactions: SourceTransaction[],
-    ) {}
+    constructor(public name: string, public transactions: SourceTransaction[]) {}
 }
 
-export class SourceDataCollectionImpl
-    extends Observable
-    implements SourceDataCollection
-{
+export class SourceDataCollectionImpl extends Observable implements SourceDataCollection {
     public static inject = ["sources", "storage"] as const;
 
     private sourceDatas: SourceData[] = [];
@@ -79,9 +69,7 @@ export class SourceDataCollectionImpl
     }
 
     public remove(name: string): void {
-        this.sourceDatas = this.sourceDatas.filter(
-            (sourceData) => sourceData.name !== name,
-        );
+        this.sourceDatas = this.sourceDatas.filter((sourceData) => sourceData.name !== name);
 
         // Re-build the sourceTransactions array.
         this.sourceTransactions = [];
@@ -100,18 +88,12 @@ export class SourceDataCollectionImpl
      * Note: Runs in O(nW | n log n) time, where W is the max amount of transactions on any given date.
      */
     private insertTransactions(newTransactions: SourceTransaction[]) {
-        newTransactions = newTransactions.sort(
-            (a, b) => a.date.getTime() - b.date.getTime(),
-        );
+        newTransactions = newTransactions.sort((a, b) => a.date.getTime() - b.date.getTime());
 
         // Checks whether two transactions are equal to each other.
         // Note: Opposite transactions are considered equal.
-        function transactionsAreEqual(
-            transaction: SourceTransaction,
-            other: SourceTransaction,
-        ) {
-            if (transaction.date.getTime() != other.date.getTime())
-                return false;
+        function transactionsAreEqual(transaction: SourceTransaction, other: SourceTransaction) {
+            if (transaction.date.getTime() != other.date.getTime()) return false;
 
             if (transaction.account === other.account) {
                 return transaction.amount === other.amount;
@@ -134,9 +116,7 @@ export class SourceDataCollectionImpl
                 this.sourceTransactions[existingIndex].date.getTime() <
                     newTransactions[newIndex].date.getTime()
             ) {
-                combinedTransactions.push(
-                    this.sourceTransactions[existingIndex],
-                );
+                combinedTransactions.push(this.sourceTransactions[existingIndex]);
                 existingIndex++;
             }
 
@@ -149,9 +129,8 @@ export class SourceDataCollectionImpl
                 let foundSameTransaction = false;
                 while (
                     existingSameDateIndex < this.sourceTransactions.length &&
-                    this.sourceTransactions[
-                        existingSameDateIndex
-                    ].date.getTime() == newTransaction.date.getTime()
+                    this.sourceTransactions[existingSameDateIndex].date.getTime() ==
+                        newTransaction.date.getTime()
                 ) {
                     if (
                         transactionsAreEqual(
@@ -173,9 +152,7 @@ export class SourceDataCollectionImpl
             newIndex++;
         }
 
-        combinedTransactions.push(
-            ...this.sourceTransactions.slice(existingIndex),
-        );
+        combinedTransactions.push(...this.sourceTransactions.slice(existingIndex));
 
         this.sourceTransactions = combinedTransactions;
     }
@@ -185,9 +162,7 @@ export class SourceDataCollectionImpl
             return new SourceDataInfoItem(
                 sourceData.name,
                 sourceData.transactions[0].date,
-                sourceData.transactions[
-                    sourceData.transactions.length - 1
-                ].date,
+                sourceData.transactions[sourceData.transactions.length - 1].date,
                 sourceData.transactions
                     .map((tr) => tr.account)
                     .filter(

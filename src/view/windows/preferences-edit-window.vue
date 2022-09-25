@@ -2,8 +2,7 @@
     <div class="tab-contents full-size">
         <span class="tab-heading">Gegevensbeheer</span>
         <div class="margin-bottom-small"></div>
-        <button class="button margin-bottom-small" @click="exportData">
-            Exporteer alle gegevens</button
+        <button class="button margin-bottom-small" @click="exportData">Exporteer alle gegevens</button
         ><br />
         <a id="export-data-link" class="disabled"></a>
         <!-- Used for creating a download prompt. -->
@@ -17,10 +16,7 @@
             class="disabled"
             @change="onExportUpload"
         /><br />
-        <i>
-            Deze optie maakt het mogelijk om gegevens uit te wisselen tussen
-            apparaten.
-        </i>
+        <i> Deze optie maakt het mogelijk om gegevens uit te wisselen tussen apparaten. </i>
     </div>
 </template>
 <script lang="ts">
@@ -33,9 +29,7 @@ export default Vue.extend({
 
             const data = new Blob([jsonData], { type: "application/json" });
             const url = window.URL.createObjectURL(data);
-            const exportDataLink = document.getElementById(
-                "export-data-link",
-            ) as HTMLLinkElement;
+            const exportDataLink = document.getElementById("export-data-link") as HTMLLinkElement;
             exportDataLink.href = url;
             (exportDataLink as any).download = "cashplot-export.json";
             exportDataLink.click();

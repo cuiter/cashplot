@@ -2,13 +2,11 @@
     <div class="progress-bar full-width margin-top-small">
         <div
             class="progress-bar-success-line"
-            v-bind:style="{ width: successPortionPercentage + '%' }"
+            :style="{ width: successPortionPercentage + '%' }"
         ></div>
         <div
             class="progress-bar-overflow-line"
-            v-bind:style="{
-                width: overflowPortionPercentage + '%',
-            }"
+            :style="{ width: overflowPortionPercentage + '%' }"
         ></div>
     </div>
 </template>
@@ -22,6 +20,7 @@ export default Vue.extend({
     computed: {
         successPortionPercentage: function () {
             const percentage = this.$props.percentage;
+
             if (percentage <= 100) {
                 return percentage;
             } else {
@@ -30,6 +29,7 @@ export default Vue.extend({
         },
         overflowPortionPercentage: function () {
             const percentage = (this.$props as any).percentage;
+
             if (percentage <= 100) {
                 return 0;
             } else {

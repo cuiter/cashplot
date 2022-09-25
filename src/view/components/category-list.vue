@@ -28,26 +28,20 @@ export default Vue.extend({
     },
     methods: {
         addCategory() {
-            const categoryName = (this as any).$root.$data.categories.add(
-                newCategoryName,
-            );
+            const categoryName = (this as any).$root.$data.categories.add(newCategoryName);
             (this as any).openWindow("category-edit", {
                 categoryName: categoryName,
             });
         },
         selectCategory(name: string) {
-            const selectedTransactionHashes: number[] =
-                this.$props.selectedTransactionHashes;
+            const selectedTransactionHashes: number[] = this.$props.selectedTransactionHashes;
 
             if (selectedTransactionHashes.length !== 0) {
                 var filters = selectedTransactionHashes.map(
                     (hash) => new ManualFilter(createUniqueId(), hash),
                 );
 
-                selectedTransactionHashes.splice(
-                    0,
-                    selectedTransactionHashes.length,
-                );
+                selectedTransactionHashes.splice(0, selectedTransactionHashes.length);
 
                 this.$root.$data.categories.addFilters(name, filters);
             } else {

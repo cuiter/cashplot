@@ -67,16 +67,11 @@ export class StorageImpl implements Storage {
     public storeSettings(settings: Settings) {
         const settingsObj = instanceToPlain(settings);
         settingsObj.version = settingsVersion;
-        this.storageDriver.storeHugeText(
-            settingsKey,
-            JSON.stringify(settingsObj),
-        );
+        this.storageDriver.storeHugeText(settingsKey, JSON.stringify(settingsObj));
     }
 
     public loadPreferences(): Preferences | null {
-        const preferencesObj = JSON.parse(
-            this.storageDriver.loadHugeText(preferencesKey) ?? "null",
-        );
+        const preferencesObj = JSON.parse(this.storageDriver.loadHugeText(preferencesKey) ?? "null");
         if (preferencesObj === null) return null;
         const preferencesVersion = (preferencesObj as any)["version"]; // eslint-disable-line
         assert(
@@ -90,10 +85,7 @@ export class StorageImpl implements Storage {
     public storePreferences(preferences: Preferences) {
         const preferencesObj = instanceToPlain(preferences);
         preferencesObj.version = preferencesVersion;
-        this.storageDriver.storeHugeText(
-            preferencesKey,
-            JSON.stringify(preferencesObj),
-        );
+        this.storageDriver.storeHugeText(preferencesKey, JSON.stringify(preferencesObj));
     }
 
     public listSourceDataNames(): string[] {
@@ -109,17 +101,10 @@ export class StorageImpl implements Storage {
         const section = sourceDataPrefix + name;
         const sectionData = this.storageDriver.loadHugeText(section);
         if (sectionData === null) {
-            throw new Error(
-                `Could not load source data from persistent storage with name "${name}"`,
-            );
+            throw new Error(`Could not load source data from persistent storage with name "${name}"`);
         }
-        const version = Number(
-            sectionData.substr(0, hugeTextVersionPrefixLength),
-        );
-        assert(
-            version === 0,
-            `Could not load source data: unsupported version ${version}`,
-        );
+        const version = Number(sectionData.substr(0, hugeTextVersionPrefixLength));
+        assert(version === 0, `Could not load source data: unsupported version ${version}`);
 
         return {
             // Note: Assumes the contents have not been removed since
@@ -133,10 +118,7 @@ export class StorageImpl implements Storage {
             minimumIntegerDigits: hugeTextVersionPrefixLength,
             useGrouping: false,
         });
-        this.storageDriver.storeHugeText(
-            sourceDataPrefix + name,
-            versionPrefix + transactionData,
-        );
+        this.storageDriver.storeHugeText(sourceDataPrefix + name, versionPrefix + transactionData);
     }
 
     public removeSourceData(name: string) {
@@ -154,8 +136,7 @@ export class StorageImpl implements Storage {
     }
 
     public importJson(jsonData: string) {
-        const exportObject: Record<string, string | null> =
-            JSON.parse(jsonData);
+        const exportObject: Record<string, string | null> = JSON.parse(jsonData);
 
         // Remove existing sections
         for (const section of this.storageDriver.listSections()) {
@@ -165,10 +146,7 @@ export class StorageImpl implements Storage {
         // Load sections from JSON object
         for (const section in exportObject) {
             if (typeof exportObject[section] == "string") {
-                this.storageDriver.storeHugeText(
-                    section,
-                    exportObject[section] as string,
-                );
+                this.storageDriver.storeHugeText(section, exportObject[section] as string);
             }
         }
     }
