@@ -41,27 +41,6 @@ const testObject = {
 const testHugeText = "transaction,data,test\n1,2,3";
 
 describe("LocalStorageDriver", () => {
-    test("should store objects to localStorage", () => {
-        const storageMock = new LocalStorageMock();
-        const storageDriver = new LocalStorageDriver(storageMock);
-
-        storageDriver.storeObject("test-section", testObject);
-
-        expect(JSON.parse(storageMock.getItem("test-section"))).toEqual(
-            testObject,
-        );
-    });
-
-    test("should load objects from localStorage", () => {
-        const storageMock = new LocalStorageMock();
-        const storageDriver = new LocalStorageDriver(storageMock);
-        storageMock.setItem("test-section", JSON.stringify(testObject));
-
-        const object = storageDriver.loadObject("test-section");
-
-        expect(object).toEqual(testObject);
-    });
-
     test("should store hugetexts to localStorage", () => {
         const storageMock = new LocalStorageMock();
         const storageDriver = new LocalStorageDriver(storageMock);

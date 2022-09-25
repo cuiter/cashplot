@@ -167,9 +167,6 @@ export interface Storage {
 }
 
 export interface StorageDriver {
-    loadObject(section: string): object | null;
-    storeObject(section: string, object: object): void;
-
     loadHugeText(section: string): string | null;
     storeHugeText(section: string, text: string): void;
 

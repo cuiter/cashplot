@@ -28,7 +28,9 @@ export class StorageImpl implements Storage {
     constructor(private storageDriver: StorageDriver) {}
 
     public loadSettings(): Settings | null {
-        const settingsObj = this.storageDriver.loadObject(settingsKey);
+        const settingsObj: Settings = JSON.parse(
+            this.storageDriver.loadHugeText(settingsKey) ?? "null",
+        );
         if (settingsObj === null) return null;
         const settingsVersion = (settingsObj as any)["version"]; // eslint-disable-line
         assert(
@@ -42,11 +44,16 @@ export class StorageImpl implements Storage {
     public storeSettings(settings: Settings) {
         const settingsObj = instanceToPlain(settings);
         settingsObj.version = settingsVersion;
-        this.storageDriver.storeObject(settingsKey, settingsObj);
+        this.storageDriver.storeHugeText(
+            settingsKey,
+            JSON.stringify(settingsObj),
+        );
     }
 
     public loadPreferences(): Preferences | null {
-        const preferencesObj = this.storageDriver.loadObject(preferencesKey);
+        const preferencesObj = JSON.parse(
+            this.storageDriver.loadHugeText(preferencesKey) ?? "null",
+        );
         if (preferencesObj === null) return null;
         const preferencesVersion = (preferencesObj as any)["version"]; // eslint-disable-line
         assert(
@@ -60,7 +67,10 @@ export class StorageImpl implements Storage {
     public storePreferences(preferences: Preferences) {
         const preferencesObj = instanceToPlain(preferences);
         preferencesObj.version = preferencesVersion;
-        this.storageDriver.storeObject(preferencesKey, preferencesObj);
+        this.storageDriver.storeHugeText(
+            preferencesKey,
+            JSON.stringify(preferencesObj),
+        );
     }
 
     public listSourceDataNames(): string[] {

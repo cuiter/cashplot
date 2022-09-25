@@ -16,14 +16,6 @@ class StorageDriverMock implements StorageDriver {
 
     constructor() {}
 
-    loadObject(section: string): object | null {
-        return Object.prototype.hasOwnProperty.call(this.valueStore, section)
-            ? this.valueStore[section]
-            : null;
-    }
-    storeObject(section: string, object: object): void {
-        this.valueStore[section] = object;
-    }
     loadHugeText(section: string): string | null {
         return Object.prototype.hasOwnProperty.call(this.valueStore, section)
             ? typeof this.valueStore[section] == "string"
@@ -126,15 +118,18 @@ describe("StorageImpl", () => {
 
         storage.storeSettings(testSettings);
 
-        expect(storageDriver.loadObject("settings")).toEqual(
-            testStoredSettings,
-        );
+        expect(
+            JSON.parse(storageDriver.loadHugeText("settings") ?? "null"),
+        ).toEqual(testStoredSettings);
     });
 
     test("should load settings from persistent storage", () => {
         const storageDriver = new StorageDriverMock();
         const storage = new StorageImpl(storageDriver);
-        storageDriver.storeObject("settings", testStoredSettings);
+        storageDriver.storeHugeText(
+            "settings",
+            JSON.stringify(testStoredSettings),
+        );
 
         const settings = storage.loadSettings();
 
@@ -156,15 +151,18 @@ describe("StorageImpl", () => {
 
         storage.storePreferences(testPreferences);
 
-        expect(storageDriver.loadObject("preferences")).toEqual(
-            testStoredPreferences,
-        );
+        expect(
+            JSON.parse(storageDriver.loadHugeText("preferences") ?? "null"),
+        ).toEqual(testStoredPreferences);
     });
 
     test("should load preferences from persistent storage", () => {
         const storageDriver = new StorageDriverMock();
         const storage = new StorageImpl(storageDriver);
-        storageDriver.storeObject("preferences", testStoredPreferences);
+        storageDriver.storeHugeText(
+            "preferences",
+            JSON.stringify(testStoredPreferences),
+        );
 
         const preferences = storage.loadPreferences();
 
@@ -264,9 +262,10 @@ describe("StorageImpl", () => {
         const storageDriver = new StorageDriverMock();
         const storage = new StorageImpl(storageDriver);
         storageDriver.storeHugeText("test-section-1", "test-1");
-        storageDriver.storeObject("test-section-2", {
-            "test-2": ["foo", "bar", 0.5, null],
-        });
+        storageDriver.storeHugeText(
+            "test-section-2",
+            '{"test-2":["foo","bar",0.5,null]}',
+        );
 
         const json = storage.exportJson();
         const jsonObject = JSON.parse(json);

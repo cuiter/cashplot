@@ -5,16 +5,6 @@ export class LocalStorageDriver implements StorageDriver {
 
     constructor(private storage: Storage = localStorage) {}
 
-    public loadObject(section: string): object | null {
-        const item = this.storage.getItem(section);
-
-        return item === null ? null : JSON.parse(item);
-    }
-
-    public storeObject(section: string, object: object) {
-        this.storage.setItem(section, JSON.stringify(object));
-    }
-
     public loadHugeText(section: string): string | null {
         return this.storage.getItem(section);
     }
