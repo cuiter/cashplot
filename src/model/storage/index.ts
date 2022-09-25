@@ -1,7 +1,30 @@
 import { instanceToPlain, plainToClass } from "class-transformer";
-import { Storage, StorageDriver } from "../../interfaces";
 import { Preferences, Settings } from "../entities";
 import { assert } from "../../utils";
+
+export interface Storage {
+    loadSettings(): Settings | null;
+    storeSettings(settings: Settings): void;
+
+    loadPreferences(): Preferences | null;
+    storePreferences(preferences: Preferences): void;
+
+    listSourceDataNames(): string[];
+    storeSourceData(name: string, transactionData: string): void;
+    loadSourceData(name: string): { transactionData: string };
+    removeSourceData(name: string): void;
+
+    exportJson(): string;
+    importJson(jsonData: string): void;
+}
+
+export interface StorageDriver {
+    loadHugeText(section: string): string | null;
+    storeHugeText(section: string, text: string): void;
+
+    listSections(): string[];
+    removeSection(section: string): void;
+}
 
 // === Configuration format ===
 

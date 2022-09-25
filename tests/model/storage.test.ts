@@ -1,5 +1,4 @@
-import { StorageDriver } from "../../src/interfaces";
-import { StorageImpl } from "../../src/model/storage";
+import { StorageDriver, StorageImpl } from "../../src/model/storage";
 import {
     Account,
     Category,

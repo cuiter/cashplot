@@ -1,6 +1,18 @@
 import { Observable } from "@daign/observable";
-import { CashFlowCalculator, TransactionSearcher } from "../../interfaces";
+import { TransactionSearcher } from "./transaction-searcher";
 import { MAX_CACHE_ENTRIES, SearchQuery } from "../../model/entities";
+
+/**
+ * Calculates the total cash flow (income / expenses) of transactions matching a specific search query.
+ *
+ * Uses a cache to save results for recent queries.
+ */
+export interface CashFlowCalculator {
+    calculateCashFlow(searchQuery: SearchQuery): {
+        income: number;
+        expenses: number;
+    };
+}
 
 export class CashFlowCalculatorImpl
     extends Observable

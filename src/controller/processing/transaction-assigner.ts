@@ -1,9 +1,6 @@
 import { Observable } from "@daign/observable";
-import {
-    CategoryCollection,
-    SourceDataCollection,
-    TransactionAssigner,
-} from "../../interfaces";
+import { CategoryCollection } from "../../controller/collections/category-collection";
+import { SourceDataCollection } from "../../controller/collections/source-data-collection";
 import {
     SourceTransaction,
     Category,
@@ -12,6 +9,18 @@ import {
     Assignment,
     TextFilter,
 } from "../../model/entities";
+
+/**
+  Takes transactions (from SourceDataCollection) and using filters, matches it to categories (from CategoryCollection).
+*/
+export interface TransactionAssigner {
+    /**
+     * Returns all transactions after assigning them to their respective categories.
+     */
+    allTransactions(): AssignedTransaction[];
+    /** Allows another component to subscribe to any changes in this component. */
+    subscribeToChanges(callback: () => void): void;
+}
 
 export class TransactionAssignerImpl
     extends Observable

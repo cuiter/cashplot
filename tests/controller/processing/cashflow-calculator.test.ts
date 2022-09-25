@@ -1,6 +1,6 @@
 import { Observable } from "@daign/observable";
 import { createInjector } from "typed-inject";
-import { TransactionSearcher } from "../../../src/interfaces";
+import { TransactionSearcher } from "../../../src/controller/processing/transaction-searcher";
 import { CashFlowCalculatorImpl } from "../../../src/controller/processing/cashflow-calculator";
 import {
     AssignedTransaction,

@@ -3,9 +3,32 @@ import {
     SourceDataInfoItem,
     SourceTransaction,
 } from "../../model/entities";
-import { Storage, Sources, SourceDataCollection } from "../../interfaces";
+import { Storage } from "../../model/storage";
+import { Sources } from "../../controller/sources";
 import { findNewName } from "../../utils";
 import { Observable } from "@daign/observable";
+
+export interface SourceDataCollection {
+    /** Initializes and restores state from previous session if available */
+    init(): void;
+    /**
+     * Loads source data (for example file contents) into the collection of loaded sources.
+     * If source data with the given name already exists, stores the data under a new name.
+     * Throws an error if the provided transactions data could not be parsed.
+     */
+    add(name: string, transactionsData: string): void;
+    /**
+     * Removes the source data associated with the given name.
+     * Note: No-op if the name doesn't exist in the collection.
+     */
+    remove(name: string): void;
+    /** Returns information about the loaded source data items. */
+    allInfo(): SourceDataInfo;
+    /** Returns the list of all transactions, ordered by date ascending. */
+    allTransactions(): SourceTransaction[];
+    /** Allows another component to subscribe to any changes in this component. */
+    subscribeToChanges(callback: () => void): void;
+}
 
 class SourceData {
     constructor(

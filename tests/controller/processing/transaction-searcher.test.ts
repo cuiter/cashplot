@@ -1,12 +1,11 @@
 import { Observable } from "@daign/observable";
 import { createInjector } from "typed-inject";
 import { TransactionSearcherImpl } from "../../../src/controller/processing/transaction-searcher";
-import { TransactionAssigner } from "../../../src/interfaces";
+import { TransactionAssigner } from "../../../src/controller/processing/transaction-assigner";
 import {
     AssignedTransaction,
     Assignment,
     DECIMAL,
-    SearchQuery,
     SourceTransaction,
 } from "../../../src/model/entities";
 import { Period, PeriodType } from "../../../src/model/period";

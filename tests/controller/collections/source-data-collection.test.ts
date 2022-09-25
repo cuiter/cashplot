@@ -7,7 +7,8 @@ import {
     Settings,
     SourceTransaction,
 } from "../../../src/model/entities";
-import { Storage, Sources } from "../../../src/interfaces";
+import { Storage } from "../../../src/model/storage";
+import { Sources } from "../../../src/controller/sources";
 
 class SourcesMock implements Sources {
     public parseTransactions(transactionData: string): SourceTransaction[] {

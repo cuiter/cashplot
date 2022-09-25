@@ -1,10 +1,21 @@
 import { Observable } from "@daign/observable";
-import { TransactionAssigner, TransactionSearcher } from "../../interfaces";
+import { TransactionAssigner } from "./transaction-assigner";
 import {
     AssignedTransaction,
     MAX_CACHE_ENTRIES,
     SearchQuery,
 } from "../../model/entities";
+
+/**
+ * Takes assigned transactions from TransactionAssigner and performs search queries.
+ *
+ * Uses a cache to save results for recent queries.
+ */
+export interface TransactionSearcher {
+    searchTransactions(searchQuery: SearchQuery): AssignedTransaction[];
+    /** Allows another component to subscribe to any changes in this component. */
+    subscribeToChanges(callback: () => void): void;
+}
 
 export class TransactionSearcherImpl
     extends Observable

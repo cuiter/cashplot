@@ -1,5 +1,5 @@
 import { SourceTransaction, DECIMAL } from "../../model/entities";
-import { Source } from "../../interfaces";
+import { Source } from "../sources";
 import { assert } from "../../utils";
 import * as Papa from "papaparse";
 

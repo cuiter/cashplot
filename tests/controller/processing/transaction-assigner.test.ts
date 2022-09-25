@@ -1,10 +1,8 @@
 import { Observable } from "@daign/observable";
 import { createInjector } from "typed-inject";
 import { TransactionAssignerImpl } from "../../../src/controller/processing/transaction-assigner";
-import {
-    CategoryCollection,
-    SourceDataCollection,
-} from "../../../src/interfaces";
+import { CategoryCollection } from "../../../src/controller/collections/category-collection";
+import { SourceDataCollection } from "../../../src/controller/collections/source-data-collection";
 import {
     Assignment,
     Category,

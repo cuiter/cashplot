@@ -1,7 +1,27 @@
 import { SourceTransaction } from "../../model/entities";
-import { Source, Sources } from "../../interfaces";
 import { INGBankCSVSource } from "./ing-csv";
 import { SNSBankCSVSource } from "./sns-csv";
+
+export interface Sources {
+    /**
+     * Loads the source transactions from the given data.
+     * Detects the format and selects the right parser accordingly.
+     * Throws an error if the provided transactions data could not be parsed.
+     * Throws an error if there were no transactions in the provided data.
+     * Note: Sorts the resulting transactions by date ascending.
+     */
+    parseTransactions(transactionData: string): Array<SourceTransaction>;
+}
+
+export interface Source {
+    /** Checks whether the data might be parsable given the header. */
+    hasValidHeader(transactionData: string): boolean;
+    /**
+     * Loads the source transactions from the given data.
+     * Note: Does not sort the resulting transactions.
+     */
+    parseTransactions(transactionData: string): Array<SourceTransaction>;
+}
 
 export class SourcesImpl implements Sources {
     constructor() {}

@@ -1,7 +1,65 @@
 import { Category, Filter, PeriodType, Settings } from "../../model/entities";
-import { CategoryCollection, Storage } from "../../interfaces";
+import { Storage } from "../../model/storage";
 import { findNewName } from "../../utils";
 import { Observable } from "@daign/observable";
+
+/**
+ * Stores a collection of categories, including budgets and filters.
+ * Provides methods for modifying the collection.
+ */
+export interface CategoryCollection {
+    /** Initializes storage and restores state from previous session if available */
+    init(): void;
+
+    /**
+     * Adds a new category to the collection. Returns the new name.
+     */
+    add(defaultName: string): string;
+    /**
+     * Removes the category and its associated filters from the collection.
+     */
+    remove(name: string): void;
+    /**
+     * Renames a category.
+     * Returns whether the rename was successful (i.e. whether there no conflicting category existed).
+     */
+    rename(name: string, newName: string): boolean;
+
+    /**
+     * Sets the budget for the specified category.
+     * Note: The budget must be multiplied by entities.DECIMAL to become an integer,
+     *       to avoid floating point storage-related inconsistencies.
+     */
+    setBudget(
+        name: string,
+        budgetAmount: number | null,
+        budgetPeriodType: PeriodType,
+    ): void;
+
+    /**
+     * Returns the budget for the specified category.
+     */
+    getBudget(name: string): { amount: number | null; periodType: PeriodType };
+
+    /**
+     * Adds filters to the category. If a filter with the same id already exists, it is replaced.
+     */
+    addFilters(categoryName: string, filters: Filter[]): void;
+    /**
+     * Removes filters from the category.
+     * Note: Throws an error if one of the given filter ids do not exist.
+     */
+    removeFilters(categoryName: string, filterId: number[]): void;
+    /** Returns the filters of the category. */
+    getFilters(name: string): Filter[];
+
+    /** Returns the names of all categories. */
+    list(): string[];
+    /** Returns all categories in the collection. */
+    all(): Category[];
+    /** Allows another component to subscribe to any changes in this component. */
+    subscribeToChanges(callback: () => void): void;
+}
 
 export class CategoryCollectionImpl
     extends Observable
