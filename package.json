@@ -17,13 +17,13 @@
         }
     },
     "scripts": {
-        "dev": "webpack && xdg-open ./public/index.html",
+        "dev": "webpack && xdg-open ./src/frontend/static/index.html",
         "build": "webpack",
         "test": "jest",
-        "lint": "eslint src/ tests/ public/sw.js --ext .ts,.js,.vue",
+        "lint": "eslint src/ tests/ --ignore-path .prettierignore --ext .ts,.js,.vue",
         "format": "prettier --write .",
         "gen-diagrams": "tplant -A --input src/main.ts --output docs/diagrams/ClassDiagram.svg && plantuml docs/diagrams/ComponentDiagram.plantuml",
-        "gen-docs": "typedoc --name CashPlot --media public/assets --out docs/public src/interfaces.ts src/utils.ts src/model/entities.ts"
+        "gen-docs": "typedoc --name CashPlot --media public/assets --out docs/public src/main.ts"
     },
     "dependencies": {
         "class-transformer": "^0.5.1",

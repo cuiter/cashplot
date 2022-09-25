@@ -1,0 +1,55 @@
+<template>
+    <div class="collection-grid-container">
+        <div class="collection-grid">
+            <div
+                v-for="category of categories"
+                class="grid-item button button-dark"
+                @click="selectCategory(category)"
+            >
+                <div class="category-name">{{ category }}</div>
+            </div>
+            <div class="grid-item button button-light" @click="addCategory">
+                <div class="category-name">Nieuw</div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script lang="ts">
+import Vue from "vue";
+import { ManualFilter } from "../../../lib/entities";
+import { createUniqueId } from "../../../lib/utils";
+const newCategoryName = "New category";
+
+export default Vue.extend({
+    props: {
+        categories: { type: Array, default: () => [] },
+        selectedTransactionHashes: { type: Array, default: () => null },
+    },
+    methods: {
+        addCategory() {
+            const categoryName = (this as any).$root.$data.categories.add(newCategoryName);
+            (this as any).openWindow("category-edit", {
+                categoryName: categoryName,
+            });
+        },
+        selectCategory(name: string) {
+            const selectedTransactionHashes: number[] = this.$props.selectedTransactionHashes;
+
+            if (selectedTransactionHashes.length !== 0) {
+                var filters = selectedTransactionHashes.map(
+                    (hash) => new ManualFilter(createUniqueId(), hash),
+                );
+
+                selectedTransactionHashes.splice(0, selectedTransactionHashes.length);
+
+                this.$root.$data.categories.addFilters(name, filters);
+            } else {
+                (this as any).openWindow("category-edit", {
+                    categoryName: name,
+                });
+            }
+        },
+    },
+});
+</script>

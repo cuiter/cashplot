@@ -15,14 +15,14 @@ jobs:
                   exec: |
                       npm i && \
                       npm run build && \
-                      cd app && \
+                      cd src/app && \
                       npm run configure && \
                       npm run build -- --versionCode=${{ github.run_number }} && \
-                      cd .. && mkdir release && \
+                      cd ../.. && mkdir release && \
                       cp "$(find . -name '*.apk')" . && \
                       mv app-debug.apk release/CashPlot.apk && \
-                      cd public && \
-                      tar -czf ../release/CashPlot.tar.gz *
+                      cd src/frontend/static && \
+                      tar -czf ../../../release/CashPlot.tar.gz *
             - name: Upload APK build artifact
               uses: actions/upload-artifact@v3
               with:

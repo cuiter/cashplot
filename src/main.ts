@@ -1,15 +1,15 @@
 import "reflect-metadata";
-
 import { createInjector } from "typed-inject";
-import { SourcesImpl } from "./controller/sources";
-import { StorageImpl } from "./model/storage";
-import { LocalStorageDriver } from "./model/storage/localstorage-driver";
-import { SourceDataCollectionImpl } from "./controller/collections/source-data-collection";
-import { CategoryCollectionImpl } from "./controller/collections/category-collection";
-import { WebUI } from "./view/web-ui";
-import { TransactionAssignerImpl } from "./controller/processing/transaction-assigner";
-import { TransactionSearcherImpl } from "./controller/processing/transaction-searcher";
-import { CashFlowCalculatorImpl } from "./controller/processing/cashflow-calculator";
+
+import { SourcesImpl } from "./lib/sources";
+import { StorageImpl } from "./lib/storage";
+import { SourceDataCollectionImpl } from "./lib/collections/source-data-collection";
+import { CategoryCollectionImpl } from "./lib/collections/category-collection";
+import { TransactionAssignerImpl } from "./lib/processing/transaction-assigner";
+import { TransactionSearcherImpl } from "./lib/processing/transaction-searcher";
+import { CashFlowCalculatorImpl } from "./lib/processing/cashflow-calculator";
+import { LocalStorageDriver } from "./frontend/localstorage-driver";
+import { WebUI } from "./frontend/ui";
 
 const appInjector = createInjector()
     .provideClass("sources", SourcesImpl)

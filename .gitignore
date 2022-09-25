@@ -1,9 +1,10 @@
 # Node.JS
 /node_modules/
 # Compiled output
-/public/js/bundle.js*
+/src/frontend/static/js/bundle.js*
 # Generated documentation
 /docs/public/
 
 # Misc
 /README.pdf
+.vscode
