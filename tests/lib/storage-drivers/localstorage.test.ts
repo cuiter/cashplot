@@ -1,4 +1,4 @@
-import { LocalStorageDriver } from "../../src/web/localstorage-driver";
+import { LocalStorageDriver } from "../../../src/lib/storage-drivers/localstorage";
 
 class LocalStorageMock implements Storage {
     private valueStore: any = {}; // eslint-disable-line
