@@ -8,8 +8,8 @@ import { CategoryCollectionImpl } from "./lib/collections/category-collection";
 import { TransactionAssignerImpl } from "./lib/processing/transaction-assigner";
 import { TransactionSearcherImpl } from "./lib/processing/transaction-searcher";
 import { CashFlowCalculatorImpl } from "./lib/processing/cashflow-calculator";
-import { LocalStorageDriver } from "./frontend/localstorage-driver";
-import { WebUI } from "./frontend/ui";
+import { LocalStorageDriver } from "./web/localstorage-driver";
+import { WebUI } from "./web/ui";
 
 const appInjector = createInjector()
     .provideClass("sources", SourcesImpl)

@@ -1,6 +1,6 @@
 node_modules/
-src/frontend/static/css/deps
-src/frontend/static/js/
-src/frontend/static/index.html
+src/web/static/css/deps
+src/web/static/js/
+src/web/static/index.html
 src/app/package_lock.json
 package_lock.json

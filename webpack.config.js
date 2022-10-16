@@ -37,6 +37,6 @@ module.exports = {
     },
     output: {
         filename: "bundle.js",
-        path: path.resolve(__dirname, "src/frontend/static/js"),
+        path: path.resolve(__dirname, "src/web/static/js"),
     },
 };

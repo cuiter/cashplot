@@ -17,7 +17,7 @@
         }
     },
     "scripts": {
-        "dev": "webpack && xdg-open ./src/frontend/static/index.html",
+        "dev": "webpack && xdg-open ./src/web/static/index.html",
         "build": "webpack",
         "test": "jest",
         "lint": "eslint src/ tests/ --ignore-path .prettierignore --ext .ts,.js,.vue",

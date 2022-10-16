@@ -21,7 +21,7 @@ jobs:
                       cd ../.. && mkdir release && \
                       cp "$(find . -name '*.apk')" . && \
                       mv app-debug.apk release/CashPlot.apk && \
-                      cd src/frontend/static && \
+                      cd src/web/static && \
                       tar -czf ../../../release/CashPlot.tar.gz *
             - name: Upload APK build artifact
               uses: actions/upload-artifact@v3

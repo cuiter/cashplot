@@ -12,5 +12,5 @@
         "noImplicitThis": true
     },
     "include": ["./src/**/*.ts", "./src/**/*.vue"],
-    "exclude": ["src/frontend/static"]
+    "exclude": ["src/ui/static"]
 }
